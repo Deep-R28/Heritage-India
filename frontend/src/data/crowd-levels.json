@@ -1,0 +1,10 @@
+{
+  "taj-mahal": { "current": 78, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [40, 45, 60, 72, 78, 85, 88, 80] },
+  "hampi": { "current": 34, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [20, 22, 28, 34, 38, 42, 40, 35] },
+  "amber-fort": { "current": 55, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [30, 38, 48, 55, 62, 65, 60, 50] },
+  "qutub-minar": { "current": 88, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [50, 60, 75, 88, 92, 90, 85, 78] },
+  "mysore-palace": { "current": 41, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [25, 30, 35, 41, 45, 48, 44, 38] },
+  "chand-baori": { "current": 22, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [10, 12, 18, 22, 25, 24, 20, 16] },
+  "hawa-mahal": { "current": 66, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [35, 42, 55, 66, 70, 72, 68, 58] },
+  "kerala-backwaters": { "current": 15, "updatedAt": "2026-09-02T09:00:00+05:30", "hourly": [8, 10, 12, 15, 18, 20, 16, 12] }
+}

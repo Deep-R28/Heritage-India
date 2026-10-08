@@ -1,0 +1,344 @@
+{
+  "nav": {
+    "explore": "Explorar",
+    "guides": "Guías",
+    "pricing": "Precios",
+    "about": "Acerca de",
+    "signUp": "Regístrate",
+    "login": "Iniciar Sesión",
+    "dashboard": "Panel",
+    "myTrips": "Mis Viajes",
+    "settings": "Configuración",
+    "logOut": "Cerrar Sesión"
+  },
+  "footer": {
+    "tagline": "Una Nueva Experiencia de Lujo.",
+    "sitemap": "Mapa del Sitio",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "cookies": "Configuración de Cookies",
+    "newsletter": "Boletín"
+  },
+  "common": {
+    "viewDetails": "Ver Detalles Completos",
+    "loading": "Cargando",
+    "language": "Idioma",
+    "theme": "Tema",
+    "accessibility": "Accesibilidad",
+    "back": "Atrás",
+    "continue": "Continuar"
+  },
+  "categories": {
+    "all": "Todos",
+    "monument": "Monumento",
+    "fort": "Fuerte",
+    "palace": "Palacio",
+    "ancientCity": "Ciudad Antigua",
+    "stepwell": "Pozo Escalonado",
+    "architecture": "Arquitectura",
+    "naturalHeritage": "Patrimonio Natural"
+  },
+  "accessibility": {
+    "menuLabel": "Accesibilidad",
+    "colorVisionMode": "Modo de Visión de Color",
+    "themeDark": "Oscuro",
+    "themeLight": "Claro",
+    "modes": {
+      "default": "Predeterminado",
+      "protanopia": "Protanopía",
+      "deuteranopia": "Deuteranopía",
+      "tritanopia": "Tritanopía"
+    },
+    "swatch": {
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto",
+      "verified": "Verificado"
+    }
+  },
+  "home": {
+    "hero": {
+      "titleLine1": "Explora Más.",
+      "titleLine2": "Preocúpate Menos.",
+      "subtitle": "Tu conserje inteligente. Gestionando multitudes, curando historias y orquestando la experiencia de viaje de lujo perfecta.",
+      "cta": "Comenzar a Explorar"
+    },
+    "problems": {
+      "eyebrow": "El Desafío",
+      "heading": "Redefiniendo el Viaje",
+      "items": {
+        "crowds": {
+          "title": "Multitudes Abrumadoras",
+          "body": "Los destinos icónicos a menudo se ven afectados por una congestión impredecible. Anticipamos el flujo, guiándote hacia momentos de serenidad.",
+          "cta": "Descubrir Soluciones"
+        },
+        "histories": {
+          "title": "Historias Fragmentadas",
+          "body": "Las guías estáticas carecen de contexto. Nuestra IA teje narrativas dinámicas, adaptadas a tu ubicación y curiosidad intelectual.",
+          "cta": "Vivir el Contexto"
+        },
+        "itineraries": {
+          "title": "Itinerarios Rígidos",
+          "body": "Viajar no debería sentirse como un horario. Ofrecemos rutas fluidas y adaptables que se ajustan a tu estado de ánimo y deseos espontáneos.",
+          "cta": "Abraza la Fluidez"
+        }
+      }
+    },
+    "how": {
+      "eyebrow": "El Viaje",
+      "heading": "Cómo Funciona",
+      "steps": {
+        "location": { "title": "Establece Tu Ubicación", "body": "Comparte tu posición para obtener un mapa en vivo de sitios patrimoniales cercanos." },
+        "language": { "title": "Elige Tu Idioma", "body": "Selecciona entre inglés, hindi, español y más, al instante." },
+        "crowd": { "title": "Ve los Niveles de Afluencia en Vivo", "body": "Cada sitio muestra un medidor de afluencia en tiempo real antes de que te decidas." },
+        "assistant": { "title": "Pregunta al Conserje de IA", "body": "Chatea o habla sobre historia, logística y protocolo." },
+        "guide": { "title": "Reserva un Guía Verificado", "body": "Solo guías con licencia ASI — sin impostores callejeros." },
+        "pay": { "title": "Paga de Forma Segura", "body": "Pago transparente y detallado sin cargos ocultos." },
+        "explore": { "title": "Explora Sin Preocupaciones", "body": "Tu itinerario, sitios guardados y recibos — siempre a mano." }
+      }
+    },
+    "features": {
+      "eyebrow": "El Kit de Herramientas",
+      "heading": "Todo, Curado",
+      "items": {
+        "discovery": { "title": "Descubrimiento Cercano", "body": "Un mapa vivo de monumentos, fuertes y pozos escalonados a tu alrededor." },
+        "crowd": { "title": "Inteligencia de Afluencia", "body": "Medidores fáciles de leer, no números crudos — infórmate antes de ir." },
+        "concierge": { "title": "Conserje de IA", "body": "Chat o voz, en tu idioma, en cada página." },
+        "guides": { "title": "Guías Verificados", "body": "Solo con licencia ASI, con precios justos y transparentes." },
+        "alternatives": { "title": "Alternativas Inteligentes", "body": "¿Sitio concurrido? Te mostramos uno más tranquilo cerca, al instante." },
+        "accessibility": { "title": "Diseñado para Todos", "body": "Modos de visión de color y control total del tema en todo el sitio." }
+      }
+    },
+    "stats": {
+      "sitesMapped": "Sitios Patrimoniales Mapeados",
+      "guidesVerified": "Guías Verificados",
+      "avoidPeakCrowds": "Viajeros que Evitan Horas Pico",
+      "languagesSupported": "Idiomas Compatibles"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Nuestra Misión",
+      "titleLine1": "Preservando los",
+      "titleLine2": "Ecos del Tiempo."
+    },
+    "statement": {
+      "heading": "El Archivo de la Ambición Humana",
+      "intro": "Fundado en el principio de que la historia no es simplemente un registro, sino una narrativa activa y viva destinada a ser vivida.",
+      "p1": "Existimos para curar y proteger los vestigios físicos de nuestro pasado colectivo. Nuestro archivo digital sirve de puente entre los logros monumentales de las civilizaciones antiguas y el viajero moderno en busca de una conexión profunda.",
+      "quote": "Caminar entre las ruinas es participar en una conversación silenciosa con quienes moldearon la tierra siglos antes de nuestra llegada.",
+      "p2": "En una era marcada por la rápida efimeridad digital, el peso tangible de la piedra, la geometría intrincada del urbanismo antiguo y el pigmento desvaído de frescos centenarios adquieren un valor sin precedentes. Abordamos el turismo patrimonial no como una actividad de ocio, sino como un acto crucial de tutela cultural.",
+      "p3": "A través de tecnologías inmersivas, rigor histórico y alianzas con conservadores locales, garantizamos que cada viaje sea un paso hacia la preservación de estos santuarios del pensamiento humano."
+    },
+    "pillars": {
+      "heading": "Nuestros Pilares Fundamentales",
+      "curation": { "label": "Curaduría", "title": "Selección Impecable", "body": "Evitamos los lugares abarrotados para revelar obras maestras arquitectónicas ocultas, aplicando rigor editorial a cada sitio que incluimos en nuestro archivo." },
+      "context": { "label": "Contexto", "title": "Integridad Histórica", "body": "Ofreciendo narrativas profundas y académicamente sólidas en lugar de anécdotas superficiales." },
+      "conservation": { "label": "Conservación", "title": "Impacto Sostenible", "body": "Dirigiendo recursos al mantenimiento físico de las estructuras que veneramos." }
+    },
+    "team": {
+      "heading": "Los Curadores",
+      "body": "Un colectivo multidisciplinario de historiadores, arquitectos y tecnólogos dedicados a la preservación de la memoria experiencial.",
+      "roles": {
+        "historian": "Historiadora Jefe",
+        "conservation": "Director de Conservación",
+        "digital": "Jefa de Experiencia Digital"
+      }
+    }
+  },
+  "pricing": {
+    "hero": {
+      "title": "Acceso Transparente a la Antigüedad.",
+      "subtitle": "Explora las tarifas de entrada a los monumentos y contrata conserjes verificados y profundamente conocedores para tu viaje por el patrimonio de la India."
+    },
+    "entryFees": {
+      "heading": "Tarifas de Entrada a Monumentos",
+      "currency": "INR",
+      "domestic": "Turista Nacional",
+      "foreign": "Turista Extranjero",
+      "viewSite": "Ver Sitio"
+    },
+    "guidesSection": {
+      "heading": "Conserjes y Guías Verificados",
+      "recommended": "Recomendado",
+      "bookCta": "Reservar un Guía Verificado",
+      "perDay": "día",
+      "perTrip": "viaje"
+    },
+    "tiers": {
+      "scholar": {
+        "title": "Erudito del Patrimonio",
+        "description": "Perspectivas históricas y arquitectónicas profundas, guiadas por eruditos con posgrado.",
+        "features": ["Aprobado por el gobierno", "Opciones multilingües", "Asistencia para saltar filas"]
+      },
+      "curated": {
+        "title": "Experiencia Curada",
+        "description": "Un día a un ritmo completo con un guía conserje privado y acceso prioritario.",
+        "features": ["Todo lo de Erudito del Patrimonio", "Coordinación de vehículo privado", "Ventanas de reserva prioritarias"]
+      },
+      "odyssey": {
+        "title": "Odisea de Varios Días",
+        "description": "Un guía dedicado a través de múltiples sitios y días, adaptado a tu itinerario.",
+        "features": ["Todo lo de Experiencia Curada", "Continuidad entre regiones", "Línea de conserjería 24/7"]
+      }
+    }
+  },
+  "explore": {
+    "noResults": "Ningún sitio coincide con este filtro todavía.",
+    "openFullMap": "Abrir Mapa a Pantalla Completa"
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "Nivel de Afluencia en Vivo",
+      "quiet": "Tranquilo en este momento — un gran momento para visitar.",
+      "moderate": "Afluencia moderada — prepárate para algunas colas.",
+      "busy": "Concurrido en este momento — considera una alternativa más tranquila."
+    },
+    "viewOnMap": "Ver en el Mapa",
+    "findGuide": "Buscar un Guía",
+    "alternatives": { "heading": "Alternativas Inteligentes", "seeAll": "Ver Todas", "further": "{{km}} km más lejos" },
+    "history": { "heading": "Historia y Significado" },
+    "entryFee": "Tarifa de Entrada",
+    "openHours": "Horario de Apertura"
+  },
+  "alternatives": {
+    "busyBadge": "{{site}} Está Concurrido Ahora",
+    "busyBadgeGeneric": "Este Sitio Está Concurrido Ahora",
+    "heading": "Aquí tienes una alternativa más tranquila, igual de extraordinaria.",
+    "distanceFurther": "{{km}} km más lejos que {{site}}",
+    "distanceCloser": "{{km}} km más cerca que {{site}}",
+    "switchCta": "Cambiar a Este Sitio"
+  },
+  "guides": {
+    "eyebrow": "Confianza y Seguridad",
+    "heading": "Verificar un Guía",
+    "subtitle": "Busca por nombre o número de licencia ASI para confirmar que un guía está oficialmente certificado antes de reservar — o pagar — cualquier cosa.",
+    "searchPlaceholder": "Buscar por nombre del guía o ID de ASI…",
+    "experience": "Experiencia",
+    "yearsShort": "años",
+    "rating": "Calificación",
+    "unverifiedWarning": "Este guía no tiene una licencia ASI registrada. Recomendamos reservar únicamente guías con licencia ASI — los sellos verificados te protegen de sobrecostos y desinformación.",
+    "noResults": "Ningún guía coincide con \"{{query}}\".",
+    "rateTable": { "heading": "Tabla de Tarifas Estándar Justas", "tier": "Nivel", "price": "Precio" },
+    "verifiedSeal": "Licencia ASI"
+  },
+  "assistant": {
+    "fab": { "label": "Preguntar al Conserje" },
+    "hub": {
+      "heading": "¿Cómo te gustaría interactuar?",
+      "subtitle": "Selecciona tu modo de comunicación preferido con la inteligencia del conserje. Puedes cambiarlo más tarde.",
+      "chat": { "title": "Interfaz de Texto", "body": "Participa en una conversación tranquila basada en texto. Ideal para consultas detalladas, archivar respuestas o entornos que requieren silencio.", "cta": "Iniciar Chat" },
+      "voice": { "title": "Interacción por Voz", "body": "Habla con naturalidad con el conserje. Ideal para navegación manos libres, conversaciones fluidas y una experiencia sensorial inmersiva.", "cta": "Activar Micrófono" },
+      "alwaysAsk": "Preguntarme siempre",
+      "rememberChoice": "Recordar mi elección"
+    },
+    "chat": {
+      "leftTitleLine1": "Tu Conserje",
+      "leftTitleLine2": "Privado",
+      "leftBody": "Estoy aquí para curar tu máxima experiencia de Heritage India. Pregúntame sobre joyas arquitectónicas ocultas, gastronomía a medida o protocolos culturales.",
+      "header": "Asistente Heritage",
+      "voiceModeLink": "Modo de Voz",
+      "inputPlaceholder": "Describe tu solicitud…",
+      "changeMode": "Cambiar Modo",
+      "languageLabel": "Idioma: {{language}}",
+      "suggestions": ["Reservar un historiador", "Mostrar sitios tranquilos cercanos", "¿Cuál es el código de vestimenta?"],
+      "seed": "Namasté. Soy tu conserje de Heritage India. ¿Cómo puedo mejorar tu viaje hoy? ¿Buscas exploración histórica o un relajo refinado?",
+      "stubResponse": "(Respuesta de prueba) Escuché: \"{{input}}\". Un modelo de conserje real responderá esto una vez conectado."
+    },
+    "voice": {
+      "title": "Conserje Heritage",
+      "listening": "Escuchando…",
+      "muted": "Silenciado",
+      "autoDetected": "Detectado automáticamente: {{language}}",
+      "mute": "Silenciar",
+      "unmute": "Activar sonido",
+      "end": "Finalizar",
+      "text": "Texto",
+      "switchToChat": "Cambiar a Modo Chat",
+      "phrases": [
+        "Cuéntame sobre la arquitectura del Taj Mahal…",
+        "¿Cuáles son las mejores épocas para visitar Rajastán?",
+        "Encuéntrame un hotel patrimonial de lujo en Jaipur.",
+        "Explica la historia detrás del Hawa Mahal."
+      ]
+    }
+  },
+  "onboarding": {
+    "step": "Paso {{current}} de {{total}}",
+    "location": {
+      "title": "¿Dónde comienza tu viaje?",
+      "body": "Permite el acceso a la ubicación para que podamos curar experiencias a medida, información local y rutas patrimoniales personalizadas más cercanas a ti.",
+      "allow": "Permitir Acceso",
+      "skip": "Ahora No",
+      "note": "Puedes cambiar esto en cualquier momento en tu configuración de privacidad."
+    },
+    "language": {
+      "title": "Elige Tu Idioma Narrativo",
+      "body": "Selecciona la voz que guiará tu viaje por el patrimonio de la India. Puedes cambiarlo más tarde en la configuración.",
+      "continue": "Continuar"
+    },
+    "accessibility": {
+      "title": "Hazlo Tuyo",
+      "body": "Elige un tema y un modo de visión de color. Cada muestra a continuación se actualiza en vivo en todo el sitio.",
+      "finish": "Entrar a Heritage India"
+    }
+  },
+  "auth": {
+    "signUpTab": "Registrarse",
+    "loginTab": "Iniciar Sesión",
+    "heroTitle": "Comienza Tu Viaje",
+    "heroSubtitle": "Vive el Nuevo Lujo de la exploración patrimonial curada.",
+    "fullName": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "createAccount": "Crear Cuenta",
+    "logIn": "Iniciar Sesión",
+    "continueAsGuest": "Continuar como Invitado"
+  },
+  "notifications": {
+    "heading": "Notificaciones",
+    "unread": "{{count}} sin leer",
+    "allCaughtUp": "Estás al día",
+    "markAllRead": "Marcar Todo como Leído",
+    "empty": "Aún no hay notificaciones.",
+    "types": {
+      "bookingConfirmed": { "title": "Reserva Confirmada", "message": "Tu guía {{guide}} está confirmado para {{site}} el {{date}}." },
+      "bookingCancelled": { "title": "Reserva Cancelada", "message": "Tu reserva para {{site}} el {{date}} fue cancelada y reembolsada." },
+      "crowdAlert": { "title": "Alerta de Afluencia — {{site}}", "message": "{{site}} está al {{percent}}% de su capacidad en este momento. Hay una alternativa más tranquila disponible." },
+      "guideVerification": { "title": "Actualización de Verificación de Guía", "message": "La licencia ASI de {{guide}} fue renovada y verificada nuevamente." }
+    }
+  },
+  "map": {
+    "searchPlaceholder": "Ir a una ciudad o región…",
+    "filters": "Filtros",
+    "category": "Categoría",
+    "crowdLevel": "Nivel de Afluencia",
+    "crowdFilters": { "any": "Cualquiera", "quiet": "Tranquilo", "moderate": "Moderado", "busy": "Concurrido" },
+    "currentCrowdAt": "Nivel de afluencia actual en {{site}}",
+    "backToList": "Volver a la Vista de Lista",
+    "distanceAway": "a {{km}} km"
+  },
+  "notFound": {
+    "title": "Este camino aún no ha sido trazado.",
+    "body": "O la página se movió, o es una parte de Heritage India que aún está en construcción. Volvamos a explorar.",
+    "cta": "Volver a Explorar"
+  },
+  "settings": {
+    "heading": "Configuración",
+    "tabs": {
+      "profile": "Perfil",
+      "theme": "Tema",
+      "accessibility": "Accesibilidad",
+      "language": "Idioma",
+      "payment": "Métodos de Pago",
+      "savedSites": "Sitios Guardados",
+      "notifications": "Notificaciones"
+    },
+    "profile": { "comingSoon": "La gestión de perfil llegará pronto." },
+    "payment": { "comingSoon": "Los métodos de pago llegarán pronto." },
+    "savedSites": { "comingSoon": "Tus sitios guardados aparecerán aquí." },
+    "notifications": { "comingSoon": "Gestiona las preferencias de notificación aquí pronto." },
+    "language": { "heading": "Idioma", "body": "Elige el idioma utilizado en todo Heritage India." },
+    "theme": { "heading": "Tema y Accesibilidad", "body": "Elige un tema y un modo de visión de color. Cada muestra a continuación se actualiza en vivo en todo el sitio." }
+  }
+}

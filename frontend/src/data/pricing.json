@@ -1,0 +1,25 @@
+{
+  "entryFees": [
+    { "siteId": "taj-mahal", "siteName": "The Taj Mahal", "indianInr": 50, "foreignInr": 1100 },
+    { "siteId": "hampi", "siteName": "Ruins of Hampi", "indianInr": 40, "foreignInr": 600 },
+    { "siteId": "amber-fort", "siteName": "Amber Fort", "indianInr": 100, "foreignInr": 550 },
+    { "siteId": "qutub-minar", "siteName": "Qutub Minar", "indianInr": 40, "foreignInr": 600 },
+    { "siteId": "mysore-palace", "siteName": "Mysore Palace", "indianInr": 70, "foreignInr": 200 }
+  ],
+  "guideRates": [
+    { "tier": "Half Day (4 hrs)", "priceInr": 1200 },
+    { "tier": "Full Day (8 hrs)", "priceInr": 2200 },
+    { "tier": "Multi-Day (per day)", "priceInr": 1800 }
+  ],
+  "feeBreakdownNote": "All prices shown include ASI entry fees, applicable taxes, and platform service charge — no hidden costs at checkout.",
+  "translations": {
+    "hi": {
+      "feeBreakdownNote": "दिखाई गई सभी कीमतों में ASI प्रवेश शुल्क, लागू कर, और प्लेटफ़ॉर्म सेवा शुल्क शामिल हैं — चेकआउट पर कोई छिपी हुई लागत नहीं।",
+      "guideRateTiers": ["आधा दिन (4 घंटे)", "पूरा दिन (8 घंटे)", "बहु-दिवसीय (प्रति दिन)"]
+    },
+    "es": {
+      "feeBreakdownNote": "Todos los precios mostrados incluyen las tarifas de entrada ASI, impuestos aplicables y el cargo por servicio de la plataforma — sin costos ocultos al finalizar la compra.",
+      "guideRateTiers": ["Medio Día (4 hrs)", "Día Completo (8 hrs)", "Varios Días (por día)"]
+    }
+  }
+}

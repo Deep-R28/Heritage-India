@@ -1,0 +1,70 @@
+[
+  {
+    "id": "g-1001",
+    "name": "Ravi Shankar Mehta",
+    "asiId": "ASI-UP-04471",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 12,
+    "languages": ["English", "Hindi", "French"],
+    "specialty": "Mughal Architecture",
+    "region": "Agra, Uttar Pradesh",
+    "rateInr": 1500,
+    "rating": 4.9,
+    "translations": {
+      "hi": { "specialty": "मुगल स्थापत्य कला" },
+      "es": { "specialty": "Arquitectura Mogol" }
+    }
+  },
+  {
+    "id": "g-1002",
+    "name": "Lakshmi Devaraj",
+    "asiId": "ASI-KA-01820",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 8,
+    "languages": ["English", "Kannada", "Tamil"],
+    "specialty": "Vijayanagara History",
+    "region": "Hampi, Karnataka",
+    "rateInr": 1200,
+    "rating": 4.8,
+    "translations": {
+      "hi": { "specialty": "विजयनगर इतिहास" },
+      "es": { "specialty": "Historia de Vijayanagara" }
+    }
+  },
+  {
+    "id": "g-1003",
+    "name": "Arjun Singh Rathore",
+    "asiId": "ASI-RJ-03392",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 15,
+    "languages": ["English", "Hindi", "German"],
+    "specialty": "Rajput Forts & Palaces",
+    "region": "Jaipur, Rajasthan",
+    "rateInr": 1800,
+    "rating": 5.0,
+    "translations": {
+      "hi": { "specialty": "राजपूत किले और महल" },
+      "es": { "specialty": "Fuertes y Palacios Rajput" }
+    }
+  },
+  {
+    "id": "g-1004",
+    "name": "Suresh Naik",
+    "asiId": null,
+    "verified": false,
+    "photo": null,
+    "experienceYears": 2,
+    "languages": ["Hindi"],
+    "specialty": "General Sightseeing",
+    "region": "Delhi",
+    "rateInr": 400,
+    "rating": 3.1,
+    "translations": {
+      "hi": { "specialty": "सामान्य सैर-सपाटा" },
+      "es": { "specialty": "Turismo General" }
+    }
+  }
+]

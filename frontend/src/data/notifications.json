@@ -1,0 +1,36 @@
+[
+  {
+    "id": "n-1",
+    "type": "booking",
+    "variant": "confirmed",
+    "guide": "Ravi Shankar Mehta",
+    "site": "The Taj Mahal",
+    "eventDate": "2026-10-12",
+    "date": "2026-09-01",
+    "read": false
+  },
+  {
+    "id": "n-2",
+    "type": "crowd-alert",
+    "site": "Qutub Minar",
+    "percent": 88,
+    "date": "2026-09-02",
+    "read": false
+  },
+  {
+    "id": "n-3",
+    "type": "guide-verification",
+    "guide": "Arjun Singh Rathore",
+    "date": "2026-08-28",
+    "read": true
+  },
+  {
+    "id": "n-4",
+    "type": "booking",
+    "variant": "cancelled",
+    "site": "Ruins of Hampi",
+    "eventDate": "2026-04-02",
+    "date": "2026-03-30",
+    "read": true
+  }
+]

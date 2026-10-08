@@ -1,0 +1,46 @@
+[
+  {
+    "id": "bk-8841",
+    "type": "guide",
+    "siteName": "The Taj Mahal at Dawn",
+    "region": "Agra, Uttar Pradesh",
+    "guideName": "Ravi Shankar Mehta",
+    "date": "2026-10-12",
+    "status": "upcoming",
+    "priceInr": 1650,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg"
+  },
+  {
+    "id": "bk-8842",
+    "type": "site",
+    "siteName": "Chand Baori Stepwell",
+    "region": "Abhaneri, Rajasthan",
+    "guideName": null,
+    "date": "2026-11-04",
+    "status": "upcoming",
+    "priceInr": 300,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg"
+  },
+  {
+    "id": "bk-7710",
+    "type": "guide",
+    "siteName": "Amber Fort Heritage Walk",
+    "region": "Jaipur, Rajasthan",
+    "guideName": "Arjun Singh Rathore",
+    "date": "2026-06-18",
+    "status": "completed",
+    "priceInr": 1800,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg"
+  },
+  {
+    "id": "bk-7002",
+    "type": "site",
+    "siteName": "Ruins of Hampi",
+    "region": "Hampi, Karnataka",
+    "guideName": "Lakshmi Devaraj",
+    "date": "2026-04-02",
+    "status": "cancelled",
+    "priceInr": 600,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg"
+  }
+]

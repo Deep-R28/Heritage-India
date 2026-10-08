@@ -1,0 +1,234 @@
+[
+  {
+    "id": "taj-mahal",
+    "slug": "taj-mahal",
+    "name": "The Taj Mahal",
+    "category": "Monument",
+    "region": "Agra, Uttar Pradesh",
+    "lat": 27.1751,
+    "lng": 78.0421,
+    "distanceKm": 2.4,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg"
+    ],
+    "crowdPercent": 78,
+    "priceInr": 1100,
+    "openHours": "6:00 AM – 6:30 PM",
+    "summary": "An ivory-white marble mausoleum on the southern bank of the Yamuna, commissioned in 1632. UNESCO World Heritage Site and one of the New Seven Wonders of the World.",
+    "history": "Built by Mughal emperor Shah Jahan in memory of his wife Mumtaz Mahal, the Taj Mahal took over 20,000 artisans and 22 years to complete. Its symmetry, inlaid gemstones, and calligraphy represent the pinnacle of Mughal architecture.",
+    "translations": {
+      "hi": {
+        "summary": "यमुना के दक्षिणी तट पर स्थित एक हाथी दांत-सफेद संगमरमर का मकबरा, जिसे 1632 में बनवाया गया था। यह UNESCO विश्व धरोहर स्थल और विश्व के नए सात आश्चर्यों में से एक है।",
+        "history": "मुगल सम्राट शाहजहां द्वारा अपनी पत्नी मुमताज़ महल की स्मृति में बनवाया गया, ताज महल को पूरा होने में 20,000 से अधिक कारीगरों और 22 वर्षों का समय लगा। इसकी समरूपता, जड़ित रत्न, और सुलेख मुगल स्थापत्य कला के शिखर का प्रतिनिधित्व करते हैं।"
+      },
+      "es": {
+        "summary": "Un mausoleo de mármol blanco marfil en la orilla sur del Yamuna, encargado en 1632. Patrimonio de la Humanidad por la UNESCO y una de las Nuevas Siete Maravillas del Mundo.",
+        "history": "Construido por el emperador mogol Shah Jahan en memoria de su esposa Mumtaz Mahal, el Taj Mahal requirió más de 20,000 artesanos y 22 años para completarse. Su simetría, piedras preciosas incrustadas y caligrafía representan la cima de la arquitectura mogol."
+      }
+    }
+  },
+  {
+    "id": "hampi",
+    "slug": "hampi",
+    "name": "Ruins of Hampi",
+    "category": "Ancient City",
+    "region": "Hampi, Karnataka",
+    "lat": 15.335,
+    "lng": 76.46,
+    "distanceKm": 5.1,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg"
+    ],
+    "crowdPercent": 34,
+    "priceInr": 600,
+    "openHours": "6:00 AM – 6:00 PM",
+    "summary": "A sprawling UNESCO World Heritage Site of boulder-strewn ruins, once the capital of the Vijayanagara Empire — the largest Hindu empire in Indian history.",
+    "history": "Founded in the 14th century, Hampi flourished as one of the richest cities in the world before its destruction in 1565. Its temples, royal enclosures, and market streets remain remarkably preserved among granite hills.",
+    "translations": {
+      "hi": {
+        "summary": "बोल्डरों से भरे खंडहरों का एक विस्तृत UNESCO विश्व धरोहर स्थल, जो कभी विजयनगर साम्राज्य — भारतीय इतिहास के सबसे बड़े हिंदू साम्राज्य — की राजधानी था।",
+        "history": "14वीं शताब्दी में स्थापित, हम्पी 1565 में अपने विनाश से पहले दुनिया के सबसे धनी शहरों में से एक के रूप में फला-फूला। इसके मंदिर, शाही परिसर, और बाज़ार की गलियां ग्रेनाइट पहाड़ियों के बीच उल्लेखनीय रूप से संरक्षित हैं।"
+      },
+      "es": {
+        "summary": "Un extenso sitio Patrimonio de la Humanidad por la UNESCO de ruinas sembradas de rocas, que fue capital del Imperio Vijayanagara — el mayor imperio hindú de la historia de la India.",
+        "history": "Fundada en el siglo XIV, Hampi floreció como una de las ciudades más ricas del mundo antes de su destrucción en 1565. Sus templos, recintos reales y calles de mercado permanecen notablemente conservados entre colinas de granito."
+      }
+    }
+  },
+  {
+    "id": "amber-fort",
+    "slug": "amber-fort",
+    "name": "Amber Fort",
+    "category": "Fort",
+    "region": "Jaipur, Rajasthan",
+    "lat": 26.9855,
+    "lng": 75.8513,
+    "distanceKm": 11.8,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg"
+    ],
+    "crowdPercent": 55,
+    "priceInr": 550,
+    "openHours": "8:00 AM – 5:30 PM",
+    "summary": "A majestic hilltop fort of pink sandstone and white marble overlooking Maota Lake, renowned for its artistic Hindu-style elements and the Sheesh Mahal mirror hall.",
+    "history": "Built starting in 1592 by Raja Man Singh I, Amber Fort served as the seat of the Kachwaha Rajput rulers for over 150 years before the capital moved to Jaipur city.",
+    "translations": {
+      "hi": {
+        "summary": "माओटा झील को निहारता गुलाबी बलुआ पत्थर और सफेद संगमरमर से बना एक भव्य पहाड़ी किला, जो अपने कलात्मक हिंदू-शैली के तत्वों और शीश महल दर्पण कक्ष के लिए प्रसिद्ध है।",
+        "history": "1592 में राजा मान सिंह प्रथम द्वारा निर्माण शुरू किया गया, आमेर किला 150 वर्षों से अधिक समय तक कछवाहा राजपूत शासकों की राजधानी रहा, इससे पहले कि राजधानी जयपुर शहर में स्थानांतरित हो गई।"
+      },
+      "es": {
+        "summary": "Un majestuoso fuerte en la cima de una colina, de arenisca rosada y mármol blanco, que domina el lago Maota, célebre por sus elementos artísticos de estilo hindú y la sala de espejos Sheesh Mahal.",
+        "history": "Construido a partir de 1592 por Raja Man Singh I, el Fuerte Amber fue la sede de los gobernantes rajput Kachwaha durante más de 150 años antes de que la capital se trasladara a la ciudad de Jaipur."
+      }
+    }
+  },
+  {
+    "id": "qutub-minar",
+    "slug": "qutub-minar",
+    "name": "Qutub Minar",
+    "category": "Monument",
+    "region": "New Delhi",
+    "lat": 28.5245,
+    "lng": 77.1855,
+    "distanceKm": 8.3,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Qutb_Minar_Complex.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/7/7b/Qutb_Minar_Complex.jpg"
+    ],
+    "crowdPercent": 88,
+    "priceInr": 600,
+    "openHours": "7:00 AM – 5:00 PM",
+    "summary": "A 73-metre tapering red sandstone and marble minaret, the tallest brick minaret in the world, at the heart of the Qutub Complex.",
+    "history": "Construction began in 1192 under Qutb al-Din Aibak. The tower and surrounding complex mark the beginning of Islamic rule in Delhi and blend Islamic and Indian craftsmanship.",
+    "translations": {
+      "hi": {
+        "summary": "73 मीटर ऊंची, संकरी होती लाल बलुआ पत्थर और संगमरमर की मीनार, कुतुब परिसर के केंद्र में स्थित, विश्व की सबसे ऊंची ईंट की मीनार।",
+        "history": "निर्माण 1192 में कुतुब-उद-दीन ऐबक के अधीन शुरू हुआ। यह टावर और आस-पास का परिसर दिल्ली में इस्लामी शासन की शुरुआत को चिह्नित करता है और इस्लामी व भारतीय शिल्पकला का मिश्रण प्रस्तुत करता है।"
+      },
+      "es": {
+        "summary": "Un minarete cónico de arenisca roja y mármol de 73 metros, el minarete de ladrillo más alto del mundo, en el corazón del Complejo Qutub.",
+        "history": "La construcción comenzó en 1192 bajo Qutb al-Din Aibak. La torre y el complejo circundante marcan el inicio del dominio islámico en Delhi y combinan la artesanía islámica e india."
+      }
+    }
+  },
+  {
+    "id": "mysore-palace",
+    "slug": "mysore-palace",
+    "name": "Mysore Palace",
+    "category": "Palace",
+    "region": "Mysuru, Karnataka",
+    "lat": 12.3052,
+    "lng": 76.6552,
+    "distanceKm": 14.6,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/Mysore_Palace.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/4/48/Mysore_Palace.jpg"
+    ],
+    "crowdPercent": 41,
+    "priceInr": 200,
+    "openHours": "10:00 AM – 5:30 PM",
+    "summary": "The official residence of the Wadiyar dynasty — an Indo-Saracenic landmark famed for its illuminated domes and stained-glass ceilings, especially during Dussehra.",
+    "history": "The current palace was completed in 1912 after a fire destroyed the previous wooden structure. It remains one of India's most visited monuments, second only to the Taj Mahal.",
+    "translations": {
+      "hi": {
+        "summary": "वाडियार वंश का आधिकारिक निवास — एक इंडो-सारसेनिक स्थल, जो अपने प्रकाशित गुंबदों और सना हुआ कांच की छतों के लिए प्रसिद्ध है, विशेष रूप से दशहरे के दौरान।",
+        "history": "वर्तमान महल 1912 में पूरा हुआ, जब एक आग ने पिछली लकड़ी की संरचना को नष्ट कर दिया था। यह ताज महल के बाद भारत के सबसे अधिक देखे जाने वाले स्मारकों में से एक बना हुआ है।"
+      },
+      "es": {
+        "summary": "La residencia oficial de la dinastía Wadiyar — un hito indosarraceno famoso por sus cúpulas iluminadas y techos de vitrales, especialmente durante el Dussehra.",
+        "history": "El palacio actual se completó en 1912 después de que un incendio destruyera la estructura de madera anterior. Sigue siendo uno de los monumentos más visitados de la India, solo superado por el Taj Mahal."
+      }
+    }
+  },
+  {
+    "id": "chand-baori",
+    "slug": "chand-baori",
+    "name": "Chand Baori Stepwell",
+    "category": "Stepwell",
+    "region": "Abhaneri, Rajasthan",
+    "lat": 27.0059,
+    "lng": 76.6015,
+    "distanceKm": 18.2,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg"
+    ],
+    "crowdPercent": 22,
+    "priceInr": 300,
+    "openHours": "8:00 AM – 5:00 PM",
+    "summary": "A 3,500-step geometric marvel descending 13 storeys underground — among the deepest and most striking stepwells in India.",
+    "history": "Built in the 9th century by King Chanda of the Nikumbha dynasty, Chand Baori was designed to conserve water in the arid region while showcasing intricate mathematical precision in its stairways.",
+    "translations": {
+      "hi": {
+        "summary": "13 मंज़िल भूमिगत उतरता 3,500 सीढ़ियों का एक ज्यामितीय चमत्कार — भारत की सबसे गहरी और सबसे शानदार बावड़ियों में से एक।",
+        "history": "9वीं शताब्दी में निकुंभ वंश के राजा चंद द्वारा निर्मित, चांद बावड़ी को शुष्क क्षेत्र में जल संरक्षण के लिए डिज़ाइन किया गया था, साथ ही इसकी सीढ़ियों में जटिल गणितीय सटीकता को प्रदर्शित करते हुए।"
+      },
+      "es": {
+        "summary": "Una maravilla geométrica de 3.500 escalones que desciende 13 pisos bajo tierra — uno de los pozos escalonados más profundos e impresionantes de la India.",
+        "history": "Construido en el siglo IX por el rey Chanda de la dinastía Nikumbha, Chand Baori fue diseñado para conservar agua en la región árida, mostrando a la vez una intrincada precisión matemática en sus escaleras."
+      }
+    }
+  },
+  {
+    "id": "hawa-mahal",
+    "slug": "hawa-mahal",
+    "name": "Hawa Mahal",
+    "category": "Architecture",
+    "region": "Jaipur, Rajasthan",
+    "lat": 26.9239,
+    "lng": 75.8267,
+    "distanceKm": 12.1,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Hawa_Mahal%2C_Jaipur.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/e/e3/Hawa_Mahal%2C_Jaipur.jpg"
+    ],
+    "crowdPercent": 66,
+    "priceInr": 200,
+    "openHours": "9:00 AM – 4:30 PM",
+    "summary": "A five-storey pink sandstone facade with 953 small windows, built to let royal women observe street life unseen.",
+    "history": "Constructed in 1799 by Maharaja Sawai Pratap Singh, the honeycomb facade allowed cool air to circulate, functioning as an early form of natural air conditioning.",
+    "translations": {
+      "hi": {
+        "summary": "953 छोटी खिड़कियों वाला पांच मंज़िला गुलाबी बलुआ पत्थर का अग्रभाग, जिसे शाही महिलाओं को बिना देखे सड़क का जीवन देखने के लिए बनाया गया था।",
+        "history": "1799 में महाराजा सवाई प्रताप सिंह द्वारा निर्मित, मधुमक्खी के छत्ते जैसा अग्रभाग ठंडी हवा को प्रसारित होने देता था, जो प्राकृतिक वातानुकूलन के एक प्रारंभिक रूप के रूप में कार्य करता था।"
+      },
+      "es": {
+        "summary": "Una fachada de arenisca rosada de cinco pisos con 953 pequeñas ventanas, construida para que las mujeres reales observaran la vida callejera sin ser vistas.",
+        "history": "Construido en 1799 por el Maharajá Sawai Pratap Singh, la fachada de panal permitía la circulación de aire fresco, funcionando como una forma temprana de aire acondicionado natural."
+      }
+    }
+  },
+  {
+    "id": "kerala-backwaters",
+    "slug": "kerala-backwaters",
+    "name": "Kerala Backwaters",
+    "category": "Natural Heritage",
+    "region": "Alleppey, Kerala",
+    "lat": 9.4981,
+    "lng": 76.3388,
+    "distanceKm": 24.7,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Kerala_backwaters%2C_Houseboats%2C_India.jpg",
+    "gallery": [
+      "https://upload.wikimedia.org/wikipedia/commons/4/4e/Kerala_backwaters%2C_Houseboats%2C_India.jpg"
+    ],
+    "crowdPercent": 15,
+    "priceInr": 1500,
+    "openHours": "Sunrise – Sunset",
+    "summary": "A serene network of lagoons and lakes lined with palms, traversed by traditional wooden houseboats.",
+    "history": "The backwaters have been a trade and transport lifeline in Kerala for centuries; today the houseboats (kettuvallams) once used for rice transport now serve as floating retreats.",
+    "translations": {
+      "hi": {
+        "summary": "ताड़ के पेड़ों से घिरे लैगून और झीलों का एक शांत नेटवर्क, पारंपरिक लकड़ी के हाउसबोट द्वारा पार किया जाता है।",
+        "history": "बैकवाटर सदियों से केरल में व्यापार और परिवहन की जीवनरेखा रहे हैं; आज चावल परिवहन के लिए कभी उपयोग किए जाने वाले हाउसबोट (केट्टुवल्लम) अब तैरते हुए विश्राम स्थल के रूप में काम करते हैं।"
+      },
+      "es": {
+        "summary": "Una serena red de lagunas y lagos bordeados de palmeras, recorridos por tradicionales casas flotantes de madera.",
+        "history": "Los backwaters han sido una línea vital de comercio y transporte en Kerala durante siglos; hoy las casas flotantes (kettuvallams), antes usadas para el transporte de arroz, sirven como retiros flotantes."
+      }
+    }
+  }
+]
