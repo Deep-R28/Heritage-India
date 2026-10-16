@@ -101,4 +101,78 @@ Hawa Mahal, Golconda Fort, Charminar
 - Used SQLite for local dev as specified; schema uses Postgres-compatible types
 - JSON arrays (imageUrls, languages) stored as TEXT for SQLite compat
 - Two demo users created with bcrypt-hashed passwords for testing
-- LLM_MODEL set to `gemini-2.5-flash-lite` (current free-tier model)
+- LLM_MODEL set to `gemini-3.5-flash-lite`
+
+---
+
+## Phase 3 — Backend API
+**Status: COMPLETE** ✅
+
+### What was done
+1. Express app created in `backend/src/app.ts` with:
+   - Helmet for security headers
+   - CORS restricted to FRONTEND_ORIGIN
+   - Cookie parser & JSON body parser
+   - Rate limiting (300 req / 15 min window)
+   - Centralized error handler (`{ data, error }` JSON shape)
+2. Implemented all required endpoints across routes:
+   - `GET /api/stats` — Total sites & verified guide counts
+   - `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`
+   - `PUT /api/me/preferences`, `GET /api/me/profile`, `PUT /api/me/profile`, `PUT /api/me/password`
+   - `GET /api/me/dashboard` — Stats (sites visited, guides booked, saved sites, languages used), upcoming bookings
+   - `GET /api/me/bookings`, `PATCH /api/bookings/:id/cancel`
+   - `GET /api/me/notifications`, `PATCH /api/me/notifications/:id/read`, `PATCH /api/me/notifications/read-all`
+   - `GET /api/me/saved`, `POST /api/me/saved/:siteId`, `DELETE /api/me/saved/:siteId`
+   - `GET /api/sites` — Filter by radius, category, crowd level, keyword, sorting
+   - `GET /api/sites/map` — Lightweight pins with bounding box support
+   - `GET /api/sites/:slug` — Multilingual site detail with live crowd
+   - `GET /api/sites/:slug/alternatives` — Quieter sites ranked by lower crowd then distance
+   - `GET /api/sites/:slug/crowd` — Live crowd gauge with lastUpdated
+   - `GET /api/guides/verify` — Search by licenseId or name, returning verified/unverified/not_found
+   - `GET /api/pricing` — Transparent fee breakdown with taxes and GST
+   - `POST /api/bookings` — Creates booking + line items with unique reference
+   - `GET /api/bookings/:reference` — Payment confirmation lookup
+   - `POST /api/payments` — Payment provider integration (Mock + Razorpay TEST)
+   - `POST /api/contact` — Inquiry submission to ContactMessage
+3. Automated Services:
+   - `CrowdService`: Realistic time-of-day + weekend + popularity crowd simulation with DB snapshot caching
+   - `NotificationService`: Auto-creates notifications on booking confirmation, cancellation, and crowd shifts to HIGH/LOW on saved sites
+   - `PaymentService`: Interface with Mock and Razorpay TEST implementations
+
+---
+
+## Phase 5 — AI Assistant (Text + Voice Engine)
+**Status: COMPLETE** ✅
+
+### What was done
+1. Provider interface (`LLMProvider`) in `backend/src/services/ai/provider.ts`:
+   - Google Gemini provider with SSE streaming
+   - Groq fallback provider (Llama models)
+   - OpenRouter fallback provider
+   - Config-driven provider switching via `LLM_PROVIDER` and `LLM_MODEL`
+2. Authentic Database Grounding (`backend/src/services/ai/grounding.ts`):
+   - Injects authentic DB context for sites, entry fees, live crowd percentages, and verified ASI guides
+   - Zero invented facts/prices rule strictly enforced in system prompt
+   - Multilingual auto-detection (Hindi, Spanish, English)
+3. Streaming endpoint (`backend/src/routes/ai.ts`):
+   - `POST /api/ai/chat` with Server-Sent Events (SSE) token streaming
+   - Chat history persistence in `ChatSession` and `ChatMessage` models
+   - `GET /api/ai/sessions/:sessionId` for chat history resumption
+4. Verified with live LLM calls:
+   - English test: Query "What are quiet places to visit in India under Rs. 500?" streamed accurately with authentic DB pricing (Mysore Palace ₹200, Amber Fort ₹500, verified guide recommendation).
+   - Hindi test: Query "ताजमहल का प्रवेश शुल्क कितना है और वहां भीड़ कैसी है?" responded fluently in Hindi with authentic ₹1100 entry fee and current crowd status.
+   - Note on model: API verified with `gemini-3.5-flash-lite`.
+
+### Test Results
+- 12/12 unit and API integration tests passing (`npm test`):
+  - Health check test: PASS
+  - Stats endpoint test: PASS
+  - Sites endpoint with crowd data test: PASS
+  - Map pins endpoint test: PASS
+  - Multilingual site detail test: PASS
+  - Smart alternatives ranking test: PASS
+  - Guide verification test (verified, unverified, not_found): PASS
+  - Auth login & /auth/me workflow test: PASS
+  - Pricing itemized GST & fees test: PASS
+  - Crowd simulation service unit tests: PASS
+
