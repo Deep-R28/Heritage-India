@@ -1,0 +1,206 @@
+// Prisma schema for Heritage India — AI-Tourist Assistant
+// Provider: SQLite for local dev, Postgres-compatible field choices
+// so switching to Supabase/Neon only needs a DATABASE_URL change.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Users & Preferences ────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  preference    Preference?
+  bookings      Booking[]
+  savedSites    SavedSite[]
+  notifications Notification[]
+  chatSessions  ChatSession[]
+}
+
+model Preference {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  theme          String  @default("dark")
+  visionMode     String  @default("default")
+  language       String  @default("en")
+  onboardingDone Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Sites & Content ────────────────────────────────────────────
+
+model Site {
+  id           String  @id @default(cuid())
+  slug         String  @unique
+  name         String
+  city         String
+  state        String
+  category     String
+  lat          Float
+  lng          Float
+  imageUrls    String  // JSON array stored as text (SQLite compat)
+  entryFeeINR  Int
+  openingHours String
+  baseCapacity Int     @default(1000)
+
+  content        SiteContent[]
+  crowdSnapshots CrowdSnapshot[]
+  bookings       Booking[]
+  savedBy        SavedSite[]
+}
+
+model SiteContent {
+  id           String @id @default(cuid())
+  siteId       String
+  locale       String
+  history      String
+  significance String
+  tips         String
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, locale])
+}
+
+// ─── Crowd Intelligence ─────────────────────────────────────────
+
+model CrowdSnapshot {
+  id         String   @id @default(cuid())
+  siteId     String
+  level      String   // LOW, MEDIUM, HIGH
+  percent    Int
+  recordedAt DateTime @default(now())
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, recordedAt])
+}
+
+// ─── Guides ─────────────────────────────────────────────────────
+
+model Guide {
+  id              String  @id @default(cuid())
+  name            String
+  photoUrl        String?
+  licenseId       String  @unique
+  licenseStatus   String  // VERIFIED, UNVERIFIED
+  experienceYears Int
+  languages       String  // JSON array stored as text (SQLite compat)
+  ratePerHourINR  Int
+  standardRateINR Int
+
+  bookings Booking[]
+}
+
+// ─── Bookings & Payments ────────────────────────────────────────
+
+model Booking {
+  id        String   @id @default(cuid())
+  userId    String
+  siteId    String
+  guideId   String?
+  visitDate DateTime
+  partySize Int      @default(1)
+  status    String   @default("UPCOMING") // UPCOMING, COMPLETED, CANCELLED
+  totalINR  Int
+  reference String   @unique
+  createdAt DateTime @default(now())
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  site      Site       @relation(fields: [siteId], references: [id])
+  guide     Guide?     @relation(fields: [guideId], references: [id])
+  payment   Payment?
+  lineItems LineItem[]
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  bookingId   String   @unique
+  method      String   // CARD, UPI
+  status      String   // SUCCESS, FAILED, PENDING
+  providerRef String?
+  amountINR   Int
+  createdAt   DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model LineItem {
+  id        String @id @default(cuid())
+  bookingId String
+  label     String
+  amountINR Int
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+// ─── User Features ──────────────────────────────────────────────
+
+model SavedSite {
+  id     String @id @default(cuid())
+  userId String
+  siteId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, siteId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String    // BOOKING, CROWD_ALERT, GUIDE_VERIFICATION
+  title     String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─── AI Chat ────────────────────────────────────────────────────
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    String?
+  language  String   @default("en")
+  createdAt DateTime @default(now())
+
+  user     User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String   // user, assistant
+  content   String
+  createdAt DateTime @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+// ─── Contact ────────────────────────────────────────────────────
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}

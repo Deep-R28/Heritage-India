@@ -1,0 +1,46 @@
+{
+  "name": "heritage-india-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "tsc --noEmit",
+    "seed": "tsx prisma/seed.ts",
+    "verify-db": "tsx scripts/verify-db.ts",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.0.0",
+    "prisma": "^7.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true,
+    "better-sqlite3@11.10.0": true,
+    "prisma@7.10.1": true,
+    "@prisma/engines@7.10.1": true,
+    "esbuild@0.28.2": true
+  }
+}
