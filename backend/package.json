@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "dev": "npx tsx watch src/server.ts",
+    "build": "npx tsc",
     "start": "node dist/server.js",
-    "lint": "tsc --noEmit",
-    "seed": "tsx prisma/seed.ts",
-    "verify-db": "tsx scripts/verify-db.ts",
-    "test": "tsx --test src/**/*.test.ts"
+    "lint": "npx tsc --noEmit",
+    "seed": "npx tsx prisma/seed.ts",
+    "verify-db": "npx tsx scripts/verify-db.ts",
+    "test": "npx tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.0.0",
