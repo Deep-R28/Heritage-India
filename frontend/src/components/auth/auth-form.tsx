@@ -13,7 +13,7 @@ const HERO_IMAGE = "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788
 export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const { t } = useTranslation();
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, signup } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +31,7 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
 
     try {
       if (isSignup) {
-        await login({ email, password, name: fullname });
+        await signup({ name: fullname, email, password });
         router.push("/onboarding");
       } else {
         await login({ email, password });

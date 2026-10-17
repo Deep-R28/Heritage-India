@@ -53,15 +53,40 @@ export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
       />
 
       {/* Search bar — top-left overlay */}
-      <div className="glass-panel absolute left-4 top-24 z-[1000] flex w-[calc(100%-2rem)] max-w-sm items-center gap-2 rounded-full px-4 py-3 md:left-8 md:top-28">
-        <Icon name="search" className="text-foreground-muted" />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (filtered.length > 0 && query.trim()) {
+            setSelected(filtered[0]);
+          }
+        }}
+        className="glass-panel absolute left-4 top-24 z-[1000] flex w-[calc(100%-2rem)] max-w-md items-center gap-2 rounded-full border border-accent/25 bg-background/90 py-1.5 pl-4 pr-1.5 shadow-2xl backdrop-blur-md md:left-8 md:top-28"
+      >
+        <Icon name="search" className="shrink-0 text-foreground-muted" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("map.searchPlaceholder") ?? undefined}
+          placeholder={t("map.searchPlaceholder") || "Search places, cities, states..."}
           className="w-full bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
         />
-      </div>
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="p-1 text-foreground-muted transition-colors hover:text-accent"
+            title="Clear search"
+          >
+            <Icon name="close" className="text-sm" />
+          </button>
+        )}
+        <button
+          type="submit"
+          className="flex shrink-0 items-center gap-1 rounded-full bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow-sm transition-all hover:bg-accent/90"
+        >
+          <Icon name="travel_explore" className="text-sm" />
+          Search
+        </button>
+      </form>
 
       {/* Filter panel — top-right overlay */}
       <div className="absolute right-4 top-24 z-[1000] md:right-8 md:top-28">
@@ -136,23 +161,67 @@ export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
             >
               <Icon name="close" />
             </button>
-            <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
+            <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl border border-accent/20">
               <Image src={selected.image} alt={selected.name} fill sizes="384px" className="object-cover" />
+              <div className="absolute left-2 top-2 flex flex-wrap gap-1.5">
+                <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent backdrop-blur-sm">
+                  {selected.category}
+                </span>
+                {selected.zone && (
+                  <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-300 backdrop-blur-sm">
+                    {selected.zone}
+                  </span>
+                )}
+              </div>
+              {selected.googleRating && (
+                <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/80 px-2.5 py-0.5 text-xs font-semibold text-amber-300 backdrop-blur-sm">
+                  ★ {selected.googleRating}
+                </span>
+              )}
             </div>
+
             <h2 className="mb-1 font-headline text-2xl text-foreground">{selected.name}</h2>
             <p className="mb-4 flex items-center gap-1 font-body text-sm text-foreground-muted">
               <Icon name="location_on" className="text-sm" />
               {selected.region} &middot; {t("map.distanceAway", { km: selected.distanceKm })}
             </p>
+
+            <div className="mb-4 flex items-center justify-between rounded-lg border border-hairline bg-surface/50 p-3 text-xs">
+              <div>
+                <span className="block text-[10px] uppercase tracking-wider text-stone-400">Entry Fee</span>
+                <span className="font-semibold text-accent">
+                  {selected.priceInr === 0 ? "Free Entry" : `₹${selected.priceInr}`}
+                </span>
+              </div>
+              {selected.timeNeeded && (
+                <div className="text-right">
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">Time Needed</span>
+                  <span className="font-semibold text-foreground">~{selected.timeNeeded} hrs</span>
+                </div>
+              )}
+            </div>
+
             <div className="mb-6 flex items-center gap-4">
               <CrowdGaugeRadial percent={selected.crowdPercent} />
               <div className="font-body text-sm text-foreground-muted">
                 {t("map.currentCrowdAt", { site: selected.name })}
               </div>
             </div>
-            <Link href={`/sites/${selected.slug}`}>
-              <Button className="w-full">{t("common.viewDetails")}</Button>
-            </Link>
+
+            <div className="flex flex-col gap-2">
+              <Link href={`/sites/${selected.slug}`}>
+                <Button className="w-full">
+                  <Icon name="info" className="text-sm" />
+                  {t("common.viewDetails")}
+                </Button>
+              </Link>
+              <Link href={`/checkout?site=${selected.slug}`}>
+                <Button variant="secondary" className="w-full">
+                  <Icon name="confirmation_number" className="text-sm" />
+                  Book Visit & Guide
+                </Button>
+              </Link>
+            </div>
           </>
         )}
       </div>
