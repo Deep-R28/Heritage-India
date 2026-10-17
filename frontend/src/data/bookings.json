@@ -8,7 +8,7 @@
     "date": "2026-10-12",
     "status": "upcoming",
     "priceInr": 1650,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg"
+    "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80"
   },
   {
     "id": "bk-8842",
@@ -19,7 +19,7 @@
     "date": "2026-11-04",
     "status": "upcoming",
     "priceInr": 300,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg"
+    "image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
   },
   {
     "id": "bk-7710",
@@ -30,7 +30,7 @@
     "date": "2026-06-18",
     "status": "completed",
     "priceInr": 1800,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg"
+    "image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
   },
   {
     "id": "bk-7002",
@@ -41,6 +41,6 @@
     "date": "2026-04-02",
     "status": "cancelled",
     "priceInr": 600,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg"
+    "image": "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80"
   }
 ]

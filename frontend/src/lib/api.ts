@@ -33,6 +33,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   }
 
   const res = await fetch(url, {
+    cache: "no-store",
     ...options,
     headers,
     credentials: "include", // send httpOnly cookies

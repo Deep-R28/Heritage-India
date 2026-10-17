@@ -58,8 +58,9 @@ const sites: SiteData[] = [
     lat: 27.1751,
     lng: 78.0421,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 1100,
     openingHours: "6:00 AM – 6:30 PM (Closed Fridays)",
     baseCapacity: 40000,
@@ -84,8 +85,8 @@ const sites: SiteData[] = [
     lat: 15.335,
     lng: 76.46,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Hampi_vibread.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "6:00 AM – 6:00 PM",
     baseCapacity: 5000,
@@ -110,8 +111,8 @@ const sites: SiteData[] = [
     lat: 26.9855,
     lng: 75.8513,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/5/5e/The_Amer_Fort.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 500,
     openingHours: "8:00 AM – 5:30 PM",
     baseCapacity: 15000,
@@ -136,8 +137,8 @@ const sites: SiteData[] = [
     lat: 28.5245,
     lng: 77.1855,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/0/0b/Qutab_Minar_mbread.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "7:00 AM – 5:00 PM",
     baseCapacity: 10000,
@@ -162,8 +163,8 @@ const sites: SiteData[] = [
     lat: 12.3052,
     lng: 76.6552,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/a/aa/Mysore_Palace_Morning.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 200,
     openingHours: "10:00 AM – 5:30 PM",
     baseCapacity: 8000,
@@ -188,8 +189,8 @@ const sites: SiteData[] = [
     lat: 28.6562,
     lng: 77.241,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/d/d5/Red_Fort_in_Delhi_03-2016_img3.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "9:30 AM – 4:30 PM (Closed Mondays)",
     baseCapacity: 20000,
@@ -214,8 +215,8 @@ const sites: SiteData[] = [
     lat: 19.8876,
     lng: 86.0945,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/3e/Konark_Sun_Temple_Front_view.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "6:00 AM – 8:00 PM",
     baseCapacity: 5000,
@@ -240,8 +241,8 @@ const sites: SiteData[] = [
     lat: 9.9195,
     lng: 78.1193,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/5/52/Meenakshi_Amman_Temple.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "5:00 AM – 12:30 PM, 4:00 PM – 9:30 PM",
     baseCapacity: 15000,
@@ -266,8 +267,8 @@ const sites: SiteData[] = [
     lat: 24.8318,
     lng: 79.9199,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Khajuraho_-_Kandariya_Mahadeo_Temple.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "Sunrise – Sunset",
     baseCapacity: 3000,
@@ -292,8 +293,8 @@ const sites: SiteData[] = [
     lat: 20.5519,
     lng: 75.7033,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/f/ff/Ajanta_%28Caves_overview%29.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "9:00 AM – 5:00 PM (Closed Mondays)",
     baseCapacity: 3000,
@@ -318,8 +319,8 @@ const sites: SiteData[] = [
     lat: 20.0258,
     lng: 75.1781,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/c/c3/Kailasha_temple_at_Ellora.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "6:00 AM – 6:00 PM (Closed Tuesdays)",
     baseCapacity: 4000,
@@ -344,8 +345,8 @@ const sites: SiteData[] = [
     lat: 27.0945,
     lng: 77.661,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/1/1e/Fatehput_Sikiri_Buland_Darwaza_gate.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "6:00 AM – 6:00 PM",
     baseCapacity: 8000,
@@ -370,8 +371,8 @@ const sites: SiteData[] = [
     lat: 26.9239,
     lng: 75.8267,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/f/f5/Hawa_Mahal_2011.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 200,
     openingHours: "9:00 AM – 4:30 PM",
     baseCapacity: 5000,
@@ -396,8 +397,8 @@ const sites: SiteData[] = [
     lat: 17.3833,
     lng: 78.4011,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/9/93/Golconda_fort_Hyderabad.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 300,
     openingHours: "8:00 AM – 5:30 PM",
     baseCapacity: 6000,
@@ -422,8 +423,8 @@ const sites: SiteData[] = [
     lat: 17.3616,
     lng: 78.4747,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/71/Charminar_Hyderabad_1.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 300,
     openingHours: "9:30 AM – 5:30 PM",
     baseCapacity: 4000,
@@ -452,8 +453,8 @@ const sites: SiteData[] = [
     lat: 31.6200,
     lng: 74.8765,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/9/94/The_Golden_Temple_of_Amritsar.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 100000,
@@ -478,8 +479,8 @@ const sites: SiteData[] = [
     lat: 28.5933,
     lng: 77.2507,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/4/4e/Humayun%27s_Tomb%2C_Delhi.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 35,
     openingHours: "Sunrise – Sunset",
     baseCapacity: 8000,
@@ -504,8 +505,8 @@ const sites: SiteData[] = [
     lat: 31.6209,
     lng: 74.8805,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/3b/Jallianwalabagh.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "6:30 AM – 7:30 PM",
     baseCapacity: 5000,
@@ -530,8 +531,8 @@ const sites: SiteData[] = [
     lat: 25.3176,
     lng: 83.0102,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/0/04/Ahilya_Ghat_by_the_Ganges%2C_Varanasi.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 50000,
@@ -556,8 +557,8 @@ const sites: SiteData[] = [
     lat: 24.5764,
     lng: 73.6913,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/5/57/City_Palace_Udaipur.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 300,
     openingHours: "9:30 AM – 5:30 PM",
     baseCapacity: 8000,
@@ -582,8 +583,8 @@ const sites: SiteData[] = [
     lat: 30.1254,
     lng: 78.3212,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/6/6c/Lakshman_Jhula%2C_Rishikesh.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 20000,
@@ -608,8 +609,8 @@ const sites: SiteData[] = [
     lat: 27.1795,
     lng: 78.0211,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/6/6e/Agra_03-2016_10_Agra_Fort.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 600,
     openingHours: "6:00 AM – 6:00 PM",
     baseCapacity: 15000,
@@ -636,8 +637,8 @@ const sites: SiteData[] = [
     lat: 18.9220,
     lng: 72.8347,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/3a/Mumbai_03-2016_30_Gateway_of_India.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 30000,
@@ -662,8 +663,8 @@ const sites: SiteData[] = [
     lat: 12.6172,
     lng: 80.1927,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/31/Shore_Temple.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 40,
     openingHours: "6:00 AM – 6:00 PM",
     baseCapacity: 5000,
@@ -688,8 +689,8 @@ const sites: SiteData[] = [
     lat: 12.9987,
     lng: 77.5921,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/b/b0/Bangalore_Palace%2C_Full_View.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 250,
     openingHours: "10:00 AM – 5:30 PM",
     baseCapacity: 3000,
@@ -714,8 +715,8 @@ const sites: SiteData[] = [
     lat: 13.6833,
     lng: 79.3500,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/1/18/Sri_Venkateswara_Temple%2C_Tirumala_Hills.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "2:30 AM – 1:30 AM (next day)",
     baseCapacity: 75000,
@@ -740,8 +741,8 @@ const sites: SiteData[] = [
     lat: 8.4826,
     lng: 76.9443,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/2/2e/Padmanabhaswamy_Temple_Trivandrum.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "3:30 AM – 12:00 PM, 5:00 PM – 8:00 PM",
     baseCapacity: 10000,
@@ -766,8 +767,8 @@ const sites: SiteData[] = [
     lat: 17.3580,
     lng: 78.4718,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/73/Chowmahalla_Palace_Main_Building.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 200,
     openingHours: "10:00 AM – 5:00 PM (Closed Fridays)",
     baseCapacity: 3000,
@@ -794,8 +795,8 @@ const sites: SiteData[] = [
     lat: 22.5449,
     lng: 88.3426,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/f/f7/Victoria_Memorial_Kolkata_panorama.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 30,
     openingHours: "10:00 AM – 5:00 PM (Closed Mondays)",
     baseCapacity: 8000,
@@ -820,8 +821,8 @@ const sites: SiteData[] = [
     lat: 19.8049,
     lng: 85.8179,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/5/58/Jagannath_Temple_Puri.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "5:00 AM – 11:00 PM",
     baseCapacity: 25000,
@@ -846,8 +847,8 @@ const sites: SiteData[] = [
     lat: 22.5851,
     lng: 88.3468,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/8/80/Howrah_Bridge_Night.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 100000,
@@ -872,8 +873,8 @@ const sites: SiteData[] = [
     lat: 21.9497,
     lng: 89.1833,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/a/a0/Sundarban_Tiger.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 300,
     openingHours: "Varies by boat tour",
     baseCapacity: 2000,
@@ -900,8 +901,8 @@ const sites: SiteData[] = [
     lat: 15.5449,
     lng: 73.7553,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/7f/Calangute_Beach_Goa.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Open 24 Hours",
     baseCapacity: 50000,
@@ -926,8 +927,8 @@ const sites: SiteData[] = [
     lat: 23.7337,
     lng: 69.8597,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/a/ab/Great_Rann_of_Kutch.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 100,
     openingHours: "6:00 AM – 6:00 PM (Rann Utsav: Nov-Feb)",
     baseCapacity: 15000,
@@ -952,8 +953,8 @@ const sites: SiteData[] = [
     lat: 20.8880,
     lng: 70.4013,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/5/5c/Somnath_Temple%2C_Gujarat.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "6:00 AM – 9:30 PM",
     baseCapacity: 20000,
@@ -978,8 +979,8 @@ const sites: SiteData[] = [
     lat: 26.2986,
     lng: 73.0183,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/a/a0/Mehrangarh_Fort.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 200,
     openingHours: "9:00 AM – 5:00 PM",
     baseCapacity: 6000,
@@ -1006,8 +1007,8 @@ const sites: SiteData[] = [
     lat: 23.4793,
     lng: 77.7399,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/0/0a/Sanchi_Stupa_from_Eastern_gate%2C_Madhya_Pradesh.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 30,
     openingHours: "8:30 AM – 5:00 PM",
     baseCapacity: 3000,
@@ -1032,8 +1033,8 @@ const sites: SiteData[] = [
     lat: 22.3332,
     lng: 75.3964,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/70/Rani_Roopmati_Pavilion_Mandu.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 25,
     openingHours: "Sunrise – Sunset",
     baseCapacity: 2000,
@@ -1060,8 +1061,8 @@ const sites: SiteData[] = [
     lat: 26.5775,
     lng: 93.1711,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/4/41/Indian_Rhinoceros_Kaziranga.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 250,
     openingHours: "7:00 AM – 3:30 PM (Nov to Apr)",
     baseCapacity: 3000,
@@ -1086,8 +1087,8 @@ const sites: SiteData[] = [
     lat: 27.5861,
     lng: 91.8595,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/2/24/Tawang_Monastery.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "7:00 AM – 6:00 PM",
     baseCapacity: 1500,
@@ -1112,8 +1113,8 @@ const sites: SiteData[] = [
     lat: 25.2857,
     lng: 91.7297,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/e/e4/Living_root_bridges%2C_Nongriat-Cherrapunji%2C_Meghalaya.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "Daylight hours",
     baseCapacity: 1000,
@@ -1140,8 +1141,8 @@ const sites: SiteData[] = [
     lat: 26.7955,
     lng: 82.1940,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/3/33/Ram_Mandir_Ayodhya.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "7:00 AM – 11:30 PM",
     baseCapacity: 70000,
@@ -1166,8 +1167,8 @@ const sites: SiteData[] = [
     lat: 21.8380,
     lng: 73.7191,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/7/7f/Statue_of_Unity.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 350,
     openingHours: "8:00 AM – 6:00 PM (Closed Mondays)",
     baseCapacity: 15000,
@@ -1192,8 +1193,8 @@ const sites: SiteData[] = [
     lat: 28.5535,
     lng: 77.2588,
     imageUrls: JSON.stringify([
-      "https://upload.wikimedia.org/wikipedia/commons/f/fc/LotusDelhi.jpg"
-    ]),
+      "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80"
+]),
     entryFeeINR: 0,
     openingHours: "9:00 AM – 5:30 PM (Closed Mondays)",
     baseCapacity: 8000,

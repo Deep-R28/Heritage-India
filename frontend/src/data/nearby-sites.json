@@ -8,9 +8,10 @@
     "lat": 27.1751,
     "lng": 78.0421,
     "distanceKm": 2.4,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg",
+    "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/7/74/Taj_Mahal%2C_Agra%2C_India_edit2.jpg"
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 78,
     "priceInr": 1100,
@@ -37,9 +38,9 @@
     "lat": 15.335,
     "lng": 76.46,
     "distanceKm": 5.1,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg",
+    "image": "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg"
+      "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 34,
     "priceInr": 600,
@@ -66,9 +67,9 @@
     "lat": 26.9855,
     "lng": 75.8513,
     "distanceKm": 11.8,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg",
+    "image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/f/fb/Amber_Fort_in_Jaipur.jpg"
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 55,
     "priceInr": 550,
@@ -95,9 +96,9 @@
     "lat": 28.5245,
     "lng": 77.1855,
     "distanceKm": 8.3,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Qutb_Minar_Complex.jpg",
+    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/7/7b/Qutb_Minar_Complex.jpg"
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 88,
     "priceInr": 600,
@@ -124,9 +125,9 @@
     "lat": 12.3052,
     "lng": 76.6552,
     "distanceKm": 14.6,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/Mysore_Palace.jpg",
+    "image": "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/4/48/Mysore_Palace.jpg"
+      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 41,
     "priceInr": 200,
@@ -153,9 +154,9 @@
     "lat": 27.0059,
     "lng": 76.6015,
     "distanceKm": 18.2,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg",
+    "image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/b/b1/Chand_Baori%2C_stepwell.jpg"
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 22,
     "priceInr": 300,
@@ -182,9 +183,9 @@
     "lat": 26.9239,
     "lng": 75.8267,
     "distanceKm": 12.1,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Hawa_Mahal%2C_Jaipur.jpg",
+    "image": "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/e/e3/Hawa_Mahal%2C_Jaipur.jpg"
+      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 66,
     "priceInr": 200,
@@ -211,9 +212,9 @@
     "lat": 9.4981,
     "lng": 76.3388,
     "distanceKm": 24.7,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Kerala_backwaters%2C_Houseboats%2C_India.jpg",
+    "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
     "gallery": [
-      "https://upload.wikimedia.org/wikipedia/commons/4/4e/Kerala_backwaters%2C_Houseboats%2C_India.jpg"
+      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 15,
     "priceInr": 1500,

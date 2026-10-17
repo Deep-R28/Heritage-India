@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { Icon } from "@/components/ui/icon";
 import { useAuth } from "@/hooks/use-auth";
 
-const HERO_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/4b/Hampi_virupaksha_temple.jpg";
+const HERO_IMAGE = "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80";
 
 export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const { t } = useTranslation();

@@ -117,8 +117,8 @@ export async function getSites(): Promise<Site[]> {
     if (apiSites && apiSites.length > 0) {
       return apiSites.map(mapApiSiteToSite);
     }
-  } catch {
-    // fallback on network failure or SSG
+  } catch (err) {
+    console.error("Failed to fetch sites from backend in getSites():", err);
   }
   return fallbackSites;
 }
