@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+*/dist/
+.next/
+*/.next/
+out/
+*/out/
+build/
+*/build/
+
+# Database and SQLite
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+
+# Environment variables
+.env
+.env.*
+!.env.example
+*.env.local
+
+# Generated files
+backend/generated/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
