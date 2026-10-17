@@ -117,8 +117,10 @@ export async function getSites(): Promise<Site[]> {
     if (apiSites && apiSites.length > 0) {
       return apiSites.map(mapApiSiteToSite);
     }
-  } catch (err) {
-    console.error("Failed to fetch sites from backend in getSites():", err);
+  } catch (err: any) {
+    if (err?.digest !== "DYNAMIC_SERVER_USAGE") {
+      console.warn("Could not reach backend API in getSites(), using catalog fallback:", err?.message || err);
+    }
   }
   return fallbackSites;
 }
