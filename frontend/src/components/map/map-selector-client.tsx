@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -21,14 +21,32 @@ const crowdFilterKey: Record<(typeof CROWD_FILTERS)[number], string> = {
   Busy: "map.crowdFilters.busy",
 };
 
-export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
+export function MapSelectorClient({
+  sites: rawSites,
+  initialSiteSlug,
+}: {
+  sites: Site[];
+  initialSiteSlug?: string;
+}) {
   const { t, i18n } = useTranslation();
   const sites = useMemo(() => rawSites.map((s) => localizeSite(s, i18n.language)), [rawSites, i18n.language]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [crowdFilter, setCrowdFilter] = useState<(typeof CROWD_FILTERS)[number]>("Any");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selected, setSelected] = useState<Site | undefined>();
+  const [selected, setSelected] = useState<Site | undefined>(() => {
+    if (initialSiteSlug) {
+      return rawSites.find((s) => s.slug === initialSiteSlug);
+    }
+    return undefined;
+  });
+
+  useEffect(() => {
+    if (initialSiteSlug) {
+      const match = sites.find((s) => s.slug === initialSiteSlug);
+      if (match) setSelected(match);
+    }
+  }, [initialSiteSlug, sites]);
 
   const filtered = useMemo(() => {
     return sites.filter((s) => {
@@ -52,41 +70,53 @@ export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
         className="h-full w-full"
       />
 
-      {/* Search bar — top-left overlay */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (filtered.length > 0 && query.trim()) {
-            setSelected(filtered[0]);
-          }
-        }}
-        className="glass-panel absolute left-4 top-24 z-[1000] flex w-[calc(100%-2rem)] max-w-md items-center gap-2 rounded-full border border-accent/25 bg-background/90 py-1.5 pl-4 pr-1.5 shadow-2xl backdrop-blur-md md:left-8 md:top-28"
-      >
-        <Icon name="search" className="shrink-0 text-foreground-muted" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("map.searchPlaceholder") || "Search places, cities, states..."}
-          className="w-full bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            className="p-1 text-foreground-muted transition-colors hover:text-accent"
-            title="Clear search"
+      {/* Top Controls — Back to Site Details button + Search bar */}
+      <div className="absolute left-4 top-24 z-[1000] flex max-w-[calc(100%-6rem)] flex-wrap items-center gap-2.5 md:left-8 md:top-28">
+        {(selected || initialSiteSlug) && (
+          <Link
+            href={`/sites/${selected?.slug || initialSiteSlug}`}
+            className="glass-panel flex shrink-0 items-center gap-1.5 rounded-full border border-accent/40 bg-background/90 px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-accent shadow-xl backdrop-blur-md transition-all hover:bg-accent hover:text-obsidian"
+            title="Return to site detail page"
           >
-            <Icon name="close" className="text-sm" />
-          </button>
+            <Icon name="arrow_back" className="text-sm" />
+            Back to {selected?.name || "Site"} Details
+          </Link>
         )}
-        <button
-          type="submit"
-          className="flex shrink-0 items-center gap-1 rounded-full bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow-sm transition-all hover:bg-accent/90"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (filtered.length > 0 && query.trim()) {
+              setSelected(filtered[0]);
+            }
+          }}
+          className="glass-panel flex w-full max-w-sm items-center gap-2 rounded-full border border-accent/25 bg-background/90 py-1.5 pl-4 pr-1.5 shadow-2xl backdrop-blur-md sm:w-auto"
         >
-          <Icon name="travel_explore" className="text-sm" />
-          Search
-        </button>
-      </form>
+          <Icon name="search" className="shrink-0 text-foreground-muted" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("map.searchPlaceholder") || "Search places, cities, states..."}
+            className="w-full bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="p-1 text-foreground-muted transition-colors hover:text-accent"
+              title="Clear search"
+            >
+              <Icon name="close" className="text-sm" />
+            </button>
+          )}
+          <button
+            type="submit"
+            className="flex shrink-0 items-center gap-1 rounded-full bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow-sm transition-all hover:bg-accent/90"
+          >
+            <Icon name="travel_explore" className="text-sm" />
+            Search
+          </button>
+        </form>
+      </div>
 
       {/* Filter panel — top-right overlay */}
       <div className="absolute right-4 top-24 z-[1000] md:right-8 md:top-28">
@@ -154,13 +184,22 @@ export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
       >
         {selected && (
           <>
-            <button
-              onClick={() => setSelected(undefined)}
-              aria-label="Close"
-              className="mb-4 text-foreground-muted hover:text-accent"
-            >
-              <Icon name="close" />
-            </button>
+            <div className="mb-4 flex items-center justify-between">
+              <Link
+                href={`/sites/${selected.slug}`}
+                className="flex items-center gap-1.5 font-label text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:text-accent/80"
+              >
+                <Icon name="arrow_back" className="text-sm" />
+                Back to Site Details
+              </Link>
+              <button
+                onClick={() => setSelected(undefined)}
+                aria-label="Close"
+                className="text-foreground-muted hover:text-accent p-1"
+              >
+                <Icon name="close" />
+              </button>
+            </div>
             <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl border border-accent/20">
               <Image src={selected.image} alt={selected.name} fill sizes="384px" className="object-cover" />
               <div className="absolute left-2 top-2 flex flex-wrap gap-1.5">
@@ -226,13 +265,25 @@ export function MapSelectorClient({ sites: rawSites }: { sites: Site[] }) {
         )}
       </div>
 
-      {/* Back to list link */}
-      <Link
-        href="/explore"
-        className="glass-panel absolute bottom-8 left-1/2 z-[1000] -translate-x-1/2 rounded-full px-6 py-3 font-label text-xs uppercase tracking-widest text-foreground transition-colors hover:text-accent"
-      >
-        {t("map.backToList")}
-      </Link>
+      {/* Bottom bar with back options */}
+      <div className="glass-panel absolute bottom-8 left-1/2 z-[1000] -translate-x-1/2 flex items-center gap-2 rounded-full p-1.5 shadow-2xl backdrop-blur-md border border-hairline bg-background/90">
+        {(selected || initialSiteSlug) && (
+          <Link
+            href={`/sites/${selected?.slug || initialSiteSlug}`}
+            className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow transition-all hover:bg-accent/90"
+          >
+            <Icon name="arrow_back" className="text-sm" />
+            Back to {selected?.name || "Site"} Details
+          </Link>
+        )}
+        <Link
+          href="/explore"
+          className="flex items-center gap-1.5 rounded-full px-4 py-2 font-label text-xs uppercase tracking-widest text-foreground-muted transition-colors hover:text-accent"
+        >
+          <Icon name="format_list_bulleted" className="text-sm" />
+          {t("map.backToList")}
+        </Link>
+      </div>
     </div>
   );
 }

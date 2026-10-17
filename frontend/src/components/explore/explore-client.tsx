@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -13,13 +13,32 @@ import { CATEGORIES, categoryLabelKey } from "@/lib/categories";
 import { localizeSite } from "@/lib/localize";
 import { api } from "@/lib/api";
 
-export function ExploreClient({ sites }: { sites: Site[] }) {
+export function ExploreClient({
+  sites,
+  initialSiteSlug,
+}: {
+  sites: Site[];
+  initialSiteSlug?: string;
+}) {
   const { t, i18n } = useTranslation();
   const [category, setCategory] = useState("All");
-  const [selected, setSelected] = useState<Site | undefined>();
+  const localizedSites = useMemo(() => sites.map((s) => localizeSite(s, i18n.language)), [sites, i18n.language]);
+  const [selected, setSelected] = useState<Site | undefined>(() => {
+    if (initialSiteSlug) {
+      return sites.find((s) => s.slug === initialSiteSlug);
+    }
+    return undefined;
+  });
+
+  useEffect(() => {
+    if (initialSiteSlug) {
+      const match = localizedSites.find((s) => s.slug === initialSiteSlug);
+      if (match) setSelected(match);
+    }
+  }, [initialSiteSlug, localizedSites]);
+
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const localizedSites = useMemo(() => sites.map((s) => localizeSite(s, i18n.language)), [sites, i18n.language]);
 
   const filtered = useMemo(() => {
     return localizedSites.filter((s) => {
