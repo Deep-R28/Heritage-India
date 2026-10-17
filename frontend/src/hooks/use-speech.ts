@@ -195,27 +195,38 @@ export function useTextToSpeech(defaultLang = "en-IN") {
   }, []);
 
   const speak = useCallback(
-    (text: string, lang = defaultLang) => {
-      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    (text: string, lang = defaultLang): Promise<void> => {
+      return new Promise((resolve) => {
+        if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+          resolve();
+          return;
+        }
 
-      window.speechSynthesis.cancel();
+        window.speechSynthesis.cancel();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
 
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => {
+          setIsSpeaking(false);
+          resolve();
+        };
+        utterance.onerror = () => {
+          setIsSpeaking(false);
+          resolve();
+        };
 
-      const voices = window.speechSynthesis.getVoices();
-      const matchingVoice = voices.find((v) => v.lang.startsWith(lang.slice(0, 2)));
-      if (matchingVoice) {
-        utterance.voice = matchingVoice;
-      }
+        const voices = window.speechSynthesis.getVoices();
+        const matchingVoice = voices.find((v) => v.lang.startsWith(lang.slice(0, 2)));
+        if (matchingVoice) {
+          utterance.voice = matchingVoice;
+        }
 
-      window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(utterance);
+      });
     },
     [defaultLang],
   );

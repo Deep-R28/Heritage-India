@@ -7,6 +7,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
       { protocol: "https", hostname: "upload.wikimedia.org" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
     // Wikimedia's CDN 429s Next's built-in optimizer proxy (no browser-like
     // User-Agent on that server-side fetch); the browser fetches these

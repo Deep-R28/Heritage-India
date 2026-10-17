@@ -25,6 +25,8 @@ export function VoiceClient() {
   const [assistantReply, setAssistantReply] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isBusyRef = useRef(false);
+  const lastQueryRef = useRef("");
 
   useEffect(() => {
     start();
@@ -37,30 +39,48 @@ export function VoiceClient() {
 
   // When speech pauses, send transcript to assistant
   useEffect(() => {
-    if (!transcript.trim()) return;
+    // If currently processing or speaking aloud, ignore any audio
+    if (processing || isSpeaking || isBusyRef.current) return;
+    const query = transcript.trim();
+    if (!query || query === lastQueryRef.current) return;
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(async () => {
-      const query = transcript.trim();
+      if (isBusyRef.current) return;
+      isBusyRef.current = true;
       setProcessing(true);
+      lastQueryRef.current = query;
+
+      // 1. STOP listening immediately so microphone won't pick up speaker output
+      stop();
+
       try {
         const reply = await sendMessageToAssistant(query, (input) =>
           t("assistant.chat.stubResponse", { input })
         );
         setAssistantReply(reply.text);
         setTranscript("");
+
+        // 2. Speak reply and wait for audio to fully finish
         await speak(reply.text, langCode);
+
+        // 3. Grace cooldown (800ms) for room echo to dissipate
+        await new Promise((r) => setTimeout(r, 800));
+        setTranscript("");
       } catch (err) {
         console.error("Voice assistant query error:", err);
       } finally {
         setProcessing(false);
+        isBusyRef.current = false;
+        // 4. Resume listening for user's next voice input
+        start();
       }
-    }, 2000); // 2s silence triggers query
+    }, 1800); // 1.8s silence triggers query
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [transcript, setTranscript, speak, langCode, t]);
+  }, [transcript, processing, isSpeaking, start, stop, setTranscript, speak, langCode, t]);
 
   useEffect(() => {
     if (transcript || assistantReply) return;

@@ -11,6 +11,7 @@ import "dotenv/config";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { hashSync } from "bcryptjs";
+import { verifiedSiteImages } from "../scripts/update-images.js";
 
 const connectionString = process.env.DATABASE_URL ?? "file:./dev.db";
 const adapter = new PrismaBetterSqlite3({ url: connectionString });
@@ -2239,7 +2240,12 @@ async function main() {
   console.log("📍 Creating 50 heritage sites...");
   const createdSites: Record<string, string> = {};
   for (const siteData of sites) {
-    const site = await prisma.site.create({ data: siteData });
+    const images = verifiedSiteImages[siteData.slug]
+      ? JSON.stringify(verifiedSiteImages[siteData.slug])
+      : siteData.imageUrls;
+    const site = await prisma.site.create({
+      data: { ...siteData, imageUrls: images },
+    });
     createdSites[site.slug] = site.id;
     console.log(`   ✓ ${site.name}`);
   }
