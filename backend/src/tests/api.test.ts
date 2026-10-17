@@ -134,4 +134,17 @@ describe("Backend API Integration Tests", () => {
     assert.ok(Array.isArray(body.data.lineItems));
     assert.ok(body.data.lineItems.length >= 3);
   });
+
+  test("GET /api/sites/:slug/forecast returns data-driven hourly crowd predictions", async () => {
+    const res = await fetch(`${baseUrl}/api/sites/taj-mahal/forecast`);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.ok(body.data.current);
+    assert.ok(body.data.current.percent > 0);
+    assert.ok(Array.isArray(body.data.hourly));
+    assert.ok(body.data.hourly.length > 0);
+    assert.ok(body.data.hourly[0].hour !== undefined);
+    assert.ok(body.data.hourly[0].expectedPercent !== undefined);
+  });
 });
+

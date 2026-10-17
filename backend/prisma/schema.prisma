@@ -55,6 +55,19 @@ model Site {
   openingHours String
   baseCapacity Int     @default(1000)
 
+  // ─── Extended fields (Kaggle-style dataset) ─────────────────
+  zone         String   @default("Northern")  // Northern, Southern, Eastern, Western, Central, North-Eastern
+  type         String   @default("Historical") // Historical, Religious, Natural, Beach, Adventure, etc.
+  established  String?  // Year or century string
+  bestTime     String?  // e.g. "October to March"
+  weeklyOff    String   @default("Open All Days")
+  dslrAllowed  Boolean  @default(true)
+  googleRating Float    @default(4.0)
+  reviewCount  Float    @default(0.5) // in lakhs
+  significance String?  // text about why it matters
+  timeNeeded   Float    @default(2.0) // hours
+  airportNearby Boolean @default(false)
+
   content        SiteContent[]
   crowdSnapshots CrowdSnapshot[]
   bookings       Booking[]
@@ -203,4 +216,34 @@ model ContactMessage {
   email     String
   message   String
   createdAt DateTime @default(now())
+}
+
+// ─── Crowd Prediction Patterns ──────────────────────────────────
+
+model CrowdPattern {
+  id         String @id @default(cuid())
+  siteSlug   String // matches Site.slug for easy lookup
+  dayOfWeek  Int    // 0=Sun, 6=Sat
+  hour       Int    // 0-23
+  avgDensity Float  // 0.0 to 1.0
+  weather    String @default("Clear") // Clear, Rainy, Foggy, Hot
+  isHoliday  Boolean @default(false)
+  season     String @default("peak") // peak, off-peak, shoulder
+
+  @@index([siteSlug, dayOfWeek, hour])
+  @@unique([siteSlug, dayOfWeek, hour, isHoliday])
+}
+
+// ─── ASI Visitor Statistics ─────────────────────────────────────
+
+model VisitorStats {
+  id              String @id @default(cuid())
+  siteSlug        String
+  year            Int
+  domesticVisitors Int
+  foreignVisitors  Int
+  totalVisitors    Int
+
+  @@unique([siteSlug, year])
+  @@index([siteSlug])
 }

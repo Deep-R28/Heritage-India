@@ -14,11 +14,13 @@ import { CrowdGaugeRadial } from "@/components/ui/crowd-gauge";
 import { Reveal } from "@/components/ui/reveal";
 import { categoryLabelKey } from "@/lib/categories";
 import { localizeSite } from "@/lib/localize";
+import { api } from "@/lib/api";
 
 export function SiteDetailView({ site: rawSite, alternatives: rawAlternatives }: { site: Site; alternatives: Site[] }) {
   const { t, i18n } = useTranslation();
   const site = localizeSite(rawSite, i18n.language);
   const alternatives = rawAlternatives.map((a) => localizeSite(a, i18n.language));
+  const [saved, setSaved] = useState(false);
 
   function levelLabel(percent: number) {
     if (percent < 40) return t("siteDetail.crowd.quiet");
@@ -49,6 +51,8 @@ export function SiteDetailView({ site: rawSite, alternatives: rawAlternatives }:
           <p className="mt-3 flex items-center gap-1 font-body text-foreground-muted">
             <Icon name="location_on" className="text-sm" />
             {site.region}
+            {site.zone ? ` · ${site.zone} Zone` : ""}
+            {site.googleRating ? ` · ★ ${site.googleRating}` : ""}
           </p>
         </div>
       </div>
@@ -63,14 +67,35 @@ export function SiteDetailView({ site: rawSite, alternatives: rawAlternatives }:
               <p className="max-w-sm font-body text-sm text-foreground-muted">{levelLabel(site.crowdPercent)}</p>
             </div>
           </div>
-          <div className="flex w-full flex-wrap gap-3 md:w-auto">
+          <div className="flex w-full flex-wrap items-center gap-3 md:w-auto">
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await api.me.saveSite(site.id);
+                  setSaved(true);
+                  alert(`Added ${site.name} to Saved Sites!`);
+                } catch {
+                  // ignore
+                }
+              }}
+              className="flex items-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-2 font-label text-xs uppercase tracking-wider text-foreground hover:bg-surface-hover hover:text-accent"
+            >
+              <Icon name={saved ? "favorite" : "favorite_border"} className="text-base text-accent" />
+              {saved ? "Saved" : "Save Site"}
+            </button>
+            <Link href={`/checkout?site=${site.slug}`}>
+              <Button size="sm">
+                <Icon name="confirmation_number" className="text-sm" /> Book Visit & Guide
+              </Button>
+            </Link>
             <Link href={`/explore/map?site=${site.slug}`}>
               <Button variant="secondary" size="sm">
                 <Icon name="map" className="text-sm" /> {t("siteDetail.viewOnMap")}
               </Button>
             </Link>
             <Link href="/guides/verify">
-              <Button size="sm">
+              <Button variant="secondary" size="sm">
                 <Icon name="person_search" className="text-sm" /> {t("siteDetail.findGuide")}
               </Button>
             </Link>
@@ -138,6 +163,22 @@ export function SiteDetailView({ site: rawSite, alternatives: rawAlternatives }:
                     </dt>
                     <dd className="font-body text-sm text-foreground">{site.openHours}</dd>
                   </div>
+                  {site.bestTime && (
+                    <div>
+                      <dt className="font-label text-xs uppercase tracking-widest text-foreground-muted">
+                        Best Time to Visit
+                      </dt>
+                      <dd className="font-body text-sm text-foreground">{site.bestTime}</dd>
+                    </div>
+                  )}
+                  {site.weeklyOff && site.weeklyOff !== "Open All Days" && (
+                    <div>
+                      <dt className="font-label text-xs uppercase tracking-widest text-foreground-muted">
+                        Weekly Off
+                      </dt>
+                      <dd className="font-body text-sm text-amber-400">{site.weeklyOff}</dd>
+                    </div>
+                  )}
                 </dl>
               </div>
             </div>

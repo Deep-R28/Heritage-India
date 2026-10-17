@@ -1,7 +1,7 @@
 import { Router } from "express";
 import prisma from "../lib/prisma.js";
 import { AppError } from "../middleware/error.js";
-import { getLiveCrowd } from "../services/crowd.js";
+import { getLiveCrowd, getHourlyForecast } from "../services/crowd.js";
 
 const router = Router();
 
@@ -66,6 +66,17 @@ router.get("/", async (req, res, next) => {
           entryFeeINR: s.entryFeeINR,
           openingHours: s.openingHours,
           images: JSON.parse(s.imageUrls || "[]"),
+          zone: (s as any).zone ?? "Northern",
+          type: (s as any).type ?? s.category,
+          established: (s as any).established ?? null,
+          bestTime: (s as any).bestTime ?? null,
+          weeklyOff: (s as any).weeklyOff ?? "Open All Days",
+          googleRating: (s as any).googleRating ?? 4.0,
+          reviewCount: (s as any).reviewCount ?? 0.5,
+          significance: (s as any).significance ?? null,
+          timeNeeded: (s as any).timeNeeded ?? 2.0,
+          dslrAllowed: (s as any).dslrAllowed ?? true,
+          airportNearby: (s as any).airportNearby ?? false,
           crowd: crowdInfo,
         };
       })
@@ -184,6 +195,17 @@ router.get("/:slug", async (req, res, next) => {
         entryFeeINR: site.entryFeeINR,
         openingHours: site.openingHours,
         images,
+        zone: (site as any).zone ?? "Northern",
+        type: (site as any).type ?? site.category,
+        established: (site as any).established ?? null,
+        bestTime: (site as any).bestTime ?? null,
+        weeklyOff: (site as any).weeklyOff ?? "Open All Days",
+        googleRating: (site as any).googleRating ?? 4.0,
+        reviewCount: (site as any).reviewCount ?? 0.5,
+        significance: (site as any).significance ?? null,
+        timeNeeded: (site as any).timeNeeded ?? 2.0,
+        dslrAllowed: (site as any).dslrAllowed ?? true,
+        airportNearby: (site as any).airportNearby ?? false,
         crowd,
         content: contentForLocale
           ? {
@@ -268,6 +290,30 @@ router.get("/:slug/crowd", async (req, res, next) => {
 
     const crowd = await getLiveCrowd(site.id, site.slug);
     return res.json({ data: crowd, error: null });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─── Hourly Forecast: GET /api/sites/:slug/forecast ─────────────
+
+router.get("/:slug/forecast", async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+    const site = await prisma.site.findUnique({ where: { slug }, select: { id: true, slug: true, name: true } });
+    if (!site) throw new AppError(404, "Site not found", "NOT_FOUND");
+
+    const crowd = await getLiveCrowd(site.id, site.slug);
+    const forecast = await getHourlyForecast(site.slug);
+
+    return res.json({
+      data: {
+        site: { id: site.id, slug: site.slug, name: site.name },
+        current: crowd,
+        hourly: forecast,
+      },
+      error: null,
+    });
   } catch (err) {
     next(err);
   }

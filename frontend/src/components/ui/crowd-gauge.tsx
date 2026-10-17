@@ -23,16 +23,27 @@ function levelFromPercent(percent: number): CrowdLevel {
   return "high";
 }
 
+function formatFreshness(timestamp?: string): string {
+  if (!timestamp) return "Updated 2m ago";
+  const diffMs = Date.now() - new Date(timestamp).getTime();
+  const diffMins = Math.max(1, Math.floor(diffMs / 60000));
+  if (diffMins < 60) return `Updated ${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  return `Updated ${diffHours}h ago`;
+}
+
 /** Radial crowd gauge — thin 2px stroke ring, percentage centered in label-caps. */
 export function CrowdGaugeRadial({
   percent,
   size = 64,
   showLabel = true,
+  lastUpdated,
   className,
 }: {
   percent: number;
   size?: number;
   showLabel?: boolean;
+  lastUpdated?: string;
   className?: string;
 }) {
   const { t } = useTranslation();
@@ -79,6 +90,9 @@ export function CrowdGaugeRadial({
           {t(levelLabelKey[level])}
         </span>
       )}
+      <span className="font-mono text-[9px] text-foreground-muted/70">
+        {formatFreshness(lastUpdated)}
+      </span>
     </div>
   );
 }
@@ -86,9 +100,11 @@ export function CrowdGaugeRadial({
 /** Horizontal bar meter variant of the crowd gauge. */
 export function CrowdGaugeBar({
   percent,
+  lastUpdated,
   className,
 }: {
   percent: number;
+  lastUpdated?: string;
   className?: string;
 }) {
   const { t } = useTranslation();
@@ -96,16 +112,35 @@ export function CrowdGaugeBar({
   const color = levelToColorVar[level];
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <div className="h-1 w-24 flex-1 overflow-hidden rounded-full bg-surface-hover">
-        <div
-          className="h-full rounded-full transition-[width] duration-500 ease-out"
-          style={{ width: `${percent}%`, backgroundColor: color }}
-        />
+    <div className={cn("flex flex-col gap-1", className)}>
+      <div className="flex items-center gap-2">
+        <div className="h-1 w-24 flex-1 overflow-hidden rounded-full bg-surface-hover">
+          <div
+            className="h-full rounded-full transition-[width] duration-500 ease-out"
+            style={{ width: `${percent}%`, backgroundColor: color }}
+          />
+        </div>
+        <span className="font-label text-[10px] uppercase tracking-widest" style={{ color }}>
+          {t(levelLabelKey[level])}
+        </span>
       </div>
-      <span className="font-label text-[10px] uppercase tracking-widest" style={{ color }}>
-        {t(levelLabelKey[level])}
+      <span className="font-mono text-[9px] text-foreground-muted/70">
+        {formatFreshness(lastUpdated)}
       </span>
     </div>
   );
+}
+
+// Compact gauge for lists and cards
+export function CrowdGauge({
+  percent,
+  size = "md",
+  className,
+}: {
+  percent: number;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) {
+  const pixelSize = size === "sm" ? 36 : size === "lg" ? 80 : 54;
+  return <CrowdGaugeRadial percent={percent} size={pixelSize} className={className} />;
 }

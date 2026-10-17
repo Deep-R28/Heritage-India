@@ -30,11 +30,33 @@ export function ChatClient() {
   const handleSend = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || sending) return;
-    setMessages((m) => [...m, { id: crypto.randomUUID(), role: "user", text: trimmed }]);
+    const userMsgId = crypto.randomUUID();
+    const assistantMsgId = crypto.randomUUID();
+
+    setMessages((m) => [
+      ...m,
+      { id: userMsgId, role: "user", text: trimmed },
+      { id: assistantMsgId, role: "assistant", text: "" },
+    ]);
     setInput("");
     setSending(true);
-    const reply = await sendMessageToAssistant(trimmed, (input) => t("assistant.chat.stubResponse", { input }));
-    setMessages((m) => [...m, reply]);
+
+    let streamed = "";
+    const reply = await sendMessageToAssistant(
+      trimmed,
+      (input) => t("assistant.chat.stubResponse", { input }),
+      (token) => {
+        streamed += token;
+        setMessages((m) =>
+          m.map((msg) => (msg.id === assistantMsgId ? { ...msg, text: streamed } : msg))
+        );
+      }
+    );
+
+    // Finalize message with complete text and detected language
+    setMessages((m) =>
+      m.map((msg) => (msg.id === assistantMsgId ? { ...msg, text: reply.text || streamed, language: reply.language } : msg))
+    );
     setSending(false);
   };
 

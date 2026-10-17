@@ -1,30 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import { useSpeechToText } from "@/hooks/use-speech";
+import { useSpeechToText, useTextToSpeech } from "@/hooks/use-speech";
 import { languages, type LanguageCode } from "@/i18n/config";
+import { sendMessageToAssistant } from "@/lib/assistant";
 
 export function VoiceClient() {
   const { t, i18n } = useTranslation();
   const phrases = t("assistant.voice.phrases", { returnObjects: true }) as string[];
   const currentLanguage = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
   const router = useRouter();
-  const { isListening, start, stop } = useSpeechToText();
+
+  const langCode = currentLanguage === "hi" ? "hi-IN" : currentLanguage === "es" ? "es-ES" : "en-IN";
+  const { isListening, transcript, micLevel, error, start, stop, setTranscript } = useSpeechToText(langCode);
+  const { isSpeaking, speak, stop: stopSpeaking } = useTextToSpeech(langCode);
+
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [assistantReply, setAssistantReply] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     start();
-    return () => stop();
+    return () => {
+      stop();
+      stopSpeaking();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // When speech pauses, send transcript to assistant
   useEffect(() => {
+    if (!transcript.trim()) return;
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(async () => {
+      const query = transcript.trim();
+      setProcessing(true);
+      try {
+        const reply = await sendMessageToAssistant(query, (input) =>
+          t("assistant.chat.stubResponse", { input })
+        );
+        setAssistantReply(reply.text);
+        setTranscript("");
+        await speak(reply.text, langCode);
+      } catch (err) {
+        console.error("Voice assistant query error:", err);
+      } finally {
+        setProcessing(false);
+      }
+    }, 2000); // 2s silence triggers query
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [transcript, setTranscript, speak, langCode, t]);
+
+  useEffect(() => {
+    if (transcript || assistantReply) return;
     const interval = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
@@ -33,8 +72,7 @@ export function VoiceClient() {
       }, 500);
     }, 6000);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [phrases.length, transcript, assistantReply]);
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background">
@@ -49,7 +87,11 @@ export function VoiceClient() {
           Heritage India
         </Link>
         <button
-          onClick={() => router.push("/assistant")}
+          onClick={() => {
+            stop();
+            stopSpeaking();
+            router.push("/assistant");
+          }}
           aria-label="Exit voice mode"
           className="text-foreground-muted transition-colors hover:text-accent"
         >
@@ -63,36 +105,60 @@ export function VoiceClient() {
             {t("assistant.voice.title")}
           </h1>
           <p className="mt-2 font-body text-sm text-foreground-muted opacity-60">
-            {isListening ? t("assistant.voice.listening") : t("assistant.voice.muted")}
+            {error ? (
+              <span className="text-red-400">{error}</span>
+            ) : isSpeaking ? (
+              <span className="text-accent animate-pulse">Assistant Speaking...</span>
+            ) : processing ? (
+              <span className="text-accent animate-pulse">Consulting Heritage Intelligence...</span>
+            ) : isListening ? (
+              t("assistant.voice.listening")
+            ) : (
+              t("assistant.voice.muted")
+            )}
           </p>
         </div>
 
-        {/* Orb */}
+        {/* Live Audio Reactive Orb */}
         <div className="relative mb-16 flex h-48 w-48 items-center justify-center md:h-64 md:w-64">
           <div
-            className="absolute inset-0 rounded-full border border-accent/20"
-            style={{ animation: "voice-pulse 3s ease-in-out infinite", animationDelay: "-1s" }}
+            className="absolute inset-0 rounded-full border border-accent/20 transition-transform duration-100"
+            style={{
+              transform: `scale(${1 + micLevel * 0.4})`,
+            }}
           />
           <div
-            className="absolute inset-4 rounded-full border border-accent/40"
-            style={{ animation: "voice-pulse 3s ease-in-out infinite", animationDelay: "-0.5s" }}
+            className="absolute inset-4 rounded-full border border-accent/40 transition-transform duration-100"
+            style={{
+              transform: `scale(${1 + micLevel * 0.3})`,
+            }}
           />
           <div
-            className="flex h-32 w-32 items-center justify-center rounded-full border border-accent/50 bg-gradient-to-tr from-accent/20 to-accent shadow-[0_0_50px_rgba(201,162,75,0.3)] backdrop-blur-sm md:h-40 md:w-40"
-            style={{ animation: "voice-pulse 3s ease-in-out infinite" }}
+            className="flex h-32 w-32 items-center justify-center rounded-full border border-accent/50 bg-gradient-to-tr from-accent/20 to-accent shadow-[0_0_50px_rgba(201,162,75,0.3)] backdrop-blur-sm transition-transform duration-100 md:h-40 md:w-40"
+            style={{
+              transform: `scale(${1 + micLevel * 0.2})`,
+            }}
           >
-            <Icon name="graphic_eq" filled className="text-5xl text-background md:text-6xl" />
+            <Icon
+              name={isSpeaking ? "volume_up" : "graphic_eq"}
+              filled
+              className={cn("text-5xl text-background md:text-6xl", isSpeaking && "animate-pulse")}
+            />
           </div>
         </div>
 
+        {/* Transcript or Assistant Response */}
         <div className="min-h-[80px] w-full px-4 text-center">
-          <p
-            className={cn(
-              "font-headline text-2xl font-light leading-relaxed text-foreground transition-opacity duration-500 md:text-4xl",
-              visible ? "opacity-100" : "opacity-0",
+          <p className="font-headline text-xl font-light leading-relaxed text-foreground transition-opacity duration-300 md:text-3xl">
+            {transcript ? (
+              <span className="text-accent">&ldquo;{transcript}&rdquo;</span>
+            ) : assistantReply ? (
+              <span className="text-foreground line-clamp-3 font-normal">&ldquo;{assistantReply}&rdquo;</span>
+            ) : (
+              <span className={visible ? "opacity-100" : "opacity-0"}>
+                &ldquo;{phrases[phraseIndex]}&rdquo;
+              </span>
             )}
-          >
-            &ldquo;{phrases[phraseIndex]}&rdquo;
           </p>
         </div>
 
@@ -106,7 +172,13 @@ export function VoiceClient() {
         <div className="glass-panel mx-auto flex max-w-2xl items-center justify-between rounded-full px-6 py-4 shadow-2xl md:px-12">
           <button
             aria-label="Mute microphone"
-            onClick={() => (isListening ? stop() : start())}
+            onClick={() => {
+              if (isListening) {
+                stop();
+              } else {
+                start();
+              }
+            }}
             className="group flex w-16 flex-col items-center justify-center gap-1"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full border border-hairline text-foreground transition-colors group-hover:bg-surface-hover">
@@ -119,7 +191,11 @@ export function VoiceClient() {
 
           <button
             aria-label="End session"
-            onClick={() => router.push("/assistant")}
+            onClick={() => {
+              stop();
+              stopSpeaking();
+              router.push("/assistant");
+            }}
             className="group -mt-8 flex flex-col items-center justify-center gap-1"
           >
             <div className="flex h-16 w-16 transform items-center justify-center rounded-full border border-error/30 bg-error/10 text-error shadow-[0_0_20px_rgba(211,47,47,0.15)] transition-all group-hover:scale-105 group-hover:bg-error/20">

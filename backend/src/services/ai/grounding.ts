@@ -41,7 +41,15 @@ export async function buildGroundingContext(userPrompt: string): Promise<string>
   const siteContexts = await Promise.all(
     relevantSites.map(async (s) => {
       const crowd = await getLiveCrowd(s.id, s.slug);
-      return `- ${s.name} (${s.city}, ${s.state}) | Category: ${s.category} | Entry Fee: ₹${s.entryFeeINR} | Hours: ${s.openingHours} | Current Crowd: ${crowd.level} (${crowd.percent}%)`;
+      const meta = [
+        `Entry Fee: ₹${s.entryFeeINR}`,
+        `Hours: ${s.openingHours}`,
+        `Current Crowd: ${crowd.level} (${crowd.percent}%)`,
+        `Rating: ${(s as any).googleRating ?? 4.5}★`,
+        (s as any).bestTime ? `Best Time: ${(s as any).bestTime}` : null,
+        (s as any).weeklyOff && (s as any).weeklyOff !== "Open All Days" ? `Weekly Off: ${(s as any).weeklyOff}` : null,
+      ].filter(Boolean).join(" | ");
+      return `- ${s.name} (${s.city}, ${s.state}, ${(s as any).zone ?? ""}) | Category: ${s.category} | ${meta}`;
     })
   );
 

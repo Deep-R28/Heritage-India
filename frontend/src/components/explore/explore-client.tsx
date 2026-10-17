@@ -11,6 +11,7 @@ import { CrowdGaugeBar } from "@/components/ui/crowd-gauge";
 import { SiteMapLazy } from "@/components/map/site-map-lazy";
 import { CATEGORIES, categoryLabelKey } from "@/lib/categories";
 import { localizeSite } from "@/lib/localize";
+import { api } from "@/lib/api";
 
 export function ExploreClient({ sites }: { sites: Site[] }) {
   const { t, i18n } = useTranslation();
@@ -73,17 +74,35 @@ export function ExploreClient({ sites }: { sites: Site[] }) {
                   <h3 className="truncate font-headline text-lg text-foreground">{site.name}</h3>
                   <p className="mb-2 flex items-center gap-1 font-body text-xs text-foreground-muted">
                     <Icon name="location_on" className="text-sm" />
-                    {site.region} &middot; {site.distanceKm} km
+                    {site.region} {site.googleRating ? `· ★${site.googleRating}` : ""} · {site.distanceKm} km
                   </p>
                   <CrowdGaugeBar percent={site.crowdPercent} />
                 </div>
-                <Link
-                  href={`/sites/${site.slug}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="shrink-0 text-foreground-muted transition-colors hover:text-accent"
-                >
-                  <Icon name="chevron_right" />
-                </Link>
+                <div className="flex shrink-0 items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      try {
+                        await api.me.saveSite(site.id);
+                        alert(`Added ${site.name} to Saved Sites!`);
+                      } catch {
+                        // ignore
+                      }
+                    }}
+                    className="p-1 text-foreground-muted hover:text-accent"
+                    title="Save to My Sites"
+                  >
+                    <Icon name="bookmark_border" className="text-base" />
+                  </button>
+                  <Link
+                    href={`/sites/${site.slug}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-foreground-muted transition-colors hover:text-accent"
+                  >
+                    <Icon name="chevron_right" />
+                  </Link>
+                </div>
               </button>
             ))}
             {filtered.length === 0 && (

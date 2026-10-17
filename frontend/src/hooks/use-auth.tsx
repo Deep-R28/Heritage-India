@@ -1,54 +1,118 @@
 "use client";
 
 /**
- * Mock auth-state flag driving which TopNav variant renders (Section 4).
- * Not a real auth system — swap for a real provider when the backend exists.
+ * Real authentication context driving TopNav and protected pages.
+ * Connects to /api/auth/me, /api/auth/login, /api/auth/signup, /api/auth/logout.
  */
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import { api, type ApiUser } from "@/lib/api";
 
-interface MockUser {
+export interface UserProfile {
+  id: string;
   name: string;
+  email: string;
   initial: string;
+  avatarUrl?: string | null;
+  preference?: ApiUser["preference"];
 }
 
 interface AuthContextValue {
   isLoggedIn: boolean;
-  user: MockUser | null;
-  login: (user?: MockUser) => void;
-  logout: () => void;
+  isLoading: boolean;
+  user: UserProfile | null;
+  login: (dataOrEmail?: { email: string; password?: string; name?: string } | string, password?: string) => Promise<void>;
+  signup: (data: { name: string; email: string; password: string }) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
-
-const AUTH_STORAGE_KEY = "heritage-auth";
-const DEFAULT_USER: MockUser = { name: "Eleanor Vance", initial: "E" };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function formatUser(apiUser: ApiUser): UserProfile {
+  const name = apiUser.name || "Explorer";
+  return {
+    id: apiUser.id,
+    name,
+    email: apiUser.email,
+    initial: name.charAt(0).toUpperCase(),
+    avatarUrl: apiUser.avatarUrl,
+    preference: apiUser.preference,
+  };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<MockUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (stored === "true") {
-      setIsLoggedIn(true);
-      setUser(DEFAULT_USER);
+  const refreshUser = useCallback(async () => {
+    try {
+      const res = await api.auth.me();
+      if (res?.user) {
+        setUser(formatUser(res.user));
+        setIsLoggedIn(true);
+      } else {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+    } catch {
+      setUser(null);
+      setIsLoggedIn(false);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const login = (nextUser: MockUser = DEFAULT_USER) => {
+  useEffect(() => {
+    refreshUser();
+  }, [refreshUser]);
+
+  const login = async (dataOrEmail?: { email: string; password?: string; name?: string } | string, password?: string) => {
+    // Support either login({ email, password }) or login("demo@...", "Demo@1234") or fallback
+    let email = "demo@heritage-india.com";
+    let pwd = "Demo@1234";
+
+    if (typeof dataOrEmail === "object" && dataOrEmail !== null) {
+      email = dataOrEmail.email || email;
+      pwd = dataOrEmail.password || pwd;
+    } else if (typeof dataOrEmail === "string") {
+      email = dataOrEmail;
+      pwd = password || pwd;
+    }
+
+    const res = await api.auth.login({ email, password: pwd });
+    setUser(formatUser(res.user));
     setIsLoggedIn(true);
-    setUser(nextUser);
-    localStorage.setItem(AUTH_STORAGE_KEY, "true");
   };
 
-  const logout = () => {
-    setIsLoggedIn(false);
+  const signup = async (data: { name: string; email: string; password: string }) => {
+    const res = await api.auth.signup(data);
+    setUser(formatUser(res.user));
+    setIsLoggedIn(true);
+  };
+
+  const logout = async () => {
+    try {
+      await api.auth.logout();
+    } catch {
+      // ignore
+    }
     setUser(null);
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        isLoading,
+        user,
+        login,
+        signup,
+        logout,
+        refreshUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

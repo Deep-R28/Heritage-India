@@ -28,6 +28,8 @@ async function verify() {
   const payments = await prisma.payment.count();
   const lineItems = await prisma.lineItem.count();
   const preferences = await prisma.preference.count();
+  const crowdPatterns = await prisma.crowdPattern.count();
+  const visitorStats = await prisma.visitorStats.count();
 
   // Check locale distribution
   const locales = await prisma.siteContent.groupBy({
@@ -53,6 +55,8 @@ async function verify() {
   console.log(`Saved Sites:     ${savedSites}`);
   console.log(`Notifications:   ${notifications}`);
   console.log(`Crowd Snapshots: ${crowdSnapshots}`);
+  console.log(`Crowd Patterns:  ${crowdPatterns} ${crowdPatterns > 0 ? "✅" : "❌"}`);
+  console.log(`Visitor Stats:   ${visitorStats} ${visitorStats > 0 ? "✅" : "❌"}`);
 
   console.log("\n═══════════════════════════════════════");
   const allGood = sites >= 15 && guides >= 12 && localeCount >= 3;

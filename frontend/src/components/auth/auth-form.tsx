@@ -14,13 +14,34 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const { t } = useTranslation();
   const router = useRouter();
   const { login } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = mode === "signup";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login();
-    router.push("/dashboard");
+    setError(null);
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = (formData.get("email") as string)?.trim();
+    const password = formData.get("password") as string;
+    const fullname = (formData.get("fullname") as string)?.trim() || "Explorer";
+
+    try {
+      if (isSignup) {
+        await login({ email, password, name: fullname });
+        router.push("/onboarding");
+      } else {
+        await login({ email, password });
+        router.push("/dashboard");
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Authentication failed. Please check your credentials.";
+      setError(msg);
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,6 +94,11 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
           </div>
 
           <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
+                {error}
+              </div>
+            )}
             {isSignup && (
               <div className="relative flex flex-col-reverse">
                 <input
@@ -125,9 +151,10 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
 
             <button
               type="submit"
-              className="group mt-6 flex w-full items-center justify-center gap-2 rounded bg-accent px-6 py-4 font-body font-semibold text-accent-foreground transition-colors hover:opacity-90"
+              disabled={loading}
+              className="group mt-6 flex w-full items-center justify-center gap-2 rounded bg-accent px-6 py-4 font-body font-semibold text-accent-foreground transition-colors hover:opacity-90 disabled:opacity-50"
             >
-              <span>{isSignup ? t("auth.createAccount") : t("auth.logIn")}</span>
+              <span>{loading ? "..." : isSignup ? t("auth.createAccount") : t("auth.logIn")}</span>
               <Icon name="arrow_forward" className="transition-transform group-hover:translate-x-1" />
             </button>
 
