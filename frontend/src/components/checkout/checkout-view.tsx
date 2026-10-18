@@ -17,7 +17,10 @@ export function CheckoutView() {
 
   const siteSlug = searchParams.get("site") || "taj-mahal";
   const guideId = searchParams.get("guide");
-  const initialDate = searchParams.get("date") || new Date(Date.now() + 86400000 * 3).toISOString().split("T")[0];
+  const initialDate = searchParams.get("date") || new Date(Date.now() + 86400000).toISOString().split("T")[0];
+  const paramParty = searchParams.get("partySize") || searchParams.get("members") || searchParams.get("tickets");
+  const initialParty = paramParty ? Math.max(1, parseInt(paramParty, 10)) : 2;
+  const initialSlot = searchParams.get("slot") || "09:00 AM (Morning Slot)";
 
   const [site, setSite] = useState<ApiSite | null>(null);
   const [guide, setGuide] = useState<ApiGuide | null>(null);
@@ -26,8 +29,9 @@ export function CheckoutView() {
   const [guideLanguageFilter, setGuideLanguageFilter] = useState("All");
   const [guideSearchQuery, setGuideSearchQuery] = useState("");
 
-  const [partySize, setPartySize] = useState(2);
+  const [partySize, setPartySize] = useState(initialParty);
   const [visitDate, setVisitDate] = useState(initialDate);
+  const [visitSlot, setVisitSlot] = useState(initialSlot);
   const [paymentMethod, setPaymentMethod] = useState<"CARD" | "UPI">("UPI");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -49,8 +53,15 @@ export function CheckoutView() {
         const guidesRes = await api.guides.verify();
         if (guidesRes.guides && guidesRes.guides.length > 0) {
           setAvailableGuides(guidesRes.guides);
-          if (guideId) {
-            const matched = guidesRes.guides.find((g) => g.id === guideId || g.licenseId === guideId);
+          if (guideId === "none" || guideId === "self") {
+            setGuide(null);
+          } else if (guideId) {
+            const matched = guidesRes.guides.find(
+              (g) =>
+                g.id === guideId ||
+                g.licenseId?.toLowerCase() === guideId.toLowerCase() ||
+                g.name.toLowerCase().includes(guideId.toLowerCase())
+            );
             if (matched) setGuide(matched);
             else setGuide(guidesRes.guides[0]);
           } else {
@@ -271,29 +282,44 @@ export function CheckoutView() {
               )}
             </div>
 
-            {/* Config: Date & Party Size */}
-            <div className="mt-6 grid grid-cols-2 gap-4 border-t border-hairline pt-4">
-              <div>
-                <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">Visit Date</label>
-                <input
-                  type="date"
-                  value={visitDate}
-                  onChange={(e) => setVisitDate(e.target.value)}
-                  className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-mono text-xs text-foreground focus:border-accent focus:outline-none"
-                />
+            {/* Config: Date, Time Slot & Party Size */}
+            <div className="mt-6 space-y-4 border-t border-hairline pt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">Visit Date</label>
+                  <input
+                    type="date"
+                    value={visitDate}
+                    onChange={(e) => setVisitDate(e.target.value)}
+                    className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-mono text-xs text-foreground focus:border-accent focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">Party Size</label>
+                  <select
+                    value={partySize}
+                    onChange={(e) => setPartySize(Number(e.target.value))}
+                    className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-body text-xs text-foreground focus:border-accent focus:outline-none"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => (
+                      <option key={n} value={n}>
+                        {n} {n === 1 ? "Visitor" : "Visitors"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div>
-                <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">Party Size</label>
+                <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">Entry Time Slot</label>
                 <select
-                  value={partySize}
-                  onChange={(e) => setPartySize(Number(e.target.value))}
+                  value={visitSlot}
+                  onChange={(e) => setVisitSlot(e.target.value)}
                   className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-body text-xs text-foreground focus:border-accent focus:outline-none"
                 >
-                  {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => (
-                    <option key={n} value={n}>
-                      {n} {n === 1 ? "Visitor" : "Visitors"}
-                    </option>
-                  ))}
+                  <option value="06:00 AM - 09:00 AM (Sunrise Slot)">🌅 06:00 AM – 09:00 AM (Sunrise Slot — Best Light & Lowest Crowd)</option>
+                  <option value="09:00 AM - 12:00 PM (Morning Slot)">☀️ 09:00 AM – 12:00 PM (Morning Slot)</option>
+                  <option value="12:00 PM - 03:00 PM (Afternoon Slot)">🌤️ 12:00 PM – 03:00 PM (Afternoon Slot)</option>
+                  <option value="03:00 PM - 06:00 PM (Sunset Slot)">🌇 03:00 PM – 06:00 PM (Sunset Slot — Golden Hour)</option>
                 </select>
               </div>
             </div>

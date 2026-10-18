@@ -13,12 +13,16 @@ import { FormattedMessage } from "@/components/assistant/formatted-message";
 
 function cleanTextForSpeech(text: string): string {
   return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // strip markdown links, keep label
+    .replace(/https?:\/\/\S+/g, "") // strip raw URLs
+    .replace(/\/checkout\S*/g, "") // strip relative checkout paths
     .replace(/\*\*/g, "")
     .replace(/\*/g, "")
     .replace(/^[-•*]\s*/gm, "")
     .replace(/₹/g, "Rupees ")
     .replace(/\(([^)]+)\)/g, ", $1,")
     .replace(/\n+/g, ". ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -56,6 +60,23 @@ export function VoiceClient() {
     const query = transcript.trim();
     if (!query || query === lastQueryRef.current) return;
 
+    // Check if user is voice-commanding to go to payment
+    const lowerQuery = query.toLowerCase();
+    if (
+      (lowerQuery.includes("pay") || lowerQuery.includes("payment") || lowerQuery.includes("checkout")) &&
+      assistantReply &&
+      assistantReply.includes("/checkout")
+    ) {
+      const match = assistantReply.match(/\/checkout\S+/);
+      if (match) {
+        stop();
+        stopSpeaking();
+        const cleanUrl = match[0].replace(/[)\]]+$/, "");
+        router.push(cleanUrl);
+        return;
+      }
+    }
+
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(async () => {
       if (isBusyRef.current) return;
@@ -90,6 +111,7 @@ export function VoiceClient() {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript, processing, isSpeaking, start, stop, setTranscript, speak, langCode, t]);
 
   useEffect(() => {
