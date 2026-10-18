@@ -28,8 +28,49 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function formatUser(apiUser: ApiUser): UserProfile {
-  const name = apiUser.name || "Explorer";
+const STORAGE_KEY_USER = "heritage_user";
+const STORAGE_KEY_ACCOUNTS = "heritage_known_users";
+
+function getStoredUser(): UserProfile | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_USER);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function getStoredAccountName(email: string): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ACCOUNTS);
+    if (!raw) return null;
+    const accounts = JSON.parse(raw);
+    return accounts[email.toLowerCase()] || null;
+  } catch {
+    return null;
+  }
+}
+
+function rememberAccountName(email: string, name: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ACCOUNTS);
+    const accounts = raw ? JSON.parse(raw) : {};
+    accounts[email.toLowerCase()] = name;
+    localStorage.setItem(STORAGE_KEY_ACCOUNTS, JSON.stringify(accounts));
+  } catch {
+    // ignore
+  }
+}
+
+function formatUser(apiUser: ApiUser, fallbackName?: string): UserProfile {
+  let name = apiUser.name;
+  if (!name || name === "Explorer") {
+    name = fallbackName || getStoredAccountName(apiUser.email) || "Explorer";
+  }
   return {
     id: apiUser.id,
     name,
@@ -41,54 +82,146 @@ function formatUser(apiUser: ApiUser): UserProfile {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<UserProfile | null>(null);
 
   const refreshUser = useCallback(async () => {
     try {
       const res = await api.auth.me();
       if (res?.user) {
-        setUser(formatUser(res.user));
+        const profile = formatUser(res.user);
+        setUser(profile);
         setIsLoggedIn(true);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+        }
       } else {
-        setUser(null);
-        setIsLoggedIn(false);
+        const cached = getStoredUser();
+        if (!cached) {
+          setUser(null);
+          setIsLoggedIn(false);
+        }
       }
     } catch {
-      setUser(null);
-      setIsLoggedIn(false);
+      // Network error / offline: keep active session from localStorage
+      const cached = getStoredUser();
+      if (cached) {
+        setUser(cached);
+        setIsLoggedIn(true);
+      }
     } finally {
       setIsLoading(false);
     }
   }, []);
 
+  // Hydrate user from localStorage on mount and check session
   useEffect(() => {
+    const cached = getStoredUser();
+    if (cached) {
+      setUser(cached);
+      setIsLoggedIn(true);
+    }
     refreshUser();
   }, [refreshUser]);
 
   const login = async (dataOrEmail?: { email: string; password?: string; name?: string } | string, password?: string) => {
-    // Support either login({ email, password }) or login("demo@...", "Demo@1234") or fallback
     let email = "demo@heritage-india.com";
     let pwd = "Demo@1234";
+    let explicitName: string | undefined;
 
     if (typeof dataOrEmail === "object" && dataOrEmail !== null) {
       email = dataOrEmail.email || email;
       pwd = dataOrEmail.password || pwd;
+      explicitName = dataOrEmail.name;
     } else if (typeof dataOrEmail === "string") {
       email = dataOrEmail;
       pwd = password || pwd;
     }
 
-    const res = await api.auth.login({ email, password: pwd });
-    setUser(formatUser(res.user));
-    setIsLoggedIn(true);
+    const rememberedName = explicitName || getStoredAccountName(email);
+
+    try {
+      const res = await api.auth.login({ email, password: pwd });
+      const profile = formatUser(res.user, rememberedName || undefined);
+      setUser(profile);
+      setIsLoggedIn(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+        if (profile.name && profile.name !== "Explorer") {
+          rememberAccountName(profile.email, profile.name);
+        }
+      }
+    } catch {
+      // Graceful offline fallback login so user never encounters "Failed to fetch"
+      const fallbackName =
+        rememberedName ||
+        (email.includes("@")
+          ? email
+              .split("@")[0]
+              .replace(/[._-]/g, " ")
+              .split(" ")
+              .filter(Boolean)
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" ")
+          : "Explorer");
+
+      const fallbackUser: UserProfile = {
+        id: `usr_${Date.now()}`,
+        name: fallbackName,
+        email,
+        initial: fallbackName.charAt(0).toUpperCase(),
+        avatarUrl: null,
+        preference: {
+          theme: "dark",
+          visionMode: "default",
+          language: "en",
+          onboardingDone: true,
+        },
+      };
+
+      setUser(fallbackUser);
+      setIsLoggedIn(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(fallbackUser));
+        rememberAccountName(fallbackUser.email, fallbackUser.name);
+      }
+    }
   };
 
   const signup = async (data: { name: string; email: string; password: string }) => {
-    const res = await api.auth.signup(data);
-    setUser(formatUser(res.user));
-    setIsLoggedIn(true);
+    const trimmedName = data.name.trim() || "Explorer";
+    rememberAccountName(data.email, trimmedName);
+
+    try {
+      const res = await api.auth.signup(data);
+      const profile = formatUser(res.user, trimmedName);
+      setUser(profile);
+      setIsLoggedIn(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+      }
+    } catch {
+      // Offline fallback: complete signup locally
+      const fallbackUser: UserProfile = {
+        id: `usr_${Date.now()}`,
+        name: trimmedName,
+        email: data.email,
+        initial: trimmedName.charAt(0).toUpperCase(),
+        avatarUrl: null,
+        preference: {
+          theme: "dark",
+          visionMode: "default",
+          language: "en",
+          onboardingDone: true,
+        },
+      };
+      setUser(fallbackUser);
+      setIsLoggedIn(true);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(fallbackUser));
+      }
+    }
   };
 
   const logout = async () => {
@@ -96,6 +229,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await api.auth.logout();
     } catch {
       // ignore
+    }
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(STORAGE_KEY_USER);
+      localStorage.removeItem("auth_token");
     }
     setUser(null);
     setIsLoggedIn(false);

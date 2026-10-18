@@ -3,7 +3,24 @@
  * Connects directly to the Express backend API.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+export function getApiBase(): string {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (envUrl) {
+    // If in an HTTPS browser, do not use an insecure http: URL (prevents mixed content block)
+    if (typeof window !== "undefined" && window.location.protocol === "https:" && envUrl.startsWith("http:")) {
+      return "";
+    }
+    return envUrl.replace(/\/+$/, "");
+  }
+  if (typeof window !== "undefined") {
+    // In production browsers (e.g. *.vercel.app), default to same-origin relative URL
+    // to prevent browser Mixed Content (HTTPS -> HTTP) blocking.
+    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+      return "";
+    }
+  }
+  return "http://localhost:4000";
+}
 
 export class ApiError extends Error {
   constructor(
@@ -18,7 +35,8 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE}${path}`;
+  const base = getApiBase();
+  const url = base ? `${base}${path}` : path;
   const headers = new Headers(options.headers || {});
   if (!headers.has("Content-Type") && options.body && typeof options.body === "string") {
     headers.set("Content-Type", "application/json");
@@ -32,12 +50,33 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     }
   }
 
-  const res = await fetch(url, {
-    cache: "no-store",
-    ...options,
-    headers,
-    credentials: "include", // send httpOnly cookies
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      cache: "no-store",
+      ...options,
+      headers,
+      credentials: "include", // send httpOnly cookies
+    });
+  } catch (netErr: unknown) {
+    // If external URL failed with a network error, retry using same-origin relative path if possible
+    if (base && typeof window !== "undefined") {
+      try {
+        res = await fetch(path, {
+          cache: "no-store",
+          ...options,
+          headers,
+          credentials: "include",
+        });
+      } catch {
+        const msg = netErr instanceof Error ? netErr.message : "Network error";
+        throw new ApiError(503, `Unable to reach backend service (${msg})`, "NETWORK_ERROR", netErr);
+      }
+    } else {
+      const msg = netErr instanceof Error ? netErr.message : "Network error";
+      throw new ApiError(503, `Unable to reach backend service (${msg})`, "NETWORK_ERROR", netErr);
+    }
+  }
 
   const json = await res.json().catch(() => ({}));
 

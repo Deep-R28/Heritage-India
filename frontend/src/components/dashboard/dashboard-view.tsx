@@ -59,7 +59,7 @@ export function DashboardView() {
         <div>
           <p className="font-label text-xs uppercase tracking-widest text-accent">Concierge Dashboard</p>
           <h1 className="mt-2 font-headline text-3xl text-foreground md:text-4xl">
-            Welcome back, {user?.name || "Explorer"}
+            Hello, {user?.name || "Explorer"}
           </h1>
           <p className="mt-1 font-body text-sm text-foreground-muted">
             Your personalized heritage itinerary, booking receipts, and crowd alerts.
