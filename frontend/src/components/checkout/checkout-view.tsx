@@ -58,11 +58,21 @@ export function CheckoutView() {
           if (guideId === "none" || guideId === "self") {
             setGuide(null);
           } else if (guideId) {
+            const target = guideId.toLowerCase();
             const matched = guidesRes.guides.find(
               (g) =>
-                g.id === guideId ||
-                g.licenseId?.toLowerCase() === guideId.toLowerCase() ||
-                g.name.toLowerCase().includes(guideId.toLowerCase())
+                g.id.toLowerCase() === target ||
+                g.licenseId?.toLowerCase() === target ||
+                g.name.toLowerCase().includes(target) ||
+                (target.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
+                (target.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
+                (target.includes("priya") && g.name.toLowerCase().includes("priya")) ||
+                (target.includes("meera") && g.name.toLowerCase().includes("meera")) ||
+                (target.includes("arun") && g.name.toLowerCase().includes("arun")) ||
+                (target.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
+                (target.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
+                (target.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
+                (target.includes("del-04") && g.name.toLowerCase().includes("meera"))
             );
             if (matched) setGuide(matched);
             else setGuide(guidesRes.guides[0]);
@@ -142,7 +152,10 @@ export function CheckoutView() {
       const booking = await api.bookings.create({
         siteId: site.id,
         guideId: guide?.id ?? null,
+        guideName: guide?.name ?? null,
         visitDate,
+        visitSlot,
+        time: visitSlot,
         partySize,
         userId: user?.id,
       });
@@ -159,6 +172,10 @@ export function CheckoutView() {
 
       if (!paymentRes.success) {
         throw new Error("Payment was declined. Please verify your details.");
+      }
+
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("heritage-notifications-updated"));
       }
 
       // 3. Navigate to success page

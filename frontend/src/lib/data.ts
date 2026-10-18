@@ -77,6 +77,8 @@ export interface NotificationItem {
   eventDate?: string;
   date: string;
   read: boolean;
+  title?: string;
+  message?: string;
 }
 
 const fallbackSites = nearbySitesRaw as Site[];
@@ -300,6 +302,9 @@ export async function getNotifications(): Promise<NotificationItem[]> {
             : "guide-verification",
         variant: n.title.toLowerCase().includes("cancel") ? "cancelled" : "confirmed",
         site: n.title,
+        title: n.title,
+        message: n.body,
+        guide: n.body,
         date: n.createdAt,
         read: Boolean(n.readAt),
       }));

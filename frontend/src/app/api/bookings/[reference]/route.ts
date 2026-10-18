@@ -32,6 +32,8 @@ export async function GET(
       id: `bk_${params.reference}`,
       reference,
       visitDate: new Date(Date.now() + 86400000 * 2).toISOString(),
+      visitSlot: "09:00 AM (Morning Slot)",
+      time: "09:00 AM (Morning Slot)",
       partySize: 2,
       totalINR: 5060,
       status: "UPCOMING",

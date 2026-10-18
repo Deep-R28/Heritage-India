@@ -71,19 +71,31 @@ export function PaymentSuccessView() {
             <span className="text-foreground">{booking?.site.city || "Agra, Uttar Pradesh"}</span>
           </div>
 
-          {booking?.guide && (
+          {booking?.guide ? (
             <div className="flex justify-between">
               <span className="text-foreground-muted">Certified Guide</span>
-              <span className="text-accent">{booking.guide.name} (ASI Licensed)</span>
+              <span className="text-accent font-medium">{booking.guide.name} (ASI Licensed)</span>
+            </div>
+          ) : (
+            <div className="flex justify-between">
+              <span className="text-foreground-muted">Certified Guide</span>
+              <span className="text-foreground-muted">Self-Guided Exploration (No Guide)</span>
             </div>
           )}
 
-          <div className="flex justify-between">
+          <div className="flex justify-between items-start">
             <span className="text-foreground-muted">Visit Schedule</span>
-            <span className="text-foreground">
+            <span className="text-foreground text-right">
               {booking?.visitDate
                 ? new Date(booking.visitDate).toLocaleDateString("en-IN", { dateStyle: "full" })
                 : "Upcoming Date"}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-foreground-muted">Time Slot</span>
+            <span className="font-mono text-accent text-xs font-semibold">
+              🕒 {booking?.visitSlot || booking?.time || "09:00 AM (Morning Slot)"}
             </span>
           </div>
 

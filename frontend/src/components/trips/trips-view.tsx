@@ -50,8 +50,18 @@ export function TripsView() {
     try {
       await api.me.cancelBooking(id);
       setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, status: "CANCELLED" } : b))
+        prev.map((b) => (b.id === id || b.reference === id ? { ...b, status: "CANCELLED" } : b))
       );
+      if (typeof window !== "undefined") {
+        try {
+          const list: ApiBooking[] = JSON.parse(localStorage.getItem("heritage_bookings") || "[]");
+          const updated = list.map((b) => (b.id === id || b.reference === id ? { ...b, status: "CANCELLED" } : b));
+          localStorage.setItem("heritage_bookings", JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        window.dispatchEvent(new CustomEvent("heritage-notifications-updated"));
+      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to cancel booking";
       alert(msg);
@@ -159,6 +169,7 @@ export function TripsView() {
                     <h3 className="mt-1 font-headline text-xl text-foreground">{b.site.name}</h3>
                     <p className="font-body text-xs text-foreground-muted">
                       {b.site.city} • Visit Date: {new Date(b.visitDate).toLocaleDateString("en-IN", { dateStyle: "full" })}
+                      {b.visitSlot && ` • Slot: ${b.visitSlot}`}
                     </p>
                     {b.guide && (
                       <p className="mt-1 flex items-center gap-1 font-body text-xs text-accent">

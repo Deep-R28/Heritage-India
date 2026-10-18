@@ -35,7 +35,17 @@ export async function GET(req: Request) {
       (g) =>
         g.name.toLowerCase().includes(q) ||
         g.licenseId.toLowerCase().includes(q) ||
-        g.id.toLowerCase() === q
+        g.id.toLowerCase() === q ||
+        (q.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
+        (q.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
+        (q.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
+        (q.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
+        (q.includes("priya") && g.name.toLowerCase().includes("priya")) ||
+        (q.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
+        (q.includes("meera") && g.name.toLowerCase().includes("meera")) ||
+        (q.includes("del-04") && g.name.toLowerCase().includes("meera")) ||
+        (q.includes("arun") && g.name.toLowerCase().includes("arun")) ||
+        (q.includes("agr-03") && g.name.toLowerCase().includes("arun"))
     );
 
     if (matched) {

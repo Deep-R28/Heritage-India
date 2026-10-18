@@ -160,6 +160,8 @@ export interface ApiBooking {
   id: string;
   reference: string;
   visitDate: string;
+  visitSlot?: string;
+  time?: string;
   partySize: number;
   status: "UPCOMING" | "COMPLETED" | "CANCELLED";
   totalINR: number;
@@ -426,6 +428,8 @@ export const api = {
       guideId?: string | null;
       guideName?: string | null;
       visitDate: string;
+      visitSlot?: string;
+      time?: string;
       partySize: number;
       userId?: string;
       leadVisitor?: string;

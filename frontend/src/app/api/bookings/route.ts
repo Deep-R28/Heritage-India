@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const siteId = body.siteId || body.siteSlug;
-    const { guideId, visitDate, partySize, guideName } = body;
+    const { guideId, visitDate, partySize, guideName, visitSlot, time } = body;
 
     if (!siteId) {
       return NextResponse.json(
@@ -21,32 +21,63 @@ export async function POST(req: Request) {
     const sites = getAllApiSites();
     const site = sites.find((s) => s.id === siteId || s.slug === siteId) || sites[0];
     
-    let guide = guideId
-      ? guideRegistryRaw.find((g) => g.id.toLowerCase() === String(guideId).toLowerCase() || (g.asiId && g.asiId.toLowerCase() === String(guideId).toLowerCase()))
-      : null;
+    let guide: {
+      id: string;
+      name: string;
+      asiId?: string | null;
+      verified?: boolean;
+      rateInr: number;
+      [key: string]: unknown;
+    } | null | undefined = null;
+    const normalizedGuideId = String(guideId || "").toLowerCase();
+    const normalizedGuideName = String(guideName || "").toLowerCase();
 
-    if (!guide && guideId && guideId !== "none") {
-      const vGuide = VERIFIED_GUIDES.find(
-        (g) => g.id.toLowerCase() === String(guideId).toLowerCase() || (guideName && g.name.toLowerCase().includes(String(guideName).toLowerCase()))
+    if (guideId && guideId !== "none" && guideId !== "self") {
+      guide = guideRegistryRaw.find(
+        (g) =>
+          g.id.toLowerCase() === normalizedGuideId ||
+          (g.asiId && g.asiId.toLowerCase() === normalizedGuideId) ||
+          g.name.toLowerCase().includes(normalizedGuideId) ||
+          (normalizedGuideName && g.name.toLowerCase().includes(normalizedGuideName)) ||
+          (normalizedGuideId.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
+          (normalizedGuideId.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
+          (normalizedGuideId.includes("priya") && g.name.toLowerCase().includes("priya")) ||
+          (normalizedGuideId.includes("meera") && g.name.toLowerCase().includes("meera")) ||
+          (normalizedGuideId.includes("arun") && g.name.toLowerCase().includes("arun")) ||
+          (normalizedGuideId.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
+          (normalizedGuideId.includes("agr-05") && g.name.toLowerCase().includes("vikram"))
       );
-      if (vGuide) {
-        guide = {
-          id: vGuide.id,
-          name: vGuide.name,
-          asiId: vGuide.license,
-          verified: true,
-          photo: null,
-          experienceYears: 10,
-          languages: vGuide.languages.split(", "),
-          specialty: "Heritage & History",
-          region: site.city ? `${site.city}, ${site.state}` : site.state,
-          rateInr: vGuide.rate,
-          rating: vGuide.rating,
-          translations: {
-            hi: { specialty: "धरोहर एवं इतिहास" },
-            es: { specialty: "Patrimonio e Historia" },
-          },
-        };
+
+      if (!guide) {
+        const vGuide = VERIFIED_GUIDES.find(
+          (g) =>
+            g.id.toLowerCase() === normalizedGuideId ||
+            (normalizedGuideName && g.name.toLowerCase().includes(normalizedGuideName)) ||
+            (normalizedGuideId.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
+            (normalizedGuideId.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
+            (normalizedGuideId.includes("priya") && g.name.toLowerCase().includes("priya")) ||
+            (normalizedGuideId.includes("meera") && g.name.toLowerCase().includes("meera")) ||
+            (normalizedGuideId.includes("agr-01") && g.name.toLowerCase().includes("rajesh"))
+        );
+        if (vGuide) {
+          guide = {
+            id: vGuide.id,
+            name: vGuide.name,
+            asiId: vGuide.license,
+            verified: true,
+            photo: null,
+            experienceYears: 10,
+            languages: vGuide.languages.split(", "),
+            specialty: "Heritage & History",
+            region: site.city ? `${site.city}, ${site.state}` : site.state,
+            rateInr: vGuide.rate,
+            rating: vGuide.rating,
+            translations: {
+              hi: { specialty: "धरोहर एवं इतिहास" },
+              es: { specialty: "Patrimonio e Historia" },
+            },
+          };
+        }
       }
     }
 
@@ -59,11 +90,14 @@ export async function POST(req: Request) {
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const reference = `HER-2026-${randomSuffix}`;
     const id = `bk_${Date.now()}_${randomSuffix}`;
+    const effectiveSlot = visitSlot || time || "09:00 AM (Morning Slot)";
 
     const newBooking: ApiBooking = {
       id,
       reference,
       visitDate: visitDate || new Date(Date.now() + 86400000 * 2).toISOString(),
+      visitSlot: effectiveSlot,
+      time: effectiveSlot,
       partySize: count,
       totalINR,
       status: "UPCOMING",
@@ -134,12 +168,13 @@ export async function POST(req: Request) {
       }
     }
 
+    const dateFormatted = visitDate ? String(visitDate).split("T")[0] : "upcoming date";
     const bookingNotification = {
       id: `notif_${Date.now()}_${randomSuffix}`,
       userId: (body.userId as string) || "user_explorer",
       type: "BOOKING" as const,
       title: `Booking Confirmed: ${site.name}`,
-      body: `Your official pass for ${count} guest(s) on ${visitDate ? String(visitDate).split("T")[0] : "upcoming date"} (Ref: ${reference}) is confirmed with ${guide ? guide.name : "Self-Guided"}.`,
+      body: `Ticket booked for ${count} member${count > 1 ? "s" : ""} for ${site.name} at ${effectiveSlot} on ${dateFormatted} (Ref: ${reference}) with ${guide ? guide.name : "Self-Guided"}.`,
       readAt: null, // Unread indicator for missed notifications
       createdAt: new Date().toISOString(),
       siteSlug: site.slug,

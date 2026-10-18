@@ -3,10 +3,12 @@
     "id": "n-1",
     "type": "booking",
     "variant": "confirmed",
-    "guide": "Ravi Shankar Mehta",
-    "site": "The Taj Mahal",
-    "eventDate": "2026-10-12",
-    "date": "2026-09-01",
+    "guide": "Ticket booked for 2 members for The Taj Mahal at 09:00 AM (Morning Slot) with verified guide Rajesh Kumar.",
+    "site": "Booking Confirmed: The Taj Mahal",
+    "title": "Booking Confirmed: The Taj Mahal",
+    "message": "Ticket booked for 2 members for The Taj Mahal at 09:00 AM (Morning Slot) on 2026-10-21 (Ref: HER-2026-8841) with Rajesh Kumar.",
+    "eventDate": "2026-10-21",
+    "date": "2026-10-18T10:00:00.000Z",
     "read": false
   },
   {

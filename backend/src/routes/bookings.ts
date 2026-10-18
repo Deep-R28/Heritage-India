@@ -9,7 +9,10 @@ const router = Router();
 const createBookingSchema = z.object({
   siteId: z.string().min(1),
   guideId: z.string().optional().nullable(),
+  guideName: z.string().optional().nullable(),
   visitDate: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}/)),
+  visitSlot: z.string().optional(),
+  time: z.string().optional(),
   partySize: z.number().int().min(1).default(1),
   userId: z.string().optional(),
 });
@@ -23,7 +26,7 @@ function generateReference(siteSlug: string): string {
 
 router.post("/", optionalAuth, async (req, res, next) => {
   try {
-    const { siteId, guideId, visitDate, partySize, userId: bodyUserId } = createBookingSchema.parse(req.body);
+    const { siteId, guideId, guideName, visitDate, visitSlot, time, partySize, userId: bodyUserId } = createBookingSchema.parse(req.body);
 
     const effectiveUserId = req.user?.id || bodyUserId;
     if (!effectiveUserId) {
@@ -35,7 +38,15 @@ router.post("/", optionalAuth, async (req, res, next) => {
 
     let guide = null;
     if (guideId) {
-      guide = await prisma.guide.findUnique({ where: { id: guideId } });
+      guide = await prisma.guide.findFirst({
+        where: {
+          OR: [
+            { id: guideId },
+            { licenseId: guideId },
+            ...(guideName ? [{ name: { contains: guideName } }] : []),
+          ],
+        },
+      });
     }
 
     const siteEntryFee = site.entryFeeINR * partySize;
@@ -47,6 +58,7 @@ router.post("/", optionalAuth, async (req, res, next) => {
 
     const reference = generateReference(site.slug);
     const dateObj = new Date(visitDate);
+    const slotText = visitSlot || time || "09:00 AM (Morning Slot)";
 
     const booking = await prisma.booking.create({
       data: {
@@ -73,6 +85,16 @@ router.post("/", optionalAuth, async (req, res, next) => {
         lineItems: true,
       },
     });
+
+    const dateFormatted = dateObj.toISOString().split("T")[0];
+    await prisma.notification.create({
+      data: {
+        userId: effectiveUserId,
+        type: "BOOKING",
+        title: `Booking Confirmed: ${site.name}`,
+        body: `Ticket booked for ${partySize} member${partySize > 1 ? "s" : ""} for ${site.name} at ${slotText} on ${dateFormatted} (Ref: ${reference}) with ${guide ? guide.name : "Self-Guided"}.`,
+      },
+    }).catch(() => {});
 
     return res.status(201).json({
       data: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,12 @@ const typeTone: Record<NotificationItem["type"], string> = {
 };
 
 function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record<string, unknown>) => string, lang: string) {
+  if (item.message) {
+    return {
+      title: item.title || item.site || t("notifications.types.bookingConfirmed.title"),
+      message: item.message,
+    };
+  }
   const eventDate = item.eventDate ? formatLocaleDate(item.eventDate, lang) : undefined;
   if (item.type === "booking") {
     // If the notification item carries its own dynamic title/message from real-time booking:
@@ -52,6 +58,56 @@ function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record
 export function NotificationsClient({ initial }: { initial: NotificationItem[] }) {
   const { t, i18n } = useTranslation();
   const [items, setItems] = useState<NotificationItem[]>(initial);
+
+  useEffect(() => {
+    async function loadNotifications() {
+      try {
+        const res = await fetch("/api/me/notifications");
+        if (res.ok) {
+          const json = await res.json();
+          if (Array.isArray(json.data) && json.data.length > 0) {
+            type StoredNotif = {
+              id: string;
+              type: string;
+              title?: string;
+              body?: string;
+              createdAt: string;
+              readAt?: string | null;
+            };
+            setItems(
+              json.data.map((n: StoredNotif) => ({
+                id: n.id,
+                type:
+                  n.type === "BOOKING"
+                    ? "booking"
+                    : n.type === "CROWD_ALERT"
+                    ? "crowd-alert"
+                    : "guide-verification",
+                variant: n.title?.toLowerCase().includes("cancel") ? "cancelled" : "confirmed",
+                site: n.title,
+                title: n.title,
+                message: n.body,
+                guide: n.body,
+                date: n.createdAt,
+                read: Boolean(n.readAt),
+              }))
+            );
+          } else if (Array.isArray(json.data) && json.data.length === 0) {
+            setItems([]);
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to load real-time notifications:", e);
+      }
+    }
+
+    loadNotifications();
+    const handleUpdate = () => {
+      loadNotifications();
+    };
+    window.addEventListener("heritage-notifications-updated", handleUpdate);
+    return () => window.removeEventListener("heritage-notifications-updated", handleUpdate);
+  }, []);
 
   const groups = useMemo(() => {
     const map = new Map<string, NotificationItem[]>();
