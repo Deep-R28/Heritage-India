@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { sendMessageToAssistant, type AssistantMessage } from "@/lib/assistant";
+import { FormattedMessage } from "@/components/assistant/formatted-message";
 import { languages, type LanguageCode } from "@/i18n/config";
 
 export function ChatClient() {
@@ -112,7 +113,11 @@ export function ChatClient() {
                     : "rounded-tr-none border border-accent/30 bg-accent/10 text-accent",
                 )}
               >
-                {msg.text}
+                {msg.role === "assistant" ? (
+                  <FormattedMessage text={msg.text} />
+                ) : (
+                  <div className="whitespace-pre-wrap">{msg.text}</div>
+                )}
                 {msg.image && (
                   <div className="group relative mt-4 h-32 w-full cursor-pointer overflow-hidden rounded-lg border border-hairline">
                     <Image
