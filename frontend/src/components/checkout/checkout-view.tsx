@@ -36,6 +36,7 @@ export function CheckoutView() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // Form states
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8892");
@@ -87,8 +88,15 @@ export function CheckoutView() {
   const taxes = Math.round(subtotal * 0.05);
   const grandTotal = subtotal + conciergeFee + taxes;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleOpenConfirmation = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!site) return;
+    setError(null);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmAndPay = async () => {
+    setShowConfirmModal(false);
     setSubmitting(true);
     setError(null);
 
@@ -399,7 +407,7 @@ export function CheckoutView() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            <form onSubmit={handleOpenConfirmation} className="mt-8 space-y-5">
               {paymentMethod === "UPI" ? (
                 <div className="space-y-4 rounded-xl border border-hairline bg-surface-hover/20 p-5">
                   <div className="flex items-center gap-3">
@@ -518,6 +526,116 @@ export function CheckoutView() {
           </Card>
         </div>
       </div>
+
+      {/* Ticket & Payment Confirmation Screen (Yes/No Modal) */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-hairline bg-surface p-6 shadow-2xl">
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-hairline pb-4">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-0.5 font-label text-[10px] font-semibold uppercase tracking-wider text-accent border border-accent/30">
+                  <Icon name="verified" className="text-xs" /> Confirmation Required
+                </span>
+                <h3 className="mt-2 font-headline text-xl text-foreground md:text-2xl">
+                  Confirm Ticket Booking & Payment
+                </h3>
+                <p className="mt-1 font-body text-xs text-foreground-muted">
+                  Please review your reservation summary before authorizing payment.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowConfirmModal(false)}
+                className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+                aria-label="Close"
+              >
+                <Icon name="close" className="text-lg" />
+              </button>
+            </div>
+
+            {/* Summary Details */}
+            <div className="flex-1 overflow-y-auto py-4 space-y-3.5">
+              <div className="rounded-xl border border-hairline bg-surface-elevated/50 p-4 space-y-2.5 text-xs">
+                <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
+                  <span className="font-label uppercase text-foreground-muted">Heritage Monument</span>
+                  <span className="font-headline font-semibold text-foreground text-right">{site?.name}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
+                  <span className="font-label uppercase text-foreground-muted">Date & Time Slot</span>
+                  <span className="font-mono text-foreground text-right">{visitDate} &middot; {visitSlot.split(" ")[0]}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
+                  <span className="font-label uppercase text-foreground-muted">Visitors</span>
+                  <span className="font-mono text-foreground text-right">{partySize} Member{partySize > 1 ? "s" : ""}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
+                  <span className="font-label uppercase text-foreground-muted">Guide Service</span>
+                  <span className="font-mono text-foreground text-right">
+                    {guide ? `${guide.name} (₹${guideFeeTotal})` : "Self-Guided (No Guide)"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-label uppercase text-foreground-muted">Payment Mode</span>
+                  <span className="font-mono text-accent text-right">
+                    {paymentMethod === "UPI" ? `UPI (${upiId})` : `Card (${cardNumber.slice(-4)})`}
+                  </span>
+                </div>
+              </div>
+
+              {/* Price Breakdown */}
+              <div className="rounded-xl border border-accent/20 bg-accent/5 p-4 space-y-1.5 font-mono text-xs">
+                <div className="flex justify-between text-foreground-muted">
+                  <span>Entry Tickets ({partySize} × ₹{entryFeePerPerson})</span>
+                  <span>₹{siteEntryTotal.toLocaleString("en-IN")}</span>
+                </div>
+                {guide && (
+                  <div className="flex justify-between text-foreground-muted">
+                    <span>Guide Fee (3 hrs)</span>
+                    <span>₹{guideFeeTotal.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-foreground-muted">
+                  <span>Concierge & Platform Fee (10%)</span>
+                  <span>₹{conciergeFee.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between text-foreground-muted">
+                  <span>GST & Taxes (5%)</span>
+                  <span>₹{taxes.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between border-t border-accent/30 pt-2 font-headline text-sm font-bold text-accent">
+                  <span className="font-label uppercase tracking-wider">Total Payable</span>
+                  <span>₹{grandTotal.toLocaleString("en-IN")}</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-hairline bg-surface-elevated/30 p-2.5 text-center text-[11px] text-foreground-muted">
+                Are you ready to confirm this reservation and initiate payment of <strong className="text-foreground">₹{grandTotal.toLocaleString("en-IN")}</strong>?
+              </div>
+            </div>
+
+            {/* Action Buttons: Yes/No */}
+            <div className="flex items-center gap-3 border-t border-hairline pt-4">
+              <button
+                type="button"
+                onClick={() => setShowConfirmModal(false)}
+                className="flex-1 rounded-lg border border-hairline py-2.5 font-label text-xs font-semibold uppercase tracking-wider text-foreground-muted transition-all hover:bg-surface-elevated hover:text-foreground cursor-pointer text-center"
+              >
+                No, Review Details
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmAndPay}
+                disabled={submitting}
+                className="flex-1 rounded-lg bg-accent py-2.5 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow-lg shadow-accent/20 transition-all hover:bg-accent/90 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <Icon name="check_circle" className="text-sm" />
+                Yes, Confirm & Pay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Interactive Guide Selection Modal */}
       {showGuideModal && (

@@ -4,7 +4,8 @@
  * verified ASI guides, entry fees, and opening hours across English, Hinglish,
  * Hindi, Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Urdu, and Spanish.
  *
- * Supports multi-turn conversational booking flows and night-time closure awareness.
+ * Supports multi-turn conversational booking flows, unrecognized site detection,
+ * best-rated guide estimation, price negotiation, and night-time closure awareness.
  */
 import nearbySitesRaw from "@/data/nearby-sites.json";
 
@@ -34,9 +35,9 @@ export interface VerifiedGuideInfo {
 }
 
 export const VERIFIED_GUIDES: VerifiedGuideInfo[] = [
+  { id: "G-AGR-05", name: "Vikram Singh", license: "ASI-AGR-005", rate: 1200, languages: "English, Hindi, French, Spanish", rating: 5.0, tours: 210 },
   { id: "G-AGR-01", name: "Rajesh Kumar", license: "ASI-AGR-001", rate: 800, languages: "English, Hindi, Urdu", rating: 4.9, tours: 180 },
   { id: "G-AGR-02", name: "Priya Sharma", license: "ASI-AGR-002", rate: 700, languages: "English, Hindi, Sanskrit", rating: 4.8, tours: 145 },
-  { id: "G-AGR-05", name: "Vikram Singh", license: "ASI-AGR-005", rate: 1200, languages: "English, Hindi, French, Spanish", rating: 5.0, tours: 210 },
   { id: "G-AGR-03", name: "Arun Nair", license: "ASI-AGR-003", rate: 1000, languages: "English, Hindi, Tamil, Malayalam", rating: 4.9, tours: 160 },
   { id: "G-DEL-04", name: "Meera Devi", license: "ASI-DEL-004", rate: 600, languages: "English, Hindi, Rajasthani, Gujarati", rating: 4.7, tours: 130 },
   { id: "none", name: "Self-Guided (No Guide)", license: "N/A", rate: 0, languages: "Self-Paced Exploration", rating: 5.0, tours: 0 },
@@ -57,7 +58,7 @@ const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
     "कुतुब मीनार", "কুতুব মিনার", "குதுப் மினார்", "కుతుబ్ మినార్", "ಕುತುಬ್ ಮಿನಾರ್"
   ],
   "red-fort": [
-    "लाल किला", "লাল কেল্লা", "செங்கோட்டை", "ఎర్ర కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
+    "लाल किला", "লাল কেল্লা", "செங்கோட்டை", "ఎర్ர కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
   ],
   "hawa-mahal": [
     "हवा महल", "হাওয়া মহল", "ஹவா மஹால்", "హవా మహల్", "ಹವಾ ಮಹಲ್", "હવા મહેલ", "ਹਵਾ ਮਹਿਲ", "ہوا محل"
@@ -69,12 +70,12 @@ const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
     "चांद बावड़ी", "চাঁদ বাওরি", "சந்த் பௌரி", "చాంద్ బావోరి", "ಚಾಂದ್ ಬಾವೊರಿ"
   ],
   "kerala-backwaters": [
-    "केरल बैकवाटर", "কেরালা ব্যাকওয়াটার", "கேரளா பேக்வாட்டர்ஸ்", "కేరళ బ్యాక్‌வாటర్స్", "കേരള ബാക്ക്‌വാട്ടേഴ്‌സ്"
+    "केरल बैकवाटर", "কেরালা ব্যাকওয়াটার", "கேரளா பேக்வாட்டர்ஸ்", "కేరళ బ్యాక్‌వాటర్స్", "കേരള ബാക്ക്‌வாട്ടേഴ്‌സ്"
   ],
 };
 
 export interface BookingSessionState {
-  step: "idle" | "awaiting_datetime" | "awaiting_guide" | "completed";
+  step: "idle" | "awaiting_datetime" | "offered_best_guide" | "awaiting_alternative_guide" | "completed";
   siteSlug: string;
   siteName: string;
   partySize: number;
@@ -112,7 +113,7 @@ export function isHinglish(text: string): boolean {
     "shandar", "aaj", "kal", "parso", "subah", "shaam", "dikhaye", "milega", "chahiye",
     "karun", "karein", "ghoomne", "dekhne", "kaisi", "accha", "achha", "sahi", "safar",
     "imarat", "jagah", "bhookh", "hoga", "hogi", "bataiye", "jaana", "jana", "tajmahal",
-    "kardo", "karo", "karna", "ticket", "tikkat", "bina"
+    "kardo", "karo", "karna", "tikkat", "bina", "mehenga", "zyada", "kripya"
   ];
   return hinglishWords.some((w) => new RegExp(`\\b${w}\\b`, "i").test(lower));
 }
@@ -153,6 +154,62 @@ function getLiveCrowdTelemetry() {
 }
 
 /**
+ * Extracts a target place name if user requests a booking for a specific site.
+ */
+function extractRequestedPlaceName(query: string): string | null {
+  const clean = query.trim();
+
+  // Known non-database / non-heritage tourist attractions
+  const nonHeritageAttractions = [
+    "eiffel tower", "wonderla", "statue of liberty", "burj khalifa", "disneyland",
+    "london eye", "colosseum", "universal studios", "times square", "louvre",
+    "machu picchu", "pyramids", "great wall", "santorini", "grand canyon",
+    "disney", "imagica", "essel world", "snow kingdom", "water park"
+  ];
+  for (const nonH of nonHeritageAttractions) {
+    if (clean.toLowerCase().includes(nonH)) {
+      return nonH.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+    }
+  }
+
+  // Pattern: "book ticket for <Place>"
+  const m1 = clean.match(/(?:book|reserve)\s+(?:a\s+)?(?:ticket|tickets|entry|pass)?\s*(?:for\s+\d+\s+(?:members?|people|persons?|tickets?))?\s*(?:for|to|at)\s+([^,?.!]+)/i);
+  if (m1 && m1[1]) {
+    const candidate = m1[1].replace(/\b(for\s+\d+|tomorrow|today|kal|aaj|at\s+\d+|on\s+\w+).*/i, "").trim();
+    if (candidate.length > 2 && !/\b(me|us|tickets?|members?|today|tomorrow)\b/i.test(candidate)) {
+      return candidate;
+    }
+  }
+
+  // Pattern: "<Place> ke liye ticket"
+  const m2 = clean.match(/(.+?)\s+ke\s+liye\s+ticket/i);
+  if (m2 && m2[1]) {
+    const candidate = m2[1].replace(/\b(mujhe|humein|hume|please|zara)\b/i, "").trim();
+    if (candidate.length > 2) return candidate;
+  }
+
+  return null;
+}
+
+/**
+ * Checks if a place name matches any supported monument in database
+ */
+function isKnownMonument(placeName: string): boolean {
+  const p = placeName.toLowerCase();
+  return sites.some((site) => {
+    const sName = site.name.toLowerCase().replace("the ", "");
+    const sSlug = site.slug.toLowerCase().replace(/-/g, " ");
+    const aliases = SITE_SCRIPT_ALIASES[site.slug] || [];
+    return (
+      p.includes(sName) ||
+      sName.includes(p) ||
+      p.includes(sSlug) ||
+      aliases.some((a) => p.includes(a.toLowerCase()))
+    );
+  });
+}
+
+/**
  * Main dialogue engine handling multi-turn booking and night-time awareness
  */
 export function generateConciergeResponse(query: string, lang = "en", sessionId?: string): string {
@@ -170,45 +227,63 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
     partySize: 2,
   };
 
-  // ─── HELPER: Format Guides List for Booking ──────────────────────────────
-  const formatGuidesWithPrices = () => {
-    return VERIFIED_GUIDES.filter((g) => g.id !== "none")
-      .map(
-        (g, i) =>
-          `${i + 1}. 🎖️ **${g.name}** (License: \`${g.license}\`) — ⭐ ${g.rating} (${g.tours}+ tours)\n` +
-          `   - **Languages:** ${g.languages}\n` +
-          `   - **Price:** **₹${g.rate}/hr** (₹${g.rate * 3} for 3-hr tour)`
-      )
-      .join("\n\n") +
-      `\n\n5. 🚶‍♂️ **Self-Guided (No Guide)** — **₹0** (Monument entry tickets only)`;
-  };
-
-  // ─── 1. DETECT MULTI-TURN BOOKING WORKFLOW ──────────────────────────────
   const isBookingInitiation =
     /\b(book|booking|ticket|tickets|reserve|reservation|pass)\b/i.test(q) &&
     !q.includes("best time") &&
     !q.includes("sahi waqt");
 
+  // ─── 0. CHECK FOR SITES NOT PRESENT IN DATABASE ─────────────────────────
+  if (isBookingInitiation) {
+    const requestedPlace = extractRequestedPlaceName(query);
+    if (requestedPlace && !isKnownMonument(requestedPlace)) {
+      if (detectedLang === "hinglish") {
+        return (
+          `Maaf kijiye, hum **${requestedPlace}** ke liye tickets provide nahi karte hain. ` +
+          `Hum sirf Bharat ke official heritage monuments (jaise The Taj Mahal, Hampi, Amber Fort, Qutub Minar, Red Fort, Mysore Palace) ke verified tickets aur certified ASI guides provide karte hain.`
+        );
+      }
+      if (detectedLang === "hi") {
+        return (
+          `क्षमा करें, हम **${requestedPlace}** के लिए टिकट प्रदान नहीं करते हैं। ` +
+          `हम केवल भारत के अधिकृत ऐतिहासिक स्मारकों (जैसे ताजमहल, हम्पी, आमेर किला, कुतुब मीनार, लाल किला) के लिए टिकट और एएसआई प्रमाणित गाइड प्रदान करते हैं।`
+        );
+      }
+      return (
+        `Sorry, we don't provide tickets for **${requestedPlace}**. ` +
+        `We only provide verified tickets and certified ASI guides for official Indian heritage monuments such as the Taj Mahal, Hampi, Amber Fort, Qutub Minar, Red Fort, and other historical sites across India.`
+      );
+    }
+  }
+
+  // ─── 1. DETECT CONVERSATION STATES ──────────────────────────────────────
   const isAnsweringDateOrSlot =
     state.step === "awaiting_datetime" ||
     (/\b(tomorrow|kal|today|aaj|sunrise|morning|afternoon|sunset|subah|shaam|am|pm|\d{1,2}\s*(?:am|pm|baje))\b/i.test(q) &&
       state.step !== "idle" &&
       state.step !== "completed");
 
-  const isAnsweringGuide =
-    state.step === "awaiting_guide" ||
-    (/\b(rajesh|priya|vikram|arun|meera|self|no guide|bina guide)\b/i.test(q) &&
-      state.step !== "idle" &&
-      state.step !== "completed");
+  const isExpensiveComplaint =
+    state.step === "offered_best_guide" &&
+    /\b(expensive|mehenga|costly|cheaper|cheap|too much|high price|kam karo|budget|bada price|zyada hai|bahut zyada|lower price|other guide|alternative)\b/i.test(q);
+
+  const isAcceptingBestGuide =
+    state.step === "offered_best_guide" &&
+    !isExpensiveComplaint &&
+    (/\b(yes|proceed|sure|ok|okay|confirm|vikram|book|agree|chalo|haan|theek hai|kardo)\b/i.test(q) ||
+      q === "1" || q === "option 1");
+
+  const isAnsweringAlternativeGuide =
+    state.step === "awaiting_alternative_guide" ||
+    (state.step !== "idle" && /\b(rajesh|priya|meera|arun|self|no guide|bina guide)\b/i.test(q));
 
   // Check if query contains ALL details in a single message
   const hasCompleteDetails =
     isBookingInitiation &&
     /\b(tomorrow|kal|\d{4}-\d{2}-\d{2})\b/i.test(q) &&
-    /\b(rajesh|priya|vikram|arun|self|no guide)\b/i.test(q);
+    /\b(rajesh|priya|vikram|arun|meera|self|no guide)\b/i.test(q);
 
-  // ─── WORKFLOW STEP 1: Booking Initiation (Ask Date and Time) ─────────────
-  if (isBookingInitiation && !hasCompleteDetails && state.step !== "awaiting_guide") {
+  // ─── WORKFLOW STEP 1: Booking Initiation (Concise Ask for Date & Time) ───
+  if (isBookingInitiation && !hasCompleteDetails && state.step === "idle") {
     // Extract site
     const matchedSite = sites.find((site) => {
       const sName = site.name.toLowerCase().replace("the ", "");
@@ -235,48 +310,18 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
     sessionStates.set(activeKey, state);
 
     if (detectedLang === "hinglish") {
-      return (
-        `Bilkul! Main aapke liye **${matchedSite.name}** ke **${partySize} members** ke tickets book karne me madad karunga! 🎫\n\n` +
-        `📅 **Kripya apni pasand ki Visit Date aur Entry Time Slot batayein:**\n` +
-        `- **Visit Date:** (jaise Kal / ${ist.tomorrowStr}, ya apni pasand ki tareekh)\n` +
-        `- **Entry Time Slots:**\n` +
-        `  1. 🌅 **Sunrise Slot** (06:00 AM – 09:00 AM) — *Subah ki taaza dhoop aur zero bheed (Recommended)*\n` +
-        `  2. ☀️ **Morning Slot** (09:00 AM – 12:00 PM) — *Aasan entry aur sundar view*\n` +
-        `  3. 🌤️ **Afternoon Slot** (12:00 PM – 03:00 PM)\n` +
-        `  4. 🌇 **Sunset Slot** (03:00 PM – 06:00 PM) — *Shaam ka golden hour view*\n\n` +
-        `Aap kis date aur time slot par visit karna chahenge?`
-      );
+      return `Zaroor! Aapko **${matchedSite.name}** (${partySize} members) ke liye kis date aur time ke tickets chahiye?`;
     }
 
     if (detectedLang === "hi") {
-      return (
-        `बिल्कुल! मैं आपके लिए **${matchedSite.name}** के **${partySize} सदस्यों** का टिकट बुक करने में सहायता करूँगा। 🎫\n\n` +
-        `📅 **कृपया अपनी पसंदीदा तारीख और समय (स्लॉट) बताएं:**\n` +
-        `- **तारीख:** (जैसे कल / ${ist.tomorrowStr}, या कोई अन्य तारीख)\n` +
-        `- **समय स्लॉट:**\n` +
-        `  1. 🌅 **सनराइज स्लॉट** (06:00 AM – 09:00 AM) — *सर्वोत्तम रोशनी और न्यूनतम भीड़ (अनुशंसित)*\n` +
-        `  2. ☀️ **मॉर्निंग स्लॉट** (09:00 AM – 12:00 PM) — *सुखद धूप और आसान दर्शन*\n` +
-        `  3. 🌤️ **आफ्टरनून स्लॉट** (12:00 PM – 03:00 PM)\n` +
-        `  4. 🌇 **सनसेट स्लॉट** (03:00 PM – 06:00 PM) — *सूर्यास्त का अद्भुत दृश्य*\n\n` +
-        `आप किस तारीख और समय स्लॉट पर जाना चाहेंगे?`
-      );
+      return `ज़रूर! आपको **${matchedSite.name}** (${partySize} सदस्यों) के लिए किस तारीख और समय के टिकट चाहिए?`;
     }
 
-    return (
-      `Certainly! I would be delighted to help you book tickets for **${partySize} members** to visit **${matchedSite.name}**! 🎫\n\n` +
-      `📅 **Please specify your preferred Visit Date and Entry Time Slot:**\n` +
-      `- **Visit Date:** (e.g., Tomorrow / ${ist.tomorrowStr}, or any date of your choice)\n` +
-      `- **Available Time Slots:**\n` +
-      `  1. 🌅 **Sunrise Slot** (06:00 AM – 09:00 AM) — *Recommended: ethereal morning light and zero crowd*\n` +
-      `  2. ☀️ **Morning Slot** (09:00 AM – 12:00 PM) — *Pleasant daylight and full access*\n` +
-      `  3. 🌤️ **Afternoon Slot** (12:00 PM – 03:00 PM)\n` +
-      `  4. 🌇 **Sunset Slot** (03:00 PM – 06:00 PM) — *Golden hour photography over the monument*\n\n` +
-      `Which date and time slot would you prefer?`
-    );
+    return `Sure! What date and time do you need tickets for **${matchedSite.name}** (${partySize} ${partySize === 1 ? "visitor" : "members"})?`;
   }
 
-  // ─── WORKFLOW STEP 2: Response from User with Date & Time (Ask for Guide) ──
-  if (isAnsweringDateOrSlot && !isAnsweringGuide) {
+  // ─── WORKFLOW STEP 2: Estimate Price of Best Rated Guide ────────────────
+  if (isAnsweringDateOrSlot && state.step === "awaiting_datetime" && !isAnsweringAlternativeGuide) {
     // Parse Date
     let parsedDate = ist.tomorrowStr;
     if (q.includes("today") || q.includes("aaj")) parsedDate = ist.todayStr;
@@ -297,57 +342,98 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
 
     state.visitDate = parsedDate;
     state.visitSlot = parsedSlot;
-    state.step = "awaiting_guide";
+    state.step = "offered_best_guide";
     if (detectedLang !== "en") state.lang = detectedLang;
     sessionStates.set(activeKey, state);
 
     const stepLang = detectedLang !== "en" ? detectedLang : (state.lang || "en");
-    const guidesBlock = formatGuidesWithPrices();
+
+    // Best Rated Guide: Vikram Singh (Rating 5.0, Rate: ₹1,200/hr)
+    const bestGuide = VERIFIED_GUIDES[0]; // Vikram Singh
+    const matchedSite = sites.find((s) => s.slug === state.siteSlug) || sites[0];
+    const entryFeePerPerson = matchedSite.priceInr || 1100;
+    const siteEntryTotal = entryFeePerPerson * state.partySize;
+    const guideTotal = bestGuide.rate * 3;
+    const subtotal = siteEntryTotal + guideTotal;
+    const grandTotal = subtotal + Math.round(subtotal * 0.15);
 
     if (stepLang === "hinglish") {
       return (
-        `Shandar! Aapki yatra **${state.partySize} members** ke liye **${parsedDate} ko ${parsedSlot}** par set kar di gayi hai.\n\n` +
-        `Kya aap Taj Mahal ke liye verified authorized ASI guide book karna chahenge? Hamare paas yeh certified guides official rates ke sath uplabdh hain:\n\n` +
-        `${guidesBlock}\n\n` +
-        `Aap kis guide ko choose karna chahenge (jaise **Rajesh Kumar**, **Priya Sharma**, ya **Self-Guided**)?`
+        `Shandar! **${parsedDate}** ko **${parsedSlot}** ke liye, hamare top-rated guide **${bestGuide.name}** (⭐ ${bestGuide.rating} rating, ${bestGuide.tours}+ tours) ke sath estimated price **₹${bestGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur ${state.partySize} members ke entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
+        `Kya aap ${bestGuide.name} ke sath proceed karna chahenge?`
       );
     }
 
-    if (detectedLang === "hi") {
+    if (stepLang === "hi") {
       return (
-        `शानदार! आपकी यात्रा **${state.partySize} सदस्यों** के लिए **${parsedDate} को ${parsedSlot}** पर निर्धारित कर दी गई है।\n\n` +
-        `क्या आप आधिकारिक एएसआई प्रमाणित गाइड बुक करना चाहेंगे? हमारे पास आधिकारिक दरों के साथ ये अधिकृत गाइड उपलब्ध हैं:\n\n` +
-        `${guidesBlock}\n\n` +
-        `आप किस गाइड का चयन करना चाहेंगे (जैसे **Rajesh Kumar**, **Priya Sharma**, या **Self-Guided**)?`
+        `शानदार! **${parsedDate}** को **${parsedSlot}** के लिए, हमारे सर्वोच्च रेटेड गाइड **${bestGuide.name}** (⭐ ${bestGuide.rating} रेटिंग, ${bestGuide.tours}+ टूर) के साथ अनुमानित गाइड शुल्क **₹${bestGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और ${state.partySize} सदस्यों के प्रवेश टिकट मिलाकर कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
+        `क्या आप ${bestGuide.name} के साथ आगे बढ़ना चाहेंगे?`
       );
     }
 
     return (
-      `Great! Your visit is scheduled for **${state.partySize} members** on **${parsedDate} at ${parsedSlot}**.\n\n` +
-      `Would you like to book an authorized ASI certified guide for your visit? Here are our verified guides with official hourly prices:\n\n` +
-      `${guidesBlock}\n\n` +
-      `Which guide would you like to book from the list above, or would you prefer **Self-Guided (No Guide)**?`
+      `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price with our top-rated guide **${bestGuide.name}** (⭐ ${bestGuide.rating} rating, ${bestGuide.tours}+ tours) is **₹${bestGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${state.partySize} monument entry tickets and taxes.\n\n` +
+      `Would you like to proceed with ${bestGuide.name}?`
     );
   }
 
-  // ─── WORKFLOW STEP 3: User Selects Guide -> Proceed to Payment Page ──────
-  if (isAnsweringGuide || hasCompleteDetails) {
-    let selectedGuide = VERIFIED_GUIDES[0]; // Default Rajesh Kumar
+  // ─── WORKFLOW STEP 2B: User says Guide is Too Expensive (Offer Alternatives) ──
+  if (isExpensiveComplaint) {
+    state.step = "awaiting_alternative_guide";
+    sessionStates.set(activeKey, state);
+
+    const stepLang = detectedLang !== "en" ? detectedLang : (state.lang || "en");
+
+    if (stepLang === "hinglish") {
+      return (
+        `Koi baat nahi! Hamare paas kam budget mein behtareen alternative verified guides uplabdh hain:\n\n` +
+        `- 🎖️ **Rajesh Kumar** (Rating: ⭐ **4.9**, 180+ tours) — **₹800/hr** (3 ghante ke ₹2,400)\n` +
+        `- 🎖️ **Priya Sharma** (Rating: ⭐ **4.8**, 145+ tours) — **₹700/hr** (3 ghante ke ₹2,100)\n` +
+        `- 🎖️ **Meera Devi** (Rating: ⭐ **4.7**, 130+ tours) — **₹600/hr** (3 ghante ke ₹1,800)\n` +
+        `- 🚶‍♂️ **Self-Guided (Bina Guide)** — **₹0** (Sirf monument entry tickets)\n\n` +
+        `Aap inmein se kiske sath proceed karna chahenge: **Rajesh Kumar** (₹800/hr), **Priya Sharma** (₹700/hr), ya **Self-Guided**?`
+      );
+    }
+
+    if (stepLang === "hi") {
+      return (
+        `कोई बात नहीं! हमारे पास किफायती दरों पर बेहतरीन वैकल्पिक प्रमाणित गाइड उपलब्ध हैं:\n\n` +
+        `- 🎖️ **राजेश कुमार** (रेटिंग: ⭐ **4.9**, 180+ टूर) — **₹800/घंटे** (3 घंटे के ₹2,400)\n` +
+        `- 🎖️ **प्रिया शर्मा** (रेटिंग: ⭐ **4.8**, 145+ टूर) — **₹700/घंटे** (3 घंटे के ₹2,100)\n` +
+        `- 🎖️ **मीरा देवी** (रेटिंग: ⭐ **4.7**, 130+ टूर) — **₹600/घंटे** (3 घंटे के ₹1,800)\n` +
+        `- 🚶‍♂️ **स्वयं भ्रमण (बिना गाइड)** — **₹0** (केवल प्रवेश टिकट)\n\n` +
+        `आप इनमें से किसके साथ आगे बढ़ना चाहेंगे: **राजेश कुमार** (₹800/घंटे), **प्रिया शर्मा** (₹700/घंटे), या **स्वयं भ्रमण**?`
+      );
+    }
+
+    return (
+      `No worries! We have great alternative verified guides at more economical rates:\n\n` +
+      `- 🎖️ **Rajesh Kumar** (Rating: ⭐ **4.9**, 180+ tours) — **₹800/hr** (₹2,400 for 3 hrs)\n` +
+      `- 🎖️ **Priya Sharma** (Rating: ⭐ **4.8**, 145+ tours) — **₹700/hr** (₹2,100 for 3 hrs)\n` +
+      `- 🎖️ **Meera Devi** (Rating: ⭐ **4.7**, 130+ tours) — **₹600/hr** (₹1,800 for 3 hrs)\n` +
+      `- 🚶‍♂️ **Self-Guided (No Guide)** — **₹0** (Monument tickets only)\n\n` +
+      `Which guide would you like to choose: **Rajesh Kumar** (₹800/hr), **Priya Sharma** (₹700/hr), or **Self-Guided**?`
+    );
+  }
+
+  // ─── WORKFLOW STEP 3: Guide Selected -> Booking Summary & Payment Link ──
+  if (isAcceptingBestGuide || isAnsweringAlternativeGuide || hasCompleteDetails) {
+    let selectedGuide = VERIFIED_GUIDES[1]; // Default Rajesh Kumar
     let isSelfGuided = false;
 
-    if (q.includes("self") || q.includes("no guide") || q.includes("bina guide") || /\b(?:option\s*5|#5|fifth)\b/i.test(q)) {
+    if (isAcceptingBestGuide) {
+      selectedGuide = VERIFIED_GUIDES[0]; // Vikram Singh
+    } else if (q.includes("self") || q.includes("no guide") || q.includes("bina guide") || /\b(?:option\s*4|#4|fourth)\b/i.test(q)) {
       selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "none")!;
       isSelfGuided = true;
-    } else if (q.includes("rajesh") || /\b(?:option\s*1|#1|first)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-01")!;
     } else if (q.includes("priya") || /\b(?:option\s*2|#2|second)\b/i.test(q)) {
       selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-02")!;
-    } else if (q.includes("vikram") || /\b(?:option\s*3|#3|third)\b/i.test(q)) {
+    } else if (q.includes("meera") || /\b(?:option\s*3|#3|third)\b/i.test(q)) {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-DEL-04")!;
+    } else if (q.includes("vikram")) {
       selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-05")!;
-    } else if (q.includes("arun") || /\b(?:option\s*4|#4|fourth)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-03")!;
-    } else {
-      selectedGuide = VERIFIED_GUIDES[0];
+    } else if (q.includes("rajesh") || /\b(?:option\s*1|#1|first)\b/i.test(q)) {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-01")!;
     }
 
     if (hasCompleteDetails) {
@@ -397,7 +483,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
         `- **Concierge & GST:** ₹${(conciergeFee + taxes).toLocaleString("en-IN")}\n` +
         `- **Grand Total:** **₹${grandTotal.toLocaleString("en-IN")}**\n\n` +
         `👉 **[Click Here to Proceed to Payment & Confirm Ticket](${checkoutUrl})**\n\n` +
-        `Kripya upar diye gaye link par click karein. UPI, Card, ya Net Banking se payment hote hi aapka official ASI ticket aur guide confirmation turant confirm ho jayega!`
+        `Kripya upar diye gaye link par click karein. Payment confirmation screen par aapko 'Yes/No' confirmation milega jisse aapka official ASI ticket confirm ho jayega!`
       );
     }
 
@@ -414,7 +500,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
         `- **कंसीयर्ज एवं जीएसटी:** ₹${(conciergeFee + taxes).toLocaleString("en-IN")}\n` +
         `- **कुल राशि:** **₹${grandTotal.toLocaleString("en-IN")}**\n\n` +
         `👉 **[Click Here to Proceed to Payment & Confirm Ticket](${checkoutUrl})**\n\n` +
-        `कृपया ऊपर दिए गए लिंक पर क्लिक करके भुगतान पृष्ठ पर जाएँ। यूपीआई या कार्ड से भुगतान करते ही आपका टिकट तुरंत कन्फर्म हो जाएगा!`
+        `कृपया ऊपर दिए गए लिंक पर क्लिक करके भुगतान पृष्ठ पर जाएँ। भुगतान पुष्टिकरण स्क्रीन (Yes/No) पर स्वीकृति देते ही आपका टिकट तुरंत कन्फर्म हो जाएगा!`
       );
     }
 
@@ -430,7 +516,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       `- **Concierge & GST:** ₹${(conciergeFee + taxes).toLocaleString("en-IN")}\n` +
       `- **Total Payable:** **₹${grandTotal.toLocaleString("en-IN")}**\n\n` +
       `👉 **[Click Here to Proceed to Payment & Confirm Ticket](${checkoutUrl})**\n\n` +
-      `Please click the button above to proceed to our secure checkout page. As soon as you complete your payment via UPI, Credit/Debit card, or Net Banking, your official ASI e-tickets and verified guide assignment will be confirmed immediately with your confirmation code!`
+      `Please click the button above to proceed to our secure checkout page. On the checkout page, you will see a final confirmation prompt (Yes/No) before finalizing your reservation!`
     );
   }
 
@@ -476,7 +562,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
           `📋 **Kal ke visit ke liye official details:**\n` +
           `- **Entry Fee:** ₹${matchedSite.priceInr}\n` +
           `- **Opening Time Tomorrow:** 06:00 AM (Sunrise)\n` +
-          `- **Certified ASI Guides:** Rajesh Kumar (₹800/hr), Priya Sharma (₹700/hr)\n\n` +
+          `- **Certified ASI Guides:** Vikram Singh (₹1200/hr), Rajesh Kumar (₹800/hr), Priya Sharma (₹700/hr)\n\n` +
           `Kya main aapke liye kal ke visit ke tickets aur guide advance mein book kar doon?`
         );
       }
@@ -489,7 +575,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
           `📋 **कल के लिए मुख्य विवरण:**\n` +
           `- **प्रवेश शुल्क:** ₹${matchedSite.priceInr}\n` +
           `- **कल खुलने का समय:** सुबह 06:00 बजे\n` +
-          `- **एएसआई प्रमाणित गाइड:** राजेश कुमार (₹800/घंटे), प्रिया शर्मा (₹700/घंटे)\n\n` +
+          `- **एएसआई प्रमाणित गाइड:** विक्रम सिंह (₹1200/घंटे), राजेश कुमार (₹800/घंटे), प्रिया शर्मा (₹700/घंटे)\n\n` +
           `क्या आप कल के भ्रमण के लिए अग्रिम टिकट और अधिकृत गाइड बुक करना चाहते हैं?`
         );
       }
@@ -497,7 +583,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       if (detectedLang === "bn") {
         return (
           `**এখন ${matchedSite.name} বন্ধ রয়েছে। অনুগ্রহ করে আগামীকালের পরিদর্শনের জন্য অগ্রিম বুকিং করে নিন।**\n\n` +
-          `স্মৃতিসৌধটি সূর্যোদয় (সকাল ০৬:০০) থেকে সূর্যাস্ত (সন্ধ্যা ০৬:০০) পর্যন্ত খোলা থাকে এবং রাতে প্রবেশ বন্ধ থাকে।\n\n` +
+          `স্মৃতিসৌধটি सूर्यোদয় (সকাল ০৬:০০) থেকে সূর্যাস্ত (সন্ধ্যা ০৬:০০) পর্যন্ত খোলা থাকে এবং রাতে প্রবেশ বন্ধ থাকে।\n\n` +
           `আগামীকালের সকালের **সানরাইজ স্লট (সকাল ০৬:০০ – ০৯:০০)** পরিদর্শনের জন্য সেরা সময়, যখন ভিড় একেবারে থাকে না।\n\n` +
           `আপনি কি আগামীকালের জন্য টিকিট বা সার্টিফায়েড ASI গাইড বুক করতে চান?`
         );
@@ -530,7 +616,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
         `Key Details for Tomorrow:\n` +
         `- **Entry Fee:** ₹${matchedSite.priceInr}\n` +
         `- **Opening Time Tomorrow:** 06:00 AM (Sunrise)\n` +
-        `- **Verified ASI Guides:** Rajesh Kumar (₹800/hr), Priya Sharma (₹700/hr)\n\n` +
+        `- **Verified ASI Guides:** Vikram Singh (₹1200/hr), Rajesh Kumar (₹800/hr), Priya Sharma (₹700/hr)\n\n` +
         `Would you like me to book your tickets and an authorized ASI guide for tomorrow morning?`
       );
     }

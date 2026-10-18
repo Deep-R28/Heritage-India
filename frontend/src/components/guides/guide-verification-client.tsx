@@ -11,12 +11,14 @@ import { Card } from "@/components/ui/card";
 import { VerifiedSeal } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { localizeGuide, localizePricing } from "@/lib/localize";
+import nearbySitesRaw from "@/data/nearby-sites.json";
 
 export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing }: { guides: Guide[]; pricing: PricingData }) {
   const { t, i18n } = useTranslation();
   const guides = useMemo(() => rawGuides.map((g) => localizeGuide(g, i18n.language)), [rawGuides, i18n.language]);
   const pricing = useMemo(() => localizePricing(rawPricing, i18n.language), [rawPricing, i18n.language]);
   const [query, setQuery] = useState("");
+  const [selectedGuideForBooking, setSelectedGuideForBooking] = useState<Guide | null>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -100,13 +102,14 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
                   <span className="text-[11px] text-foreground-muted">(&asymp; ₹{guide.rateInr * 3} for 3 hrs)</span>
                 </div>
                 {guide.verified ? (
-                  <Link
-                    href={`/checkout?guide=${guide.id}`}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-background shadow transition-all hover:bg-accent/90"
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGuideForBooking(guide)}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-background shadow transition-all hover:bg-accent/90 cursor-pointer"
                   >
                     <Icon name="calendar_today" className="text-sm" />
                     Book This Guide
-                  </Link>
+                  </button>
                 ) : (
                   <span className="font-label text-xs uppercase tracking-wider text-warning">
                     Unverified &middot; Booking Disabled
@@ -151,6 +154,79 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
           </table>
         </div>
       </Reveal>
+
+      {/* Site Selection Modal for chosen guide */}
+      {selectedGuideForBooking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-hairline bg-surface p-6 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setSelectedGuideForBooking(null)}
+              className="absolute right-4 top-4 rounded-full p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+              aria-label="Close"
+            >
+              <Icon name="close" className="text-xl" />
+            </button>
+
+            <div className="mb-5 pr-8">
+              <span className="font-label text-xs uppercase tracking-widest text-accent">Select Monument to Visit</span>
+              <h3 className="mt-1 font-headline text-xl text-foreground md:text-2xl">
+                Choose Site for {selectedGuideForBooking.name}
+              </h3>
+              <p className="mt-1 font-body text-xs text-foreground-muted">
+                Please select the heritage destination you wish to visit with this certified guide (₹{selectedGuideForBooking.rateInr}/hr):
+              </p>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {nearbySitesRaw.map((site) => (
+                  <Link
+                    key={site.slug}
+                    href={`/checkout?guide=${selectedGuideForBooking.id}&site=${site.slug}`}
+                    onClick={() => setSelectedGuideForBooking(null)}
+                    className="group flex items-center gap-3 rounded-xl border border-hairline bg-surface-elevated/60 p-3 transition-all hover:border-accent hover:bg-accent/5 cursor-pointer"
+                  >
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-hairline">
+                      <Image
+                        src={site.image}
+                        alt={site.name}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="56px"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="truncate font-headline text-sm font-semibold text-foreground group-hover:text-accent">
+                        {site.name}
+                      </h4>
+                      <p className="truncate text-xs text-foreground-muted">{site.region}</p>
+                      <p className="mt-0.5 font-mono text-xs font-medium text-accent">
+                        ₹{site.priceInr} entry fee
+                      </p>
+                    </div>
+                    <Icon
+                      name="arrow_forward"
+                      className="text-base text-foreground-muted transition-transform group-hover:translate-x-1 group-hover:text-accent"
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between border-t border-hairline pt-4 text-xs text-foreground-muted">
+              <span>Selected guide rate: ₹{selectedGuideForBooking.rateInr}/hr</span>
+              <button
+                type="button"
+                onClick={() => setSelectedGuideForBooking(null)}
+                className="rounded-lg border border-hairline px-4 py-1.5 font-label text-xs uppercase tracking-wider text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
