@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -25,6 +26,20 @@ export function TopNav({ minimal = false }: { minimal?: boolean }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      api.me
+        .notifications()
+        .then((notifs) => {
+          if (Array.isArray(notifs)) {
+            setUnreadNotifs(notifs.filter((n) => !n.readAt).length);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [isLoggedIn, pathname]);
 
   return (
     <header className="fixed top-0 z-[2000] w-full border-b border-hairline bg-surface/80 backdrop-blur-md">
@@ -60,14 +75,18 @@ export function TopNav({ minimal = false }: { minimal?: boolean }) {
           {!minimal &&
             (isLoggedIn ? (
               <div className="relative hidden items-center gap-4 md:flex">
-                <button
+                <Link
+                  href="/dashboard/notifications"
                   aria-label="Notifications"
-                  className="rounded-full p-2 text-accent transition-all hover:bg-surface-hover"
+                  className="relative flex items-center justify-center rounded-full p-2 text-accent transition-all hover:bg-surface-hover"
                 >
-                  <Link href="/dashboard/notifications">
-                    <Icon name="notifications" />
-                  </Link>
-                </button>
+                  <Icon name="notifications" />
+                  {unreadNotifs > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 font-mono text-[9px] font-bold text-white shadow-sm ring-2 ring-background">
+                      {unreadNotifs}
+                    </span>
+                  )}
+                </Link>
                 <button
                   aria-label="Account menu"
                   onClick={() => setAvatarOpen((o) => !o)}
@@ -148,6 +167,18 @@ export function TopNav({ minimal = false }: { minimal?: boolean }) {
             </div>
             {isLoggedIn ? (
               <div className="flex flex-col gap-3 pt-2">
+                <Link
+                  href="/dashboard/notifications"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between font-label text-sm uppercase tracking-widest text-foreground hover:text-accent"
+                >
+                  <span>{t("nav.notifications") || "Notifications"}</span>
+                  {unreadNotifs > 0 && (
+                    <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 font-mono text-[10px] font-bold text-white">
+                      {unreadNotifs}
+                    </span>
+                  )}
+                </Link>
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="font-label text-sm uppercase tracking-widest text-foreground hover:text-accent">
                   {t("nav.dashboard")}
                 </Link>

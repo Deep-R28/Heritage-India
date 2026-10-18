@@ -115,7 +115,7 @@ export async function sendMessageToAssistant(
       return {
         id: crypto.randomUUID(),
         role: "assistant",
-        text: json.data?.message || generateConciergeResponse(input),
+        text: json.data?.message || generateConciergeResponse(input, undefined, sessionId),
         language: json.data?.language,
       };
     } catch (parseErr) {
@@ -124,7 +124,7 @@ export async function sendMessageToAssistant(
   }
 
   // Graceful local concierge answer (never display stub responses)
-  const intelligentReply = generateConciergeResponse(input);
+  const intelligentReply = generateConciergeResponse(input, undefined, sessionId);
   if (onToken) {
     // If streaming was requested, simulate a quick token stream
     const words = intelligentReply.split(/(\s+)/);

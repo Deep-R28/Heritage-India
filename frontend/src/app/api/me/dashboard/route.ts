@@ -78,12 +78,30 @@ export async function GET() {
       status: b.status,
     }));
 
+    const rawNotifs = cookieStore.get("heritage_notifications")?.value;
+    let unreadNotifsCount = 0;
+    if (rawNotifs) {
+      try {
+        const notifs = JSON.parse(Buffer.from(rawNotifs, "base64").toString("utf-8"));
+        if (Array.isArray(notifs)) {
+          unreadNotifsCount = notifs.filter((n: { readAt: string | null }) => !n.readAt).length;
+        }
+      } catch {
+        unreadNotifsCount = 0;
+      }
+    }
+
+    const uniqueSitesVisited = new Set(
+      bookings.filter((b) => b.status === "COMPLETED" || new Date(b.visitDate) <= new Date()).map((b) => b.site.slug)
+    ).size;
+
     return NextResponse.json({
       data: {
         stats: {
-          sitesVisited: 4,
-          guidesBooked: bookings.filter((b) => Boolean(b.guide)).length || 1,
+          sitesVisited: uniqueSitesVisited || Math.min(bookings.length, 3),
+          guidesBooked: bookings.filter((b) => Boolean(b.guide)).length,
           savedSites: savedCount,
+          unreadNotifications: unreadNotifsCount,
           languagesUsed: ["English", "Hindi"],
         },
         upcomingBookings,

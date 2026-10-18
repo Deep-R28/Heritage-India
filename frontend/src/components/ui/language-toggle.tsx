@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { languages, type LanguageCode } from "@/i18n/config";
+import { languages, LANGUAGE_STORAGE_KEY, type LanguageCode } from "@/i18n/config";
 import { Icon } from "./icon";
 import { cn } from "@/lib/cn";
 
 export function LanguageToggle({ className }: { className?: string }) {
+  const router = useRouter();
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const current = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
@@ -29,11 +31,21 @@ export function LanguageToggle({ className }: { className?: string }) {
                 key={code}
                 onClick={() => {
                   i18n.changeLanguage(code);
+                  if (typeof document !== "undefined") {
+                    document.cookie = `${LANGUAGE_STORAGE_KEY}=${code}; path=/; max-age=31536000; SameSite=Lax`;
+                    try {
+                      localStorage.setItem(LANGUAGE_STORAGE_KEY, code);
+                    } catch {
+                      // ignore
+                    }
+                    document.documentElement.lang = code;
+                  }
                   setOpen(false);
+                  router.refresh();
                 }}
                 className={cn(
                   "flex w-full items-center justify-between px-4 py-2 text-left font-label text-xs uppercase tracking-widest hover:bg-surface-hover",
-                  current === code ? "text-accent" : "text-foreground",
+                  current === code ? "text-accent font-semibold" : "text-foreground",
                 )}
               >
                 {nativeLabel}

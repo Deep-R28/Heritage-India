@@ -38,34 +38,217 @@
     "architecture": "ವಾಸ್ತುಶಿಲ್ಪ",
     "naturalHeritage": "ನೈಸರ್ಗಿಕ ಪರಂಪರೆ"
   },
-  "assistant": {
-    "fab": { "label": "ಸಹಾಯ ಕೇಳಿ" },
-    "chat": {
-      "leftTitleLine1": "ನಿಮ್ಮ ವೈಯಕ್ತಿಕ",
-      "leftTitleLine2": "ಪರಂಪರೆ ಸಹಾಯಕಿ",
-      "leftBody": "ಭಾರತದ ಐತಿಹಾಸಿಕ ತಾಣಗಳು, ಲೈವ್ ಜನದಟ್ಟಣೆ ಮತ್ತು ASI ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ತಿಳಿಯಿರಿ.",
-      "header": "ಪರಂಪರೆ ಸಹಾಯಕ",
-      "voiceModeLink": "ಧ್ವನಿ ಮೋಡ್",
-      "inputPlaceholder": "ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...",
-      "changeMode": "ಮೋಡ್ ಬದಲಾಯಿಸಿ",
-      "languageLabel": "ಭಾಷೆ: {{language}}"
+  "accessibility": {
+    "menuLabel": "Accessibility",
+    "colorVisionMode": "Color-Vision Mode",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "modes": {
+      "default": "Default",
+      "protanopia": "Protanopia",
+      "deuteranopia": "Deuteranopia",
+      "tritanopia": "Tritanopia"
     },
-    "voice": {
-      "title": "ಧ್ವನಿ ಸಹಾಯಕ",
-      "listening": "ಕೇಳಿಸಿಕೊಳ್ಳುತ್ತಿದೆ...",
-      "muted": "ಮೈಕ್ ಆಫ್ ಆಗಿದೆ",
-      "autoDetected": "ಗುರುತಿಸಲಾದ ಭಾಷೆ: {{language}}"
+    "swatch": {
+      "low": "Low",
+      "medium": "Med",
+      "high": "High",
+      "verified": "Verified"
     }
   },
-  "guides": {
-    "heading": "ಅಧಿಕೃತ ASI ಮಾರ್ಗದರ್ಶಿ ಪರಿಶೀಲನೆ",
-    "subtitle": "ಬುಕಿಂಗ್ ಮಾಡುವ ಮೊದಲು ಮಾರ್ಗದರ್ಶಿಯ ಹೆಸರು ಅಥವಾ ಪರವಾನಗಿ ಪರಿಶೀಲಿಸಿ.",
-    "experience": "ಅನುಭವ",
-    "yearsShort": "ವರ್ಷಗಳು",
-    "rating": "ರೇಟಿಂಗ್",
-    "verifiedSeal": "ASI ಪ್ರಮಾಣೀಕೃತ"
+  "home": {
+    "hero": {
+      "titleLine1": "Explore More.",
+      "titleLine2": "Worry Less.",
+      "subtitle": "Your intelligent concierge. Navigating crowds, curating histories, and orchestrating the perfect luxury travel experience.",
+      "cta": "Start Exploring"
+    },
+    "problems": {
+      "eyebrow": "The Challenge",
+      "heading": "Redefining the Journey",
+      "items": {
+        "crowds": {
+          "title": "Overwhelming Crowds",
+          "body": "Iconic destinations are often marred by unpredictable congestion. We anticipate the flow, guiding you to moments of serenity.",
+          "cta": "Discover Solutions"
+        },
+        "histories": {
+          "title": "Fragmented Histories",
+          "body": "Static guidebooks lack context. Our AI weaves dynamic narratives, tailored to your location and intellectual curiosity.",
+          "cta": "Experience Context"
+        },
+        "itineraries": {
+          "title": "Rigid Itineraries",
+          "body": "Travel shouldn't feel like a schedule. We provide fluid, adaptive routing that bends to your mood and spontaneous desires.",
+          "cta": "Embrace Fluidity"
+        }
+      }
+    },
+    "how": {
+      "eyebrow": "The Journey",
+      "heading": "How It Works",
+      "steps": {
+        "location": {
+          "title": "Set Your Location",
+          "body": "Share your position for a live map of heritage sites nearby."
+        },
+        "language": {
+          "title": "Choose Your Language",
+          "body": "Select from English, Hindi, Spanish and more, instantly."
+        },
+        "crowd": {
+          "title": "See Live Crowd Levels",
+          "body": "Every site shows a real-time crowd gauge before you commit."
+        },
+        "assistant": {
+          "title": "Ask the AI Concierge",
+          "body": "Chat or talk through history, logistics, and etiquette."
+        },
+        "guide": {
+          "title": "Book a Verified Guide",
+          "body": "ASI-licensed guides only — no street-side impersonators."
+        },
+        "pay": {
+          "title": "Pay Securely",
+          "body": "Transparent, itemized checkout with no hidden fees."
+        },
+        "explore": {
+          "title": "Explore, Worry-Free",
+          "body": "Your itinerary, saved sites, and receipts — always at hand."
+        }
+      }
+    },
+    "features": {
+      "eyebrow": "The Toolkit",
+      "heading": "Everything, Curated",
+      "items": {
+        "discovery": {
+          "title": "Nearby Discovery",
+          "body": "A living map of monuments, forts, and stepwells around you."
+        },
+        "crowd": {
+          "title": "Crowd Intelligence",
+          "body": "Glanceable gauges, not raw numbers — know before you go."
+        },
+        "concierge": {
+          "title": "AI Concierge",
+          "body": "Chat or voice, in your language, on every page."
+        },
+        "guides": {
+          "title": "Verified Guides",
+          "body": "ASI-licensed only, with transparent fair-rate pricing."
+        },
+        "alternatives": {
+          "title": "Smart Alternatives",
+          "body": "Busy site? We surface a quieter one nearby, instantly."
+        },
+        "accessibility": {
+          "title": "Built for Everyone",
+          "body": "Color-vision modes and full theme control, site-wide."
+        }
+      }
+    },
+    "stats": {
+      "sitesMapped": "Heritage Sites Mapped",
+      "guidesVerified": "Verified Guides",
+      "avoidPeakCrowds": "Travelers Avoid Peak Crowds",
+      "languagesSupported": "Languages Supported"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Our Mission",
+      "titleLine1": "Preserving the",
+      "titleLine2": "Echoes of Time."
+    },
+    "statement": {
+      "heading": "The Archive of Human Ambition",
+      "intro": "Founded on the principle that history is not merely a record, but an active, breathing narrative meant to be experienced.",
+      "p1": "We exist to curate and protect the physical remnants of our collective past. Our digital archive serves as a bridge between the monumental achievements of ancient civilizations and the modern traveler seeking profound connection.",
+      "quote": "To walk among the ruins is to participate in a silent conversation with those who shaped the earth centuries before our arrival.",
+      "p2": "In an era characterized by rapid digital ephemerality, the tangible weight of stone, the intricate geometry of ancient urban planning, and the faded pigment of centuries-old frescoes hold unprecedented value. We approach heritage tourism not as a leisure activity, but as a crucial act of cultural stewardship.",
+      "p3": "Through immersive technologies, rigorous historical accuracy, and partnerships with local conservators, we ensure that every journey taken is a step toward preserving these sanctuaries of human thought."
+    },
+    "pillars": {
+      "heading": "Our Core Pillars",
+      "curation": {
+        "label": "Curation",
+        "title": "Impeccable Selection",
+        "body": "We bypass the overcrowded landmarks to reveal hidden architectural masterpieces, applying editorial rigor to every site we include in our archive."
+      },
+      "context": {
+        "label": "Context",
+        "title": "Historical Integrity",
+        "body": "Providing profound, academically sound narratives rather than superficial anecdotes."
+      },
+      "conservation": {
+        "label": "Conservation",
+        "title": "Sustainable Impact",
+        "body": "Directing resources back into the physical maintenance of the structures we venerate."
+      }
+    },
+    "team": {
+      "heading": "The Curators",
+      "body": "A multidisciplinary collective of historians, architects, and technologists dedicated to the preservation of experiential memory.",
+      "roles": {
+        "historian": "Chief Historian",
+        "conservation": "Director of Conservation",
+        "digital": "Head of Digital Experience"
+      }
+    }
+  },
+  "pricing": {
+    "hero": {
+      "title": "Transparent Access to Antiquity.",
+      "subtitle": "Explore monument entry fees and secure verified, deeply knowledgeable concierges for your journey through India's heritage."
+    },
+    "entryFees": {
+      "heading": "Monument Entry Fees",
+      "currency": "INR",
+      "domestic": "Domestic Tourist",
+      "foreign": "Foreign Tourist",
+      "viewSite": "View Site"
+    },
+    "guidesSection": {
+      "heading": "Verified Concierge & Guides",
+      "recommended": "Recommended",
+      "bookCta": "Book a Verified Guide",
+      "perDay": "day",
+      "perTrip": "trip"
+    },
+    "tiers": {
+      "scholar": {
+        "title": "Heritage Scholar",
+        "description": "In-depth historical and architectural insights led by post-graduate scholars.",
+        "features": [
+          "Government approved",
+          "Multilingual options",
+          "Skip-the-line ticketing assistance"
+        ]
+      },
+      "curated": {
+        "title": "Curated Experience",
+        "description": "A fully paced day with a private concierge guide and priority access.",
+        "features": [
+          "Everything in Heritage Scholar",
+          "Private vehicle coordination",
+          "Priority booking windows"
+        ]
+      },
+      "odyssey": {
+        "title": "Multi-Day Odyssey",
+        "description": "A dedicated guide across multiple sites and days, tailored to your itinerary.",
+        "features": [
+          "Everything in Curated Experience",
+          "Cross-region continuity",
+          "24/7 concierge line"
+        ]
+      }
+    }
   },
   "explore": {
+    "noResults": "No sites match this filter yet.",
+    "openFullMap": "Open Full-Screen Map",
     "searchPlaceholder": "ಸ್ಥಳಗಳು, ನಗರಗಳು ಅಥವಾ ದೇವಾಲಯಗಳನ್ನು ಹುಡುಕಿ..."
   },
   "siteDetail": {
@@ -76,6 +259,205 @@
       "busy": "ಹೆಚ್ಚು ಜನದಟ್ಟಣೆ — ಪರ್ಯಾಯ ಸ್ಥಳಗಳನ್ನು ಪರಿಗಣಿಸಿ."
     },
     "viewOnMap": "ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿ",
-    "findGuide": "ಮಾರ್ಗದರ್ಶಿ ಹುಡುಕಿ"
+    "findGuide": "ಮಾರ್ಗದರ್ಶಿ ಹುಡುಕಿ",
+    "alternatives": {
+      "heading": "Smart Alternatives",
+      "seeAll": "See All",
+      "further": "{{km}} km further"
+    },
+    "history": {
+      "heading": "History & Significance"
+    },
+    "entryFee": "Entry Fee",
+    "openHours": "Open Hours"
+  },
+  "alternatives": {
+    "busyBadge": "{{site}} is Busy Right Now",
+    "busyBadgeGeneric": "This Site is Busy Right Now",
+    "heading": "Here's a quieter alternative, just as remarkable.",
+    "distanceFurther": "{{km}} km further than {{site}}",
+    "distanceCloser": "{{km}} km closer than {{site}}",
+    "switchCta": "Switch to This Site"
+  },
+  "guides": {
+    "eyebrow": "Trust & Safety",
+    "heading": "ಅಧಿಕೃತ ASI ಮಾರ್ಗದರ್ಶಿ ಪರಿಶೀಲನೆ",
+    "subtitle": "ಬುಕಿಂಗ್ ಮಾಡುವ ಮೊದಲು ಮಾರ್ಗದರ್ಶಿಯ ಹೆಸರು ಅಥವಾ ಪರವಾನಗಿ ಪರಿಶೀಲಿಸಿ.",
+    "searchPlaceholder": "Search by guide name or ASI ID…",
+    "experience": "ಅನುಭವ",
+    "yearsShort": "ವರ್ಷಗಳು",
+    "rating": "ರೇಟಿಂಗ್",
+    "unverifiedWarning": "This guide has no ASI license on file. We recommend booking only ASI-licensed guides — verified seals protect you from overcharging and misinformation.",
+    "noResults": "No guides match \"{{query}}\".",
+    "rateTable": {
+      "heading": "Standard Fair-Rate Table",
+      "tier": "Tier",
+      "price": "Price"
+    },
+    "verifiedSeal": "ASI ಪ್ರಮಾಣೀಕೃತ"
+  },
+  "assistant": {
+    "fab": {
+      "label": "ಸಹಾಯ ಕೇಳಿ"
+    },
+    "hub": {
+      "heading": "How would you like to interact?",
+      "subtitle": "Select your preferred mode of communication with the concierge intelligence. You can change this later.",
+      "chat": {
+        "title": "Text Interface",
+        "body": "Engage in a quiet, text-based conversation. Ideal for detailed inquiries, archiving responses, or environments requiring silence.",
+        "cta": "Start Chat"
+      },
+      "voice": {
+        "title": "Voice Interaction",
+        "body": "Speak naturally with the concierge. Best for hands-free navigation, fluid conversations, and an immersive sensory experience.",
+        "cta": "Activate Mic"
+      },
+      "alwaysAsk": "Always ask me",
+      "rememberChoice": "Remember my choice"
+    },
+    "chat": {
+      "leftTitleLine1": "ನಿಮ್ಮ ವೈಯಕ್ತಿಕ",
+      "leftTitleLine2": "ಪರಂಪರೆ ಸಹಾಯಕಿ",
+      "leftBody": "ಭಾರತದ ಐತಿಹಾಸಿಕ ತಾಣಗಳು, ಲೈವ್ ಜನದಟ್ಟಣೆ ಮತ್ತು ASI ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ತಿಳಿಯಿರಿ.",
+      "header": "ಪರಂಪರೆ ಸಹಾಯಕ",
+      "voiceModeLink": "ಧ್ವನಿ ಮೋಡ್",
+      "inputPlaceholder": "ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...",
+      "changeMode": "ಮೋಡ್ ಬದಲಾಯಿಸಿ",
+      "languageLabel": "ಭಾಷೆ: {{language}}",
+      "suggestions": [
+        "Book a historian",
+        "Show quiet sites nearby",
+        "What is the dress code?"
+      ],
+      "seed": "Namaste. I am your Heritage India concierge. How may I elevate your journey today? Are you seeking historic exploration or refined relaxation?",
+      "stubResponse": "I would be delighted to assist you with \"{{input}}\". You can explore historical monuments, check live crowd gauges, and verify certified ASI guides across India."
+    },
+    "voice": {
+      "title": "ಧ್ವನಿ ಸಹಾಯಕ",
+      "listening": "ಕೇಳಿಸಿಕೊಳ್ಳುತ್ತಿದೆ...",
+      "muted": "ಮೈಕ್ ಆಫ್ ಆಗಿದೆ",
+      "autoDetected": "ಗುರುತಿಸಲಾದ ಭಾಷೆ: {{language}}",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "end": "End",
+      "text": "Text",
+      "switchToChat": "Switch to Chat Mode",
+      "phrases": [
+        "Tell me about the architecture of the Taj Mahal…",
+        "What are the best times to visit Rajasthan?",
+        "Find me a luxury heritage hotel in Jaipur.",
+        "Explain the history behind Hawa Mahal."
+      ]
+    }
+  },
+  "onboarding": {
+    "step": "Step {{current}} of {{total}}",
+    "location": {
+      "title": "Where does your journey begin?",
+      "body": "Allow location access so we can curate bespoke experiences, local insights, and personalized heritage paths closest to you.",
+      "allow": "Allow Access",
+      "skip": "Not Now",
+      "note": "You can change this anytime in your privacy settings."
+    },
+    "language": {
+      "title": "Choose Your Narrative Language",
+      "body": "Select the voice that will guide your journey through India's heritage. You can change this later in settings.",
+      "continue": "Continue"
+    },
+    "accessibility": {
+      "title": "Make It Yours",
+      "body": "Pick a theme and color-vision mode. Every swatch below updates live across the site.",
+      "finish": "Enter Heritage India"
+    }
+  },
+  "auth": {
+    "signUpTab": "Sign Up",
+    "loginTab": "Login",
+    "heroTitle": "Begin Your Journey",
+    "heroSubtitle": "Experience the New Luxury of curated heritage exploration.",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "password": "Password",
+    "createAccount": "Create Account",
+    "logIn": "Log In",
+    "continueAsGuest": "Continue as Guest"
+  },
+  "notifications": {
+    "heading": "Notifications",
+    "unread": "{{count}} unread",
+    "allCaughtUp": "You're all caught up",
+    "markAllRead": "Mark All as Read",
+    "empty": "No notifications yet.",
+    "types": {
+      "bookingConfirmed": {
+        "title": "Booking Confirmed",
+        "message": "Your guide {{guide}} is confirmed for {{site}} on {{date}}."
+      },
+      "bookingCancelled": {
+        "title": "Booking Cancelled",
+        "message": "Your booking for {{site}} on {{date}} was cancelled and refunded."
+      },
+      "crowdAlert": {
+        "title": "Crowd Alert — {{site}}",
+        "message": "{{site}} is at {{percent}}% capacity right now. A quieter alternative is available."
+      },
+      "guideVerification": {
+        "title": "Guide Verification Update",
+        "message": "{{guide}}'s ASI license was renewed and re-verified."
+      }
+    }
+  },
+  "map": {
+    "searchPlaceholder": "Jump to a city or region…",
+    "filters": "Filters",
+    "category": "Category",
+    "crowdLevel": "Crowd Level",
+    "crowdFilters": {
+      "any": "Any",
+      "quiet": "Quiet",
+      "moderate": "Moderate",
+      "busy": "Busy"
+    },
+    "currentCrowdAt": "Current crowd level at {{site}}",
+    "backToList": "Back to List View",
+    "distanceAway": "{{km}} km away"
+  },
+  "notFound": {
+    "title": "This path hasn't been charted yet.",
+    "body": "Either the page moved, or it's a part of Heritage India still being built. Let's get you back to exploring.",
+    "cta": "Back to Explore"
+  },
+  "settings": {
+    "heading": "Settings",
+    "tabs": {
+      "profile": "Profile",
+      "theme": "Theme",
+      "accessibility": "Accessibility",
+      "language": "Language",
+      "payment": "Payment Methods",
+      "savedSites": "Saved Sites",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "comingSoon": "Profile management is coming soon."
+    },
+    "payment": {
+      "comingSoon": "Payment methods are coming soon."
+    },
+    "savedSites": {
+      "comingSoon": "Your saved sites will appear here."
+    },
+    "notifications": {
+      "comingSoon": "Manage notification preferences here soon."
+    },
+    "language": {
+      "heading": "Language",
+      "body": "Choose the language used across Heritage India."
+    },
+    "theme": {
+      "heading": "Theme & Accessibility",
+      "body": "Pick a theme and color-vision mode. Every swatch below updates live across the site."
+    }
   }
 }

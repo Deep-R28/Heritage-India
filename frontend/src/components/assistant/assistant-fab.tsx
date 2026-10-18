@@ -8,8 +8,8 @@ import { Icon } from "@/components/ui/icon";
 import { ASSISTANT_PREFERENCE_KEY, type AssistantMode } from "@/lib/assistant";
 
 // Transactional / immersive flows that shouldn't show a floating entry point
-// on top of them (assistant pages themselves, auth, onboarding).
-const HIDDEN_PREFIXES = ["/assistant", "/signup", "/login", "/onboarding"];
+// on top of them (assistant pages themselves, auth, onboarding, immersive map view).
+const HIDDEN_PREFIXES = ["/assistant", "/signup", "/login", "/onboarding", "/explore/map"];
 
 export function AssistantFab() {
   const { t } = useTranslation();

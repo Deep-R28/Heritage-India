@@ -88,25 +88,64 @@
       "eyebrow": "El Viaje",
       "heading": "Cómo Funciona",
       "steps": {
-        "location": { "title": "Establece Tu Ubicación", "body": "Comparte tu posición para obtener un mapa en vivo de sitios patrimoniales cercanos." },
-        "language": { "title": "Elige Tu Idioma", "body": "Selecciona entre inglés, hindi, español y más, al instante." },
-        "crowd": { "title": "Ve los Niveles de Afluencia en Vivo", "body": "Cada sitio muestra un medidor de afluencia en tiempo real antes de que te decidas." },
-        "assistant": { "title": "Pregunta al Conserje de IA", "body": "Chatea o habla sobre historia, logística y protocolo." },
-        "guide": { "title": "Reserva un Guía Verificado", "body": "Solo guías con licencia ASI — sin impostores callejeros." },
-        "pay": { "title": "Paga de Forma Segura", "body": "Pago transparente y detallado sin cargos ocultos." },
-        "explore": { "title": "Explora Sin Preocupaciones", "body": "Tu itinerario, sitios guardados y recibos — siempre a mano." }
+        "location": {
+          "title": "Establece Tu Ubicación",
+          "body": "Comparte tu posición para obtener un mapa en vivo de sitios patrimoniales cercanos."
+        },
+        "language": {
+          "title": "Elige Tu Idioma",
+          "body": "Selecciona entre inglés, hindi, español y más, al instante."
+        },
+        "crowd": {
+          "title": "Ve los Niveles de Afluencia en Vivo",
+          "body": "Cada sitio muestra un medidor de afluencia en tiempo real antes de que te decidas."
+        },
+        "assistant": {
+          "title": "Pregunta al Conserje de IA",
+          "body": "Chatea o habla sobre historia, logística y protocolo."
+        },
+        "guide": {
+          "title": "Reserva un Guía Verificado",
+          "body": "Solo guías con licencia ASI — sin impostores callejeros."
+        },
+        "pay": {
+          "title": "Paga de Forma Segura",
+          "body": "Pago transparente y detallado sin cargos ocultos."
+        },
+        "explore": {
+          "title": "Explora Sin Preocupaciones",
+          "body": "Tu itinerario, sitios guardados y recibos — siempre a mano."
+        }
       }
     },
     "features": {
       "eyebrow": "El Kit de Herramientas",
       "heading": "Todo, Curado",
       "items": {
-        "discovery": { "title": "Descubrimiento Cercano", "body": "Un mapa vivo de monumentos, fuertes y pozos escalonados a tu alrededor." },
-        "crowd": { "title": "Inteligencia de Afluencia", "body": "Medidores fáciles de leer, no números crudos — infórmate antes de ir." },
-        "concierge": { "title": "Conserje de IA", "body": "Chat o voz, en tu idioma, en cada página." },
-        "guides": { "title": "Guías Verificados", "body": "Solo con licencia ASI, con precios justos y transparentes." },
-        "alternatives": { "title": "Alternativas Inteligentes", "body": "¿Sitio concurrido? Te mostramos uno más tranquilo cerca, al instante." },
-        "accessibility": { "title": "Diseñado para Todos", "body": "Modos de visión de color y control total del tema en todo el sitio." }
+        "discovery": {
+          "title": "Descubrimiento Cercano",
+          "body": "Un mapa vivo de monumentos, fuertes y pozos escalonados a tu alrededor."
+        },
+        "crowd": {
+          "title": "Inteligencia de Afluencia",
+          "body": "Medidores fáciles de leer, no números crudos — infórmate antes de ir."
+        },
+        "concierge": {
+          "title": "Conserje de IA",
+          "body": "Chat o voz, en tu idioma, en cada página."
+        },
+        "guides": {
+          "title": "Guías Verificados",
+          "body": "Solo con licencia ASI, con precios justos y transparentes."
+        },
+        "alternatives": {
+          "title": "Alternativas Inteligentes",
+          "body": "¿Sitio concurrido? Te mostramos uno más tranquilo cerca, al instante."
+        },
+        "accessibility": {
+          "title": "Diseñado para Todos",
+          "body": "Modos de visión de color y control total del tema en todo el sitio."
+        }
       }
     },
     "stats": {
@@ -132,9 +171,21 @@
     },
     "pillars": {
       "heading": "Nuestros Pilares Fundamentales",
-      "curation": { "label": "Curaduría", "title": "Selección Impecable", "body": "Evitamos los lugares abarrotados para revelar obras maestras arquitectónicas ocultas, aplicando rigor editorial a cada sitio que incluimos en nuestro archivo." },
-      "context": { "label": "Contexto", "title": "Integridad Histórica", "body": "Ofreciendo narrativas profundas y académicamente sólidas en lugar de anécdotas superficiales." },
-      "conservation": { "label": "Conservación", "title": "Impacto Sostenible", "body": "Dirigiendo recursos al mantenimiento físico de las estructuras que veneramos." }
+      "curation": {
+        "label": "Curaduría",
+        "title": "Selección Impecable",
+        "body": "Evitamos los lugares abarrotados para revelar obras maestras arquitectónicas ocultas, aplicando rigor editorial a cada sitio que incluimos en nuestro archivo."
+      },
+      "context": {
+        "label": "Contexto",
+        "title": "Integridad Histórica",
+        "body": "Ofreciendo narrativas profundas y académicamente sólidas en lugar de anécdotas superficiales."
+      },
+      "conservation": {
+        "label": "Conservación",
+        "title": "Impacto Sostenible",
+        "body": "Dirigiendo recursos al mantenimiento físico de las estructuras que veneramos."
+      }
     },
     "team": {
       "heading": "Los Curadores",
@@ -169,17 +220,29 @@
       "scholar": {
         "title": "Erudito del Patrimonio",
         "description": "Perspectivas históricas y arquitectónicas profundas, guiadas por eruditos con posgrado.",
-        "features": ["Aprobado por el gobierno", "Opciones multilingües", "Asistencia para saltar filas"]
+        "features": [
+          "Aprobado por el gobierno",
+          "Opciones multilingües",
+          "Asistencia para saltar filas"
+        ]
       },
       "curated": {
         "title": "Experiencia Curada",
         "description": "Un día a un ritmo completo con un guía conserje privado y acceso prioritario.",
-        "features": ["Todo lo de Erudito del Patrimonio", "Coordinación de vehículo privado", "Ventanas de reserva prioritarias"]
+        "features": [
+          "Todo lo de Erudito del Patrimonio",
+          "Coordinación de vehículo privado",
+          "Ventanas de reserva prioritarias"
+        ]
       },
       "odyssey": {
         "title": "Odisea de Varios Días",
         "description": "Un guía dedicado a través de múltiples sitios y días, adaptado a tu itinerario.",
-        "features": ["Todo lo de Experiencia Curada", "Continuidad entre regiones", "Línea de conserjería 24/7"]
+        "features": [
+          "Todo lo de Experiencia Curada",
+          "Continuidad entre regiones",
+          "Línea de conserjería 24/7"
+        ]
       }
     }
   },
@@ -196,8 +259,14 @@
     },
     "viewOnMap": "Ver en el Mapa",
     "findGuide": "Buscar un Guía",
-    "alternatives": { "heading": "Alternativas Inteligentes", "seeAll": "Ver Todas", "further": "{{km}} km más lejos" },
-    "history": { "heading": "Historia y Significado" },
+    "alternatives": {
+      "heading": "Alternativas Inteligentes",
+      "seeAll": "Ver Todas",
+      "further": "{{km}} km más lejos"
+    },
+    "history": {
+      "heading": "Historia y Significado"
+    },
     "entryFee": "Tarifa de Entrada",
     "openHours": "Horario de Apertura"
   },
@@ -219,16 +288,30 @@
     "rating": "Calificación",
     "unverifiedWarning": "Este guía no tiene una licencia ASI registrada. Recomendamos reservar únicamente guías con licencia ASI — los sellos verificados te protegen de sobrecostos y desinformación.",
     "noResults": "Ningún guía coincide con \"{{query}}\".",
-    "rateTable": { "heading": "Tabla de Tarifas Estándar Justas", "tier": "Nivel", "price": "Precio" },
+    "rateTable": {
+      "heading": "Tabla de Tarifas Estándar Justas",
+      "tier": "Nivel",
+      "price": "Precio"
+    },
     "verifiedSeal": "Licencia ASI"
   },
   "assistant": {
-    "fab": { "label": "Preguntar al Conserje" },
+    "fab": {
+      "label": "Preguntar al Conserje"
+    },
     "hub": {
       "heading": "¿Cómo te gustaría interactuar?",
       "subtitle": "Selecciona tu modo de comunicación preferido con la inteligencia del conserje. Puedes cambiarlo más tarde.",
-      "chat": { "title": "Interfaz de Texto", "body": "Participa en una conversación tranquila basada en texto. Ideal para consultas detalladas, archivar respuestas o entornos que requieren silencio.", "cta": "Iniciar Chat" },
-      "voice": { "title": "Interacción por Voz", "body": "Habla con naturalidad con el conserje. Ideal para navegación manos libres, conversaciones fluidas y una experiencia sensorial inmersiva.", "cta": "Activar Micrófono" },
+      "chat": {
+        "title": "Interfaz de Texto",
+        "body": "Participa en una conversación tranquila basada en texto. Ideal para consultas detalladas, archivar respuestas o entornos que requieren silencio.",
+        "cta": "Iniciar Chat"
+      },
+      "voice": {
+        "title": "Interacción por Voz",
+        "body": "Habla con naturalidad con el conserje. Ideal para navegación manos libres, conversaciones fluidas y una experiencia sensorial inmersiva.",
+        "cta": "Activar Micrófono"
+      },
       "alwaysAsk": "Preguntarme siempre",
       "rememberChoice": "Recordar mi elección"
     },
@@ -241,7 +324,11 @@
       "inputPlaceholder": "Describe tu solicitud…",
       "changeMode": "Cambiar Modo",
       "languageLabel": "Idioma: {{language}}",
-      "suggestions": ["Reservar un historiador", "Mostrar sitios tranquilos cercanos", "¿Cuál es el código de vestimenta?"],
+      "suggestions": [
+        "Reservar un historiador",
+        "Mostrar sitios tranquilos cercanos",
+        "¿Cuál es el código de vestimenta?"
+      ],
       "seed": "Namasté. Soy tu conserje de Heritage India. ¿Cómo puedo mejorar tu viaje hoy? ¿Buscas exploración histórica o un relajo refinado?",
       "stubResponse": "Con gusto le ayudaré. Puede explorar monumentos históricos, verificar el aforo en tiempo real y contratar guías certificados de la ASI."
     },
@@ -302,10 +389,22 @@
     "markAllRead": "Marcar Todo como Leído",
     "empty": "Aún no hay notificaciones.",
     "types": {
-      "bookingConfirmed": { "title": "Reserva Confirmada", "message": "Tu guía {{guide}} está confirmado para {{site}} el {{date}}." },
-      "bookingCancelled": { "title": "Reserva Cancelada", "message": "Tu reserva para {{site}} el {{date}} fue cancelada y reembolsada." },
-      "crowdAlert": { "title": "Alerta de Afluencia — {{site}}", "message": "{{site}} está al {{percent}}% de su capacidad en este momento. Hay una alternativa más tranquila disponible." },
-      "guideVerification": { "title": "Actualización de Verificación de Guía", "message": "La licencia ASI de {{guide}} fue renovada y verificada nuevamente." }
+      "bookingConfirmed": {
+        "title": "Reserva Confirmada",
+        "message": "Tu guía {{guide}} está confirmado para {{site}} el {{date}}."
+      },
+      "bookingCancelled": {
+        "title": "Reserva Cancelada",
+        "message": "Tu reserva para {{site}} el {{date}} fue cancelada y reembolsada."
+      },
+      "crowdAlert": {
+        "title": "Alerta de Afluencia — {{site}}",
+        "message": "{{site}} está al {{percent}}% de su capacidad en este momento. Hay una alternativa más tranquila disponible."
+      },
+      "guideVerification": {
+        "title": "Actualización de Verificación de Guía",
+        "message": "La licencia ASI de {{guide}} fue renovada y verificada nuevamente."
+      }
     }
   },
   "map": {
@@ -313,7 +412,12 @@
     "filters": "Filtros",
     "category": "Categoría",
     "crowdLevel": "Nivel de Afluencia",
-    "crowdFilters": { "any": "Cualquiera", "quiet": "Tranquilo", "moderate": "Moderado", "busy": "Concurrido" },
+    "crowdFilters": {
+      "any": "Cualquiera",
+      "quiet": "Tranquilo",
+      "moderate": "Moderado",
+      "busy": "Concurrido"
+    },
     "currentCrowdAt": "Nivel de afluencia actual en {{site}}",
     "backToList": "Volver a la Vista de Lista",
     "distanceAway": "a {{km}} km"
@@ -334,11 +438,25 @@
       "savedSites": "Sitios Guardados",
       "notifications": "Notificaciones"
     },
-    "profile": { "comingSoon": "La gestión de perfil llegará pronto." },
-    "payment": { "comingSoon": "Los métodos de pago llegarán pronto." },
-    "savedSites": { "comingSoon": "Tus sitios guardados aparecerán aquí." },
-    "notifications": { "comingSoon": "Gestiona las preferencias de notificación aquí pronto." },
-    "language": { "heading": "Idioma", "body": "Elige el idioma utilizado en todo Heritage India." },
-    "theme": { "heading": "Tema y Accesibilidad", "body": "Elige un tema y un modo de visión de color. Cada muestra a continuación se actualiza en vivo en todo el sitio." }
+    "profile": {
+      "comingSoon": "La gestión de perfil llegará pronto."
+    },
+    "payment": {
+      "comingSoon": "Los métodos de pago llegarán pronto."
+    },
+    "savedSites": {
+      "comingSoon": "Tus sitios guardados aparecerán aquí."
+    },
+    "notifications": {
+      "comingSoon": "Gestiona las preferencias de notificación aquí pronto."
+    },
+    "language": {
+      "heading": "Idioma",
+      "body": "Elige el idioma utilizado en todo Heritage India."
+    },
+    "theme": {
+      "heading": "Tema y Accesibilidad",
+      "body": "Elige un tema y un modo de visión de color. Cada muestra a continuación se actualiza en vivo en todo el sitio."
+    }
   }
 }

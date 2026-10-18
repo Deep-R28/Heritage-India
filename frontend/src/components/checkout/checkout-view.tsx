@@ -185,6 +185,39 @@ export function CheckoutView() {
         </p>
       </div>
 
+      {/* Not Logged In Banner */}
+      {!user && (
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-accent/40 bg-accent/10 p-5 shadow-lg backdrop-blur-md animate-in fade-in duration-300">
+          <div className="flex items-start gap-3.5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
+              <Icon name="account_circle" className="text-2xl" />
+            </div>
+            <div>
+              <h4 className="font-headline text-sm font-semibold text-foreground">
+                Sign In to Save Your Booking & Entry Pass
+              </h4>
+              <p className="mt-0.5 font-body text-xs text-foreground-muted">
+                Please log in or sign up so your tickets, real-time notifications, and visited site history are permanently linked to your profile.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <Link
+              href={`/login?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
+              className="rounded-lg border border-accent/60 bg-surface px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:bg-accent/10"
+            >
+              Log In
+            </Link>
+            <Link
+              href={`/signup?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
+              className="rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian transition-colors hover:bg-accent/90 shadow"
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      )}
+
       {error && (
         <div className="mb-8 flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-400">
           <Icon name="error" className="text-xl shrink-0" />

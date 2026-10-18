@@ -15,17 +15,23 @@
     ],
     "crowdPercent": 78,
     "priceInr": 1100,
-    "openHours": "6:00 AM – 6:30 PM",
-    "summary": "An ivory-white marble mausoleum on the southern bank of the Yamuna, commissioned in 1632. UNESCO World Heritage Site and one of the New Seven Wonders of the World.",
-    "history": "Built by Mughal emperor Shah Jahan in memory of his wife Mumtaz Mahal, the Taj Mahal took over 20,000 artisans and 22 years to complete. Its symmetry, inlaid gemstones, and calligraphy represent the pinnacle of Mughal architecture.",
+    "openHours": "6:00 AM – 6:30 PM (Closed Fridays)",
+    "summary": "UNESCO World Heritage Site and one of the New Seven Wonders of the World. Represents the pinnacle of Mughal architecture combining Persian, Islamic, and Indian styles.",
+    "history": "Built between 1632 and 1653 by Mughal emperor Shah Jahan in memory of his wife Mumtaz Mahal. Over 20,000 artisans from across the empire and Central Asia worked on this ivory-white marble mausoleum.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.6,
+    "bestTime": "October to March",
+    "weeklyOff": "Friday",
+    "timeNeeded": 2.5,
     "translations": {
       "hi": {
-        "summary": "यमुना के दक्षिणी तट पर स्थित एक हाथी दांत-सफेद संगमरमर का मकबरा, जिसे 1632 में बनवाया गया था। यह UNESCO विश्व धरोहर स्थल और विश्व के नए सात आश्चर्यों में से एक है।",
-        "history": "मुगल सम्राट शाहजहां द्वारा अपनी पत्नी मुमताज़ महल की स्मृति में बनवाया गया, ताज महल को पूरा होने में 20,000 से अधिक कारीगरों और 22 वर्षों का समय लगा। इसकी समरूपता, जड़ित रत्न, और सुलेख मुगल स्थापत्य कला के शिखर का प्रतिनिधित्व करते हैं।"
+        "summary": "यूनेस्को विश्व धरोहर स्थल और विश्व के नए सात अजूबों में से एक। फ़ारसी, इस्लामी और भारतीय शैलियों के मिश्रण के साथ मुगल वास्तुकला की पराकाष्ठा को दर्शाता है।",
+        "history": "1632 से 1653 के बीच मुगल सम्राट शाहजहाँ ने अपनी पत्नी मुमताज़ महल की याद में इसे बनवाया। पूरे साम्राज्य और मध्य एशिया से 20,000 से अधिक कारीगरों ने इस हाथीदांत-सफेद संगमरमर के मकबरे पर काम किया।"
       },
       "es": {
-        "summary": "Un mausoleo de mármol blanco marfil en la orilla sur del Yamuna, encargado en 1632. Patrimonio de la Humanidad por la UNESCO y una de las Nuevas Siete Maravillas del Mundo.",
-        "history": "Construido por el emperador mogol Shah Jahan en memoria de su esposa Mumtaz Mahal, el Taj Mahal requirió más de 20,000 artesanos y 22 años para completarse. Su simetría, piedras preciosas incrustadas y caligrafía representan la cima de la arquitectura mogol."
+        "summary": "Patrimonio de la Humanidad por la UNESCO y una de las Nuevas Siete Maravillas del Mundo. Representa la cúspide de la arquitectura mogol combinando estilos persas, islámicos e indios.",
+        "history": "Construido entre 1632 y 1653 por el emperador mogol Shah Jahan en memoria de su esposa Mumtaz Mahal. Más de 20.000 artesanos de todo el imperio y Asia Central trabajaron en este mausoleo de mármol blanco marfil."
       }
     }
   },
@@ -45,16 +51,22 @@
     "crowdPercent": 34,
     "priceInr": 600,
     "openHours": "6:00 AM – 6:00 PM",
-    "summary": "A sprawling UNESCO World Heritage Site of boulder-strewn ruins, once the capital of the Vijayanagara Empire — the largest Hindu empire in Indian history.",
-    "history": "Founded in the 14th century, Hampi flourished as one of the richest cities in the world before its destruction in 1565. Its temples, royal enclosures, and market streets remain remarkably preserved among granite hills.",
+    "summary": "UNESCO World Heritage Site with over 1,600 surviving remains including forts, temples, and aquatic structures. Demonstrates the ingenuity of Vijayanagara's urban planning.",
+    "history": "Capital of the Vijayanagara Empire from the 14th to 16th centuries. At its peak, it was one of the largest and richest cities in the world, with half a million inhabitants.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.6,
+    "bestTime": "October to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 4.0,
     "translations": {
       "hi": {
-        "summary": "बोल्डरों से भरे खंडहरों का एक विस्तृत UNESCO विश्व धरोहर स्थल, जो कभी विजयनगर साम्राज्य — भारतीय इतिहास के सबसे बड़े हिंदू साम्राज्य — की राजधानी था।",
-        "history": "14वीं शताब्दी में स्थापित, हम्पी 1565 में अपने विनाश से पहले दुनिया के सबसे धनी शहरों में से एक के रूप में फला-फूला। इसके मंदिर, शाही परिसर, और बाज़ार की गलियां ग्रेनाइट पहाड़ियों के बीच उल्लेखनीय रूप से संरक्षित हैं।"
+        "summary": "यूनेस्को विश्व धरोहर स्थल जिसमें किले, मंदिर और जल संरचनाओं सहित 1,600 से अधिक शेष अवशेष हैं।",
+        "history": "14वीं से 16वीं शताब्दी तक विजयनगर साम्राज्य की राजधानी। अपने चरम पर, यह दुनिया के सबसे बड़े और सबसे समृद्ध शहरों में से एक था, जिसमें आधा मिलियन निवासी थे।"
       },
       "es": {
-        "summary": "Un extenso sitio Patrimonio de la Humanidad por la UNESCO de ruinas sembradas de rocas, que fue capital del Imperio Vijayanagara — el mayor imperio hindú de la historia de la India.",
-        "history": "Fundada en el siglo XIV, Hampi floreció como una de las ciudades más ricas del mundo antes de su destrucción en 1565. Sus templos, recintos reales y calles de mercado permanecen notablemente conservados entre colinas de granito."
+        "summary": "Patrimonio de la Humanidad por la UNESCO con más de 1.600 restos, incluyendo fuertes, templos y estructuras acuáticas.",
+        "history": "Capital del Imperio Vijayanagara del siglo XIV al XVI. En su apogeo, fue una de las ciudades más grandes y ricas del mundo, con medio millón de habitantes."
       }
     }
   },
@@ -72,18 +84,24 @@
       "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
     ],
     "crowdPercent": 55,
-    "priceInr": 550,
+    "priceInr": 500,
     "openHours": "8:00 AM – 5:30 PM",
-    "summary": "A majestic hilltop fort of pink sandstone and white marble overlooking Maota Lake, renowned for its artistic Hindu-style elements and the Sheesh Mahal mirror hall.",
-    "history": "Built starting in 1592 by Raja Man Singh I, Amber Fort served as the seat of the Kachwaha Rajput rulers for over 150 years before the capital moved to Jaipur city.",
+    "summary": "Part of the Rajasthan Hill Forts UNESCO World Heritage cluster. The Sheesh Mahal (Mirror Palace) is considered one of the finest examples of mirror-work in India.",
+    "history": "Built in 1592 by Raja Man Singh I, this fort-palace complex blends Hindu and Mughal architectural styles. It served as the capital of the Kachwaha clan until Jaipur was founded.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.5,
     "translations": {
       "hi": {
-        "summary": "माओटा झील को निहारता गुलाबी बलुआ पत्थर और सफेद संगमरमर से बना एक भव्य पहाड़ी किला, जो अपने कलात्मक हिंदू-शैली के तत्वों और शीश महल दर्पण कक्ष के लिए प्रसिद्ध है।",
-        "history": "1592 में राजा मान सिंह प्रथम द्वारा निर्माण शुरू किया गया, आमेर किला 150 वर्षों से अधिक समय तक कछवाहा राजपूत शासकों की राजधानी रहा, इससे पहले कि राजधानी जयपुर शहर में स्थानांतरित हो गई।"
+        "summary": "राजस्थान हिल फोर्ट्स यूनेस्को विश्व धरोहर समूह का हिस्सा। शीश महल को भारत में दर्पण कार्य के बेहतरीन उदाहरणों में से एक माना जाता है।",
+        "history": "1592 में राजा मान सिंह प्रथम द्वारा निर्मित, यह किला-महल परिसर हिंदू और मुगल वास्तुकला शैलियों का मिश्रण है।"
       },
       "es": {
-        "summary": "Un majestuoso fuerte en la cima de una colina, de arenisca rosada y mármol blanco, que domina el lago Maota, célebre por sus elementos artísticos de estilo hindú y la sala de espejos Sheesh Mahal.",
-        "history": "Construido a partir de 1592 por Raja Man Singh I, el Fuerte Amber fue la sede de los gobernantes rajput Kachwaha durante más de 150 años antes de que la capital se trasladara a la ciudad de Jaipur."
+        "summary": "Parte del conjunto Patrimonio de la Humanidad de Fuertes de las Colinas de Rajasthan. El Sheesh Mahal se considera uno de los mejores ejemplos de trabajo de espejos en India.",
+        "history": "Construido en 1592 por Raja Man Singh I, este complejo de fuerte-palacio mezcla estilos arquitectónicos hindúes y mogoles."
       }
     }
   },
@@ -92,7 +110,7 @@
     "slug": "qutub-minar",
     "name": "Qutub Minar",
     "category": "Monument",
-    "region": "New Delhi",
+    "region": "New Delhi, Delhi",
     "lat": 28.5245,
     "lng": 77.1855,
     "distanceKm": 8.3,
@@ -103,16 +121,22 @@
     "crowdPercent": 88,
     "priceInr": 600,
     "openHours": "7:00 AM – 5:00 PM",
-    "summary": "A 73-metre tapering red sandstone and marble minaret, the tallest brick minaret in the world, at the heart of the Qutub Complex.",
-    "history": "Construction began in 1192 under Qutb al-Din Aibak. The tower and surrounding complex mark the beginning of Islamic rule in Delhi and blend Islamic and Indian craftsmanship.",
+    "summary": "UNESCO World Heritage Site. The surrounding Qutb complex includes the Iron Pillar of Delhi, which has resisted rust for over 1,600 years.",
+    "history": "Construction began in 1193 by Qutb-ud-din Aibak and was completed by his successor Iltutmish. At 72.5 meters, it is the tallest brick minaret in the world.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.5,
     "translations": {
       "hi": {
-        "summary": "73 मीटर ऊंची, संकरी होती लाल बलुआ पत्थर और संगमरमर की मीनार, कुतुब परिसर के केंद्र में स्थित, विश्व की सबसे ऊंची ईंट की मीनार।",
-        "history": "निर्माण 1192 में कुतुब-उद-दीन ऐबक के अधीन शुरू हुआ। यह टावर और आस-पास का परिसर दिल्ली में इस्लामी शासन की शुरुआत को चिह्नित करता है और इस्लामी व भारतीय शिल्पकला का मिश्रण प्रस्तुत करता है।"
+        "summary": "यूनेस्को विश्व धरोहर स्थल। आसपास के कुतुब परिसर में दिल्ली का लौह स्तंभ शामिल है, जिसने 1,600 से अधिक वर्षों तक जंग का प्रतिरोध किया है।",
+        "history": "निर्माण 1193 में कुतुबुद्दीन ऐबक द्वारा शुरू किया गया और उनके उत्तराधिकारी इल्तुतमिश द्वारा पूरा किया गया। 72.5 मीटर पर, यह दुनिया की सबसे ऊंची ईंट की मीनार है।"
       },
       "es": {
-        "summary": "Un minarete cónico de arenisca roja y mármol de 73 metros, el minarete de ladrillo más alto del mundo, en el corazón del Complejo Qutub.",
-        "history": "La construcción comenzó en 1192 bajo Qutb al-Din Aibak. La torre y el complejo circundante marcan el inicio del dominio islámico en Delhi y combinan la artesanía islámica e india."
+        "summary": "Patrimonio de la Humanidad por la UNESCO. El complejo Qutb incluye el Pilar de Hierro de Delhi, que ha resistido la oxidación durante más de 1.600 años.",
+        "history": "La construcción comenzó en 1193 por Qutb-ud-din Aibak y fue completada por su sucesor Iltutmish. Con 72,5 metros, es el minarete de ladrillo más alto del mundo."
       }
     }
   },
@@ -132,16 +156,1387 @@
     "crowdPercent": 41,
     "priceInr": 200,
     "openHours": "10:00 AM – 5:30 PM",
-    "summary": "The official residence of the Wadiyar dynasty — an Indo-Saracenic landmark famed for its illuminated domes and stained-glass ceilings, especially during Dussehra.",
-    "history": "The current palace was completed in 1912 after a fire destroyed the previous wooden structure. It remains one of India's most visited monuments, second only to the Taj Mahal.",
+    "summary": "India's most visited monument, attracting over 6 million visitors annually. The palace's illumination with 97,000 light bulbs during Dasara is world-famous.",
+    "history": "The current palace was built between 1897 and 1912 after the previous wooden palace burned down. Designed by British architect Henry Irwin in the Indo-Saracenic style.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "September to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
     "translations": {
       "hi": {
-        "summary": "वाडियार वंश का आधिकारिक निवास — एक इंडो-सारसेनिक स्थल, जो अपने प्रकाशित गुंबदों और सना हुआ कांच की छतों के लिए प्रसिद्ध है, विशेष रूप से दशहरे के दौरान।",
-        "history": "वर्तमान महल 1912 में पूरा हुआ, जब एक आग ने पिछली लकड़ी की संरचना को नष्ट कर दिया था। यह ताज महल के बाद भारत के सबसे अधिक देखे जाने वाले स्मारकों में से एक बना हुआ है।"
+        "summary": "भारत का सबसे अधिक दौरा किया जाने वाला स्मारक, जो सालाना 6 मिलियन से अधिक आगंतुकों को आकर्षित करता है।",
+        "history": "वर्तमान महल 1897 और 1912 के बीच बनाया गया था, जब पिछला लकड़ी का महल जलकर खाक हो गया। ब्रिटिश वास्तुकार हेनरी इरविन द्वारा इंडो-सारासेनिक शैली में डिज़ाइन किया गया।"
       },
       "es": {
-        "summary": "La residencia oficial de la dinastía Wadiyar — un hito indosarraceno famoso por sus cúpulas iluminadas y techos de vitrales, especialmente durante el Dussehra.",
-        "history": "El palacio actual se completó en 1912 después de que un incendio destruyera la estructura de madera anterior. Sigue siendo uno de los monumentos más visitados de la India, solo superado por el Taj Mahal."
+        "summary": "El monumento más visitado de India, con más de 6 millones de visitantes anuales. Su iluminación con 97.000 bombillas durante Dasara es mundialmente famosa.",
+        "history": "El palacio actual fue construido entre 1897 y 1912 después de que el palacio anterior de madera se incendiara. Diseñado por el arquitecto británico Henry Irwin en estilo indo-sarraceno."
+      }
+    }
+  },
+  {
+    "id": "red-fort",
+    "slug": "red-fort",
+    "name": "Red Fort",
+    "category": "Fort",
+    "region": "New Delhi, Delhi",
+    "lat": 28.6562,
+    "lng": 77.241,
+    "distanceKm": 7.8,
+    "image": "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 68,
+    "priceInr": 600,
+    "openHours": "9:30 AM – 4:30 PM (Closed Mondays)",
+    "summary": "UNESCO World Heritage Site. The Prime Minister hoists the national flag here every Independence Day. Symbol of India's sovereignty.",
+    "history": "Built by Mughal emperor Shah Jahan in 1639 as the palace of his new capital Shahjahanabad. The massive red sandstone walls extend for 2 km.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to March",
+    "weeklyOff": "Monday",
+    "timeNeeded": 2.5,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। प्रधानमंत्री हर स्वतंत्रता दिवस पर यहाँ राष्ट्रीय ध्वज फहराते हैं।",
+        "history": "1639 में मुगल सम्राट शाहजहाँ ने अपनी नई राजधानी शाहजहानाबाद के महल के रूप में इसे बनवाया। विशाल लाल बलुआ पत्थर की दीवारें 2 किमी तक फैली हुई हैं।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. El Primer Ministro iza la bandera nacional aquí cada Día de la Independencia.",
+        "history": "Construido por el emperador mogol Shah Jahan en 1639 como palacio de su nueva capital Shahjahanabad. Las enormes murallas de arenisca roja se extienden por 2 km."
+      }
+    }
+  },
+  {
+    "id": "konark-sun-temple",
+    "slug": "konark-sun-temple",
+    "name": "Konark Sun Temple",
+    "category": "Temple",
+    "region": "Konark, Odisha",
+    "lat": 19.8876,
+    "lng": 86.0945,
+    "distanceKm": 10.0,
+    "image": "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 45,
+    "priceInr": 600,
+    "openHours": "6:00 AM – 8:00 PM",
+    "summary": "UNESCO World Heritage Site. A masterpiece of Kalinga architecture and the most iconic representation of Indian temple art.",
+    "history": "Built in the 13th century by King Narasimhadeva I of the Eastern Ganga dynasty. Designed as a colossal chariot of the Sun God with 24 intricately carved wheels.",
+    "zone": "Eastern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। कलिंग वास्तुकला की उत्कृष्ट कृति।",
+        "history": "13वीं शताब्दी में पूर्वी गंग वंश के राजा नरसिंहदेव प्रथम द्वारा निर्मित। सूर्य देव के विशाल रथ के रूप में 24 जटिल नक्काशीदार पहियों के साथ डिज़ाइन किया गया।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. Una obra maestra de la arquitectura Kalinga.",
+        "history": "Construido en el siglo XIII por el Rey Narasimhadeva I de la dinastía Ganga Oriental. Diseñado como un colosal carro del Dios Sol con 24 ruedas intrincadamente talladas."
+      }
+    }
+  },
+  {
+    "id": "meenakshi-temple",
+    "slug": "meenakshi-temple",
+    "name": "Meenakshi Amman Temple",
+    "category": "Temple",
+    "region": "Madurai, Tamil Nadu",
+    "lat": 9.9195,
+    "lng": 78.1193,
+    "distanceKm": 16.6,
+    "image": "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 51,
+    "priceInr": 0,
+    "openHours": "5:00 AM – 12:30 PM, 4:00 PM – 9:30 PM",
+    "summary": "One of India's most important Hindu temples, dedicated to Meenakshi (a form of Parvati) and Sundareswarar (Shiva). Nominated for the New Seven Wonders of the World.",
+    "history": "Originally built in the 6th century and rebuilt by Thirumalai Nayak in the 17th century. The temple complex spans 14 acres with 14 gopurams (gateway towers) covered in thousands of colourful sculptures.",
+    "zone": "Southern",
+    "type": "Religious",
+    "googleRating": 4.6,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत के सबसे महत्वपूर्ण हिंदू मंदिरों में से एक, मीनाक्षी (पार्वती का एक रूप) और सुंदरेश्वर (शिव) को समर्पित।",
+        "history": "मूल रूप से 6वीं शताब्दी में निर्मित और 17वीं शताब्दी में तिरुमलई नायक द्वारा पुनर्निर्मित। 14 एकड़ में फैला मंदिर परिसर हज़ारों रंगीन मूर्तियों से सजे 14 गोपुरम के साथ।"
+      },
+      "es": {
+        "summary": "Uno de los templos hindúes más importantes de India, dedicado a Meenakshi y Sundareswarar.",
+        "history": "Originalmente construido en el siglo VI y reconstruido por Thirumalai Nayak en el XVII. El complejo abarca 14 acres con 14 gopurams cubiertos de miles de esculturas coloridas."
+      }
+    }
+  },
+  {
+    "id": "khajuraho",
+    "slug": "khajuraho",
+    "name": "Khajuraho Temples",
+    "category": "Temple",
+    "region": "Khajuraho, Madhya Pradesh",
+    "lat": 24.8318,
+    "lng": 79.9199,
+    "distanceKm": 8.2,
+    "image": "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 42,
+    "priceInr": 600,
+    "openHours": "Sunrise – Sunset",
+    "summary": "UNESCO World Heritage Site. The temples represent the artistic and architectural achievement of medieval India at its finest.",
+    "history": "Built between 950 and 1050 CE by the Chandela dynasty. Of the original 85 temples, only 25 survive today, famous for their erotic and intricate sculptural art.",
+    "zone": "Central",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। ये मंदिर मध्यकालीन भारत की कलात्मक और वास्तुशिल्प उपलब्धि का प्रतिनिधित्व करते हैं।",
+        "history": "950 और 1050 ई. के बीच चंदेल राजवंश द्वारा निर्मित। मूल 85 मंदिरों में से केवल 25 आज बचे हैं, जो अपनी शृंगारिक और जटिल मूर्तिकला कला के लिए प्रसिद्ध हैं।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. Los templos representan el logro artístico y arquitectónico de la India medieval.",
+        "history": "Construidos entre 950 y 1050 d.C. por la dinastía Chandela. De los 85 templos originales, solo sobreviven 25, famosos por su arte escultórico erótico e intrincado."
+      }
+    }
+  },
+  {
+    "id": "ajanta-caves",
+    "slug": "ajanta-caves",
+    "name": "Ajanta Caves",
+    "category": "Caves",
+    "region": "Aurangabad, Maharashtra",
+    "lat": 20.5519,
+    "lng": 75.7033,
+    "distanceKm": 17.3,
+    "image": "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 58,
+    "priceInr": 600,
+    "openHours": "9:00 AM – 5:00 PM (Closed Mondays)",
+    "summary": "UNESCO World Heritage Site. The murals depict Jataka tales and are considered masterpieces of Buddhist religious art with universal significance.",
+    "history": "Carved between the 2nd century BCE and 6th century CE, these 30 rock-cut Buddhist caves contain the finest examples of ancient Indian mural paintings.",
+    "zone": "Western",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "November to March",
+    "weeklyOff": "Monday",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। भित्ति चित्र जातक कथाओं को दर्शाते हैं और बौद्ध धार्मिक कला की उत्कृष्ट कृतियाँ मानी जाती हैं।",
+        "history": "दूसरी शताब्दी ईसा पूर्व और 6वीं शताब्दी ई. के बीच उकेरी गई, ये 30 चट्टान-कटी बौद्ध गुफाएँ प्राचीन भारतीय भित्ति चित्रों के बेहतरीन उदाहरण हैं।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. Los murales representan cuentos Jataka y se consideran obras maestras del arte religioso budista.",
+        "history": "Talladas entre el siglo II a.C. y el VI d.C., estas 30 cuevas budistas excavadas en roca contienen los mejores ejemplos de pintura mural antigua de India."
+      }
+    }
+  },
+  {
+    "id": "ellora-caves",
+    "slug": "ellora-caves",
+    "name": "Ellora Caves",
+    "category": "Caves",
+    "region": "Aurangabad, Maharashtra",
+    "lat": 20.0258,
+    "lng": 75.1781,
+    "distanceKm": 3.9,
+    "image": "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 74,
+    "priceInr": 600,
+    "openHours": "6:00 AM – 6:00 PM (Closed Tuesdays)",
+    "summary": "UNESCO World Heritage Site. Cave 16 (Kailasa Temple) is the largest monolithic rock excavation in the world, carved top-down from a single basalt cliff.",
+    "history": "Excavated between the 6th and 11th centuries, Ellora's 34 caves represent Buddhism, Hinduism, and Jainism, showcasing ancient India's religious harmony.",
+    "zone": "Western",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "November to March",
+    "weeklyOff": "Tuesday",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। गुफा 16 (कैलास मंदिर) दुनिया की सबसे बड़ी अखंड चट्टान खुदाई है।",
+        "history": "6वीं और 11वीं शताब्दी के बीच उत्खनित, एलोरा की 34 गुफाएँ बौद्ध धर्म, हिंदू धर्म और जैन धर्म का प्रतिनिधित्व करती हैं।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. La Cueva 16 (Templo Kailasa) es la mayor excavación monolítica de roca del mundo.",
+        "history": "Excavadas entre los siglos VI y XI, las 34 cuevas representan budismo, hinduismo y jainismo, mostrando la armonía religiosa de la antigua India."
+      }
+    }
+  },
+  {
+    "id": "fatehpur-sikri",
+    "slug": "fatehpur-sikri",
+    "name": "Fatehpur Sikri",
+    "category": "Monument",
+    "region": "Agra, Uttar Pradesh",
+    "lat": 27.0945,
+    "lng": 77.661,
+    "distanceKm": 12.9,
+    "image": "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 44,
+    "priceInr": 600,
+    "openHours": "6:00 AM – 6:00 PM",
+    "summary": "UNESCO World Heritage Site. A masterpiece of Mughal urban planning combining Hindu and Islamic architecture. Buland Darwaza is the highest gateway in the world at 54 metres.",
+    "history": "Built by Mughal emperor Akbar in 1571 as his capital, then abandoned after just 14 years due to water scarcity. It remains remarkably well-preserved.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। बुलंद दरवाज़ा 54 मीटर पर दुनिया का सबसे ऊंचा प्रवेश द्वार है।",
+        "history": "1571 में मुगल सम्राट अकबर ने अपनी राजधानी के रूप में इसे बनवाया, फिर पानी की कमी के कारण मात्र 14 वर्षों बाद इसे छोड़ दिया।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. El Buland Darwaza es la puerta más alta del mundo con 54 metros.",
+        "history": "Construida por el emperador mogol Akbar en 1571 como su capital, luego abandonada tras solo 14 años por escasez de agua."
+      }
+    }
+  },
+  {
+    "id": "hawa-mahal",
+    "slug": "hawa-mahal",
+    "name": "Hawa Mahal",
+    "category": "Architecture",
+    "region": "Jaipur, Rajasthan",
+    "lat": 26.9239,
+    "lng": 75.8267,
+    "distanceKm": 12.1,
+    "image": "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 66,
+    "priceInr": 200,
+    "openHours": "9:00 AM – 4:30 PM",
+    "summary": "The iconic pink sandstone facade is the most photographed building in Jaipur and a masterpiece of Rajput architecture.",
+    "history": "Built in 1799 by Maharaja Sawai Pratap Singh, this five-storey 'Palace of Winds' features 953 small windows (jharokhas) designed so royal women could observe street life without being seen.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.0,
+    "translations": {
+      "hi": {
+        "summary": "यह प्रतिष्ठित गुलाबी बलुआ पत्थर का अग्रभाग जयपुर की सबसे अधिक फ़ोटो खींची जाने वाली इमारत है।",
+        "history": "1799 में महाराजा सवाई प्रताप सिंह द्वारा निर्मित, इस पाँच मंज़िला 'हवाओं के महल' में 953 छोटी खिड़कियाँ (झरोखे) हैं जो शाही महिलाओं को बिना दिखे सड़क का जीवन देखने के लिए डिज़ाइन की गई थीं।"
+      },
+      "es": {
+        "summary": "La icónica fachada de arenisca rosa es el edificio más fotografiado de Jaipur.",
+        "history": "Construido en 1799 por el Maharajá Sawai Pratap Singh, este 'Palacio de los Vientos' de cinco pisos tiene 953 pequeñas ventanas diseñadas para que las mujeres reales pudieran observar la vida callejera sin ser vistas."
+      }
+    }
+  },
+  {
+    "id": "golconda-fort",
+    "slug": "golconda-fort",
+    "name": "Golconda Fort",
+    "category": "Fort",
+    "region": "Hyderabad, Telangana",
+    "lat": 17.3833,
+    "lng": 78.4011,
+    "distanceKm": 15.2,
+    "image": "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 52,
+    "priceInr": 300,
+    "openHours": "8:00 AM – 5:30 PM",
+    "summary": "Famous for its acoustic engineering — a handclap at the entrance can be heard at the highest point, nearly a kilometre away. Once home to the Koh-i-Noor and Hope diamonds.",
+    "history": "Originally a mud fort built in the 13th century, it was expanded by the Qutb Shahi dynasty into a massive fortification with 87 bastions and an advanced acoustic warning system.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.5,
+    "translations": {
+      "hi": {
+        "summary": "अपनी ध्वनिक इंजीनियरिंग के लिए प्रसिद्ध — प्रवेश द्वार पर एक ताली लगभग एक किलोमीटर दूर सबसे ऊंचे बिंदु पर सुनी जा सकती है।",
+        "history": "मूल रूप से 13वीं शताब्दी में बनाया गया एक मिट्टी का किला, इसे कुतुब शाही राजवंश ने 87 बुर्जों वाले विशाल किले में विस्तारित किया।"
+      },
+      "es": {
+        "summary": "Famoso por su ingeniería acústica — una palmada en la entrada se puede escuchar en el punto más alto, a casi un kilómetro.",
+        "history": "Originalmente un fuerte de barro del siglo XIII, fue expandido por la dinastía Qutb Shahi con 87 bastiones y un sistema acústico avanzado."
+      }
+    }
+  },
+  {
+    "id": "charminar",
+    "slug": "charminar",
+    "name": "Charminar",
+    "category": "Monument",
+    "region": "Hyderabad, Telangana",
+    "lat": 17.3616,
+    "lng": 78.4747,
+    "distanceKm": 7.4,
+    "image": "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1588416936097-41850ab3d86d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 34,
+    "priceInr": 300,
+    "openHours": "9:30 AM – 5:30 PM",
+    "summary": "The iconic symbol of Hyderabad and a masterpiece of Indo-Islamic architecture. The surrounding Laad Bazaar is one of India's oldest markets.",
+    "history": "Built in 1591 by Sultan Muhammad Quli Qutb Shah to commemorate the end of a deadly plague. The four minarets symbolise the first four caliphs of Islam.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.3,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.5,
+    "translations": {
+      "hi": {
+        "summary": "हैदराबाद का प्रतिष्ठित प्रतीक और इंडो-इस्लामी वास्तुकला की उत्कृष्ट कृति।",
+        "history": "1591 में सुल्तान मुहम्मद कुली कुतुब शाह ने एक घातक प्लेग की समाप्ति की याद में इसे बनवाया। चार मीनारें इस्लाम के पहले चार ख़लीफ़ाओं का प्रतीक हैं।"
+      },
+      "es": {
+        "summary": "El símbolo icónico de Hyderabad y una obra maestra de la arquitectura indo-islámica.",
+        "history": "Construido en 1591 por el Sultán Muhammad Quli Qutb Shah para conmemorar el fin de una plaga mortal. Los cuatro minaretes simbolizan los cuatro primeros califas del Islam."
+      }
+    }
+  },
+  {
+    "id": "golden-temple",
+    "slug": "golden-temple",
+    "name": "Golden Temple",
+    "category": "Gurudwara",
+    "region": "Amritsar, Punjab",
+    "lat": 31.62,
+    "lng": 74.8765,
+    "distanceKm": 15.0,
+    "image": "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 50,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "The holiest shrine in Sikhism (Sri Harmandir Sahib). Its langar (community kitchen) serves over 50,000 free meals daily to people of all faiths.",
+    "history": "Founded in 1604 by Guru Arjan Dev, the fifth Sikh Guru, who installed the Adi Granth here. The gold covering was added by Maharaja Ranjit Singh in the early 19th century.",
+    "zone": "Northern",
+    "type": "Religious",
+    "googleRating": 4.8,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.5,
+    "translations": {
+      "hi": {
+        "summary": "सिख धर्म का सबसे पवित्र तीर्थ (श्री हरमंदिर साहिब)। लंगर में सभी धर्मों के लोगों को रोज़ 50,000 से अधिक मुफ़्त भोजन परोसा जाता है।",
+        "history": "1604 में पाँचवें सिख गुरु, गुरु अर्जन देव द्वारा स्थापित, जिन्होंने यहाँ आदि ग्रंथ की स्थापना की। सोने की परत 19वीं शताब्दी की शुरुआत में महाराजा रणजीत सिंह ने लगवाई।"
+      },
+      "es": {
+        "summary": "El santuario más sagrado del sijismo. Su cocina comunitaria (langar) sirve más de 50.000 comidas gratuitas diarias a personas de todas las religiones.",
+        "history": "Fundado en 1604 por Guru Arjan Dev, el quinto Guru Sij. El revestimiento de oro fue añadido por Maharajá Ranjit Singh a principios del siglo XIX."
+      }
+    }
+  },
+  {
+    "id": "humayuns-tomb",
+    "slug": "humayuns-tomb",
+    "name": "Humayun's Tomb",
+    "category": "Monument",
+    "region": "New Delhi, Delhi",
+    "lat": 28.5933,
+    "lng": 77.2507,
+    "distanceKm": 4.4,
+    "image": "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 49,
+    "priceInr": 35,
+    "openHours": "Sunrise – Sunset",
+    "summary": "UNESCO World Heritage Site. The design directly inspired the construction of the Taj Mahal. The surrounding Mughal-era garden complex has been beautifully restored.",
+    "history": "Commissioned by Empress Bega Begum for her husband Emperor Humayun in 1565. It was the first garden-tomb on the Indian subcontinent, predating the Taj Mahal by nearly a century.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.5,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। इसकी डिज़ाइन ने सीधे ताज महल के निर्माण को प्रेरित किया।",
+        "history": "1565 में महारानी बेगा बेगम ने अपने पति सम्राट हुमायूँ के लिए इसे बनवाया। यह भारतीय उपमहाद्वीप का पहला बाग़-मकबरा था।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. Su diseño inspiró directamente la construcción del Taj Mahal.",
+        "history": "Encargada por la emperatriz Bega Begum para su esposo el emperador Humayun en 1565. Fue la primera tumba-jardín del subcontinente indio."
+      }
+    }
+  },
+  {
+    "id": "jallianwala-bagh",
+    "slug": "jallianwala-bagh",
+    "name": "Jallianwala Bagh",
+    "category": "Memorial",
+    "region": "Amritsar, Punjab",
+    "lat": 31.6209,
+    "lng": 74.8805,
+    "distanceKm": 12.4,
+    "image": "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 54,
+    "priceInr": 0,
+    "openHours": "6:30 AM – 7:30 PM",
+    "summary": "A pivotal site in India's independence movement. The bullet marks on the walls and the martyr's well remain preserved as a reminder of the massacre.",
+    "history": "On 13 April 1919, British troops under General Dyer fired on a peaceful gathering here, killing an estimated 379–1,500 civilians. The memorial was established in 1951.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत के स्वतंत्रता आंदोलन में एक महत्वपूर्ण स्थल। दीवारों पर गोलियों के निशान और शहीद कुआँ नरसंहार की याद दिलाते हैं।",
+        "history": "13 अप्रैल 1919 को जनरल डायर के नेतृत्व में ब्रिटिश सैनिकों ने यहाँ एक शांतिपूर्ण सभा पर गोलीबारी की, जिसमें अनुमानित 379-1,500 नागरिक मारे गए।"
+      },
+      "es": {
+        "summary": "Un sitio crucial en el movimiento de independencia de India. Las marcas de bala en las paredes permanecen como recuerdo de la masacre.",
+        "history": "El 13 de abril de 1919, tropas británicas bajo el General Dyer dispararon contra una reunión pacífica aquí, matando a entre 379 y 1.500 civiles."
+      }
+    }
+  },
+  {
+    "id": "varanasi-ghats",
+    "slug": "varanasi-ghats",
+    "name": "Varanasi Ghats",
+    "category": "Religious Site",
+    "region": "Varanasi, Uttar Pradesh",
+    "lat": 25.3176,
+    "lng": 83.0102,
+    "distanceKm": 10.8,
+    "image": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 68,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "The spiritual capital of India. Hindus believe dying in Varanasi grants moksha (liberation from the cycle of rebirth). The Ganga Aarti ceremony at Dashashwamedh Ghat is iconic.",
+    "history": "Varanasi is one of the oldest continuously inhabited cities in the world, dating back to the 11th century BCE. The 88 ghats along the Ganges were largely developed by the Marathas and Scindias in the 18th century.",
+    "zone": "Northern",
+    "type": "Religious",
+    "googleRating": 4.6,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत की आध्यात्मिक राजधानी। हिंदू मानते हैं कि वाराणसी में मृत्यु मोक्ष प्रदान करती है। दशाश्वमेध घाट पर गंगा आरती प्रतिष्ठित है।",
+        "history": "वाराणसी दुनिया के सबसे पुराने लगातार बसे शहरों में से एक है, जो 11वीं शताब्दी ईसा पूर्व से है। गंगा के किनारे 88 घाट 18वीं शताब्दी में मराठों और सिंधियों ने विकसित किए।"
+      },
+      "es": {
+        "summary": "La capital espiritual de India. Los hindúes creen que morir en Varanasi otorga moksha. La ceremonia Ganga Aarti es icónica.",
+        "history": "Varanasi es una de las ciudades habitadas más antiguas del mundo, desde el siglo XI a.C. Los 88 ghats a lo largo del Ganges fueron desarrollados principalmente por los Marathas en el siglo XVIII."
+      }
+    }
+  },
+  {
+    "id": "city-palace-udaipur",
+    "slug": "city-palace-udaipur",
+    "name": "City Palace Udaipur",
+    "category": "Palace",
+    "region": "Udaipur, Rajasthan",
+    "lat": 24.5764,
+    "lng": 73.6913,
+    "distanceKm": 13.2,
+    "image": "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 47,
+    "priceInr": 300,
+    "openHours": "9:30 AM – 5:30 PM",
+    "summary": "A fusion of Rajasthani and Mughal architectural styles. Part of the palace is now a luxury hotel, while the rest houses museums with miniature paintings and royal artefacts.",
+    "history": "Construction began in 1559 by Maharana Udai Singh II. Successive rulers over 400 years added to the complex, creating Rajasthan's largest palace spanning the banks of Lake Pichola.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "September to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.5,
+    "translations": {
+      "hi": {
+        "summary": "राजस्थानी और मुगल शैलियों का मिश्रण। महल का एक हिस्सा अब लक्ज़री होटल है, बाकी में संग्रहालय हैं।",
+        "history": "1559 में महाराणा उदय सिंह द्वितीय ने निर्माण शुरू किया। 400 वर्षों में क्रमिक शासकों ने इसमें जोड़कर राजस्थान का सबसे बड़ा महल बनाया।"
+      },
+      "es": {
+        "summary": "Una fusión de estilos arquitectónicos rajput y mogol. Parte del palacio es ahora un hotel de lujo.",
+        "history": "La construcción comenzó en 1559 por Maharana Udai Singh II. Sucesivos gobernantes durante 400 años añadieron al complejo, creando el palacio más grande de Rajasthan."
+      }
+    }
+  },
+  {
+    "id": "rishikesh-laxman-jhula",
+    "slug": "rishikesh-laxman-jhula",
+    "name": "Rishikesh (Laxman Jhula)",
+    "category": "Religious Site",
+    "region": "Rishikesh, Uttarakhand",
+    "lat": 30.1254,
+    "lng": 78.3212,
+    "distanceKm": 15.8,
+    "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 58,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "Known as the Yoga Capital of the World. Gateway to the Char Dham pilgrimage sites. A hub for adventure sports, ashrams, and spiritual seekers.",
+    "history": "Laxman Jhula is a 450-ft iron suspension bridge built in 1929 across the Ganges. Legend says Lord Laxmana crossed the river here on a jute rope. Rishikesh gained global fame after the Beatles visited in 1968.",
+    "zone": "Northern",
+    "type": "Religious",
+    "googleRating": 4.4,
+    "bestTime": "September to November, February to May",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "विश्व की योग राजधानी। चार धाम तीर्थ स्थलों का प्रवेश द्वार। साहसिक खेलों और आश्रमों का केंद्र।",
+        "history": "लक्ष्मण झूला 1929 में गंगा पर बना 450 फीट का लोहे का झूला पुल है। किंवदंती है कि भगवान लक्ष्मण ने यहाँ जूट की रस्सी पर नदी पार की थी।"
+      },
+      "es": {
+        "summary": "Conocido como la Capital Mundial del Yoga. Puerta de entrada a los sitios de peregrinación Char Dham.",
+        "history": "Laxman Jhula es un puente colgante de hierro de 450 pies construido en 1929 sobre el Ganges. Rishikesh ganó fama mundial tras la visita de los Beatles en 1968."
+      }
+    }
+  },
+  {
+    "id": "agra-fort",
+    "slug": "agra-fort",
+    "name": "Agra Fort",
+    "category": "Fort",
+    "region": "Agra, Uttar Pradesh",
+    "lat": 27.1795,
+    "lng": 78.0211,
+    "distanceKm": 17.4,
+    "image": "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 74,
+    "priceInr": 600,
+    "openHours": "6:00 AM – 6:00 PM",
+    "summary": "UNESCO World Heritage Site. Shah Jahan spent his final years imprisoned here by his son Aurangzeb, gazing at the Taj Mahal from his marble chamber.",
+    "history": "Built primarily by Emperor Akbar in 1573, with additions by Shah Jahan who added white marble structures. The fort served as the main residence of Mughal emperors until the capital shifted to Delhi.",
+    "zone": "Northern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। शाहजहाँ ने अपने अंतिम वर्ष यहाँ कैद में बिताए, अपने कक्ष से ताज महल को निहारते हुए।",
+        "history": "मुख्य रूप से 1573 में सम्राट अकबर द्वारा निर्मित, शाहजहाँ ने सफेद संगमरमर की संरचनाएँ जोड़ीं। यह किला दिल्ली तक राजधानी बदलने तक मुगल सम्राटों का मुख्य निवास था।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. Shah Jahan pasó sus últimos años prisionero aquí, contemplando el Taj Mahal desde su cámara de mármol.",
+        "history": "Construido principalmente por el emperador Akbar en 1573, con adiciones de Shah Jahan. El fuerte sirvió como residencia principal de los emperadores mogoles."
+      }
+    }
+  },
+  {
+    "id": "gateway-of-india",
+    "slug": "gateway-of-india",
+    "name": "Gateway of India",
+    "category": "Monument",
+    "region": "Mumbai, Maharashtra",
+    "lat": 18.922,
+    "lng": 72.8347,
+    "distanceKm": 9.9,
+    "image": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 74,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "The last British troops left India through this gateway in 1948. It has become the defining symbol of Mumbai, overlooking the Arabian Sea.",
+    "history": "Built between 1911 and 1924 to commemorate the visit of King George V and Queen Mary to Mumbai. Designed by architect George Wittet in the Indo-Saracenic style.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.0,
+    "translations": {
+      "hi": {
+        "summary": "1948 में अंतिम ब्रिटिश सैनिकों ने इस प्रवेश द्वार से भारत छोड़ा। यह मुंबई का प्रतिष्ठित प्रतीक बन गया है।",
+        "history": "1911 से 1924 के बीच किंग जॉर्ज पंचम और क्वीन मैरी की मुंबई यात्रा की याद में बनाया गया। वास्तुकार जॉर्ज विटेट द्वारा इंडो-सारासेनिक शैली में डिज़ाइन किया गया।"
+      },
+      "es": {
+        "summary": "Las últimas tropas británicas abandonaron India a través de esta puerta en 1948. Se ha convertido en el símbolo definitivo de Mumbai.",
+        "history": "Construido entre 1911 y 1924 para conmemorar la visita del Rey Jorge V y la Reina María a Mumbai. Diseñado en estilo indo-sarraceno."
+      }
+    }
+  },
+  {
+    "id": "mahabalipuram",
+    "slug": "mahabalipuram",
+    "name": "Mahabalipuram",
+    "category": "Temple/Ruins",
+    "region": "Mahabalipuram, Tamil Nadu",
+    "lat": 12.6172,
+    "lng": 80.1927,
+    "distanceKm": 3.9,
+    "image": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 44,
+    "priceInr": 40,
+    "openHours": "6:00 AM – 6:00 PM",
+    "summary": "UNESCO World Heritage Site. Arjuna's Penance is the world's largest open-air rock relief at 27m × 9m. The site influenced temple architecture across Southeast Asia.",
+    "history": "Built by the Pallava dynasty in the 7th and 8th centuries. The Shore Temple, Pancha Rathas, and Arjuna's Penance are among the oldest surviving examples of Dravidian architecture.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.6,
+    "bestTime": "November to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। अर्जुन की तपस्या 27m × 9m पर दुनिया की सबसे बड़ी खुली चट्टान राहत है।",
+        "history": "7वीं और 8वीं शताब्दी में पल्लव राजवंश द्वारा निर्मित। शोर मंदिर, पंच रथ और अर्जुन की तपस्या द्रविड़ वास्तुकला के सबसे पुराने उदाहरणों में हैं।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. La Penitencia de Arjuna es el mayor relieve en roca al aire libre del mundo.",
+        "history": "Construido por la dinastía Pallava en los siglos VII y VIII. El Templo de la Orilla y la Penitencia de Arjuna son los ejemplos más antiguos de arquitectura dravidiana."
+      }
+    }
+  },
+  {
+    "id": "bangalore-palace",
+    "slug": "bangalore-palace",
+    "name": "Bangalore Palace",
+    "category": "Palace",
+    "region": "Bengaluru, Karnataka",
+    "lat": 12.9987,
+    "lng": 77.5921,
+    "distanceKm": 12.3,
+    "image": "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 53,
+    "priceInr": 250,
+    "openHours": "10:00 AM – 5:30 PM",
+    "summary": "Owned by the Wadiyar dynasty with 454 acres of grounds. The palace grounds now host major concerts and cultural events. A rare example of Tudor architecture in India.",
+    "history": "Built in 1878 by King Chamaraja Wadiyar, inspired by England's Windsor Castle after a visit to Europe. The Tudor-style architecture is unique among Indian palaces.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.3,
+    "bestTime": "October to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.5,
+    "translations": {
+      "hi": {
+        "summary": "वाडियार वंश के स्वामित्व वाला 454 एकड़ का परिसर। अब प्रमुख संगीत कार्यक्रमों और सांस्कृतिक कार्यक्रमों की मेज़बानी करता है।",
+        "history": "1878 में राजा चामराजा वाडियार ने यूरोप यात्रा के बाद इंग्लैंड के विंडसर कैसल से प्रेरित होकर इसे बनवाया। ट्यूडर शैली भारतीय महलों में अनूठी है।"
+      },
+      "es": {
+        "summary": "Propiedad de la dinastía Wadiyar con 454 acres. Ahora alberga conciertos y eventos culturales importantes.",
+        "history": "Construido en 1878 por el Rey Chamaraja Wadiyar, inspirado en el Castillo de Windsor. La arquitectura Tudor es única entre los palacios indios."
+      }
+    }
+  },
+  {
+    "id": "tirupati-balaji",
+    "slug": "tirupati-balaji",
+    "name": "Tirupati Balaji Temple",
+    "category": "Temple",
+    "region": "Tirupati, Andhra Pradesh",
+    "lat": 13.6833,
+    "lng": 79.35,
+    "distanceKm": 6.3,
+    "image": "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 38,
+    "priceInr": 0,
+    "openHours": "2:30 AM – 1:30 AM (next day)",
+    "summary": "The richest and most visited Hindu temple in the world. Receives 50,000-100,000 pilgrims daily. Annual revenue exceeds ₹3,000 crore from donations and the hair-offering tradition.",
+    "history": "The Tirumala Venkateswara Temple dates back to around 300 CE, though legends trace it much earlier. The present structure was expanded by various dynasties including the Pallavas, Cholas, and Vijayanagara kings.",
+    "zone": "Southern",
+    "type": "Religious",
+    "googleRating": 4.7,
+    "bestTime": "September to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 4.0,
+    "translations": {
+      "hi": {
+        "summary": "दुनिया का सबसे अमीर और सबसे अधिक दौरा किया जाने वाला हिंदू मंदिर। रोज़ाना 50,000-100,000 तीर्थयात्री आते हैं।",
+        "history": "तिरुमला वेंकटेश्वर मंदिर लगभग 300 ई. का है। वर्तमान संरचना पल्लव, चोल और विजयनगर राजाओं ने विस्तारित की।"
+      },
+      "es": {
+        "summary": "El templo hindú más rico y visitado del mundo. Recibe 50.000-100.000 peregrinos diarios.",
+        "history": "El Templo Tirumala Venkateswara data de alrededor del 300 d.C. La estructura actual fue expandida por varias dinastías."
+      }
+    }
+  },
+  {
+    "id": "padmanabhaswamy-temple",
+    "slug": "padmanabhaswamy-temple",
+    "name": "Padmanabhaswamy Temple",
+    "category": "Temple",
+    "region": "Thiruvananthapuram, Kerala",
+    "lat": 8.4826,
+    "lng": 76.9443,
+    "distanceKm": 4.9,
+    "image": "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 54,
+    "priceInr": 0,
+    "openHours": "3:30 AM – 12:00 PM, 5:00 PM – 8:00 PM",
+    "summary": "Home to the richest temple treasure ever discovered — vaults opened in 2011 revealed gold, gems, and artefacts worth over $20 billion. Only Hindus in traditional attire are allowed entry.",
+    "history": "Built in the Dravidian style, the temple dates back to at least the 8th century. The Travancore royal family has been its custodians for centuries.",
+    "zone": "Southern",
+    "type": "Religious",
+    "googleRating": 4.6,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "अब तक खोजे गए सबसे अमीर मंदिर खजाने का घर — 2011 में खोले गए तहखानों में $20 बिलियन से अधिक का सोना और रत्न मिले।",
+        "history": "द्रविड़ शैली में निर्मित, यह मंदिर कम से कम 8वीं शताब्दी का है। त्रावणकोर शाही परिवार सदियों से इसके संरक्षक रहे हैं।"
+      },
+      "es": {
+        "summary": "Hogar del tesoro de templo más rico jamás descubierto — las bóvedas abiertas en 2011 revelaron oro y gemas por más de $20 mil millones.",
+        "history": "Construido en estilo dravidiano, el templo data de al menos el siglo VIII. La familia real de Travancore ha sido su custodio durante siglos."
+      }
+    }
+  },
+  {
+    "id": "chowmahalla-palace",
+    "slug": "chowmahalla-palace",
+    "name": "Chowmahalla Palace",
+    "category": "Palace",
+    "region": "Hyderabad, Telangana",
+    "lat": 17.358,
+    "lng": 78.4718,
+    "distanceKm": 3.7,
+    "image": "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1595846519845-68e298c2edd8?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 42,
+    "priceInr": 200,
+    "openHours": "10:00 AM – 5:00 PM (Closed Fridays)",
+    "summary": "Won the UNESCO Asia-Pacific Heritage Award in 2010. Houses a collection of vintage cars, weapons, and clothing of the Nizams. Considered one of India's most elegant palaces.",
+    "history": "Built in the 18th century by the Nizams of Hyderabad, the name means 'Four Palaces'. The grand complex was the seat of the Asaf Jahi dynasty and venue for state functions.",
+    "zone": "Southern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Friday",
+    "timeNeeded": 1.5,
+    "translations": {
+      "hi": {
+        "summary": "2010 में यूनेस्को एशिया-पैसिफिक हेरिटेज अवार्ड जीता। निज़ामों की विंटेज कारों, हथियारों और कपड़ों का संग्रह।",
+        "history": "18वीं शताब्दी में हैदराबाद के निज़ामों द्वारा निर्मित, नाम का अर्थ 'चार महल' है। यह भव्य परिसर आसफ जाही वंश की सीट और राजकीय समारोहों का स्थल था।"
+      },
+      "es": {
+        "summary": "Ganó el Premio de Patrimonio UNESCO Asia-Pacífico en 2010. Alberga una colección de autos clásicos y armas de los Nizams.",
+        "history": "Construido en el siglo XVIII por los Nizams de Hyderabad, el nombre significa 'Cuatro Palacios'. Fue la sede de la dinastía Asaf Jahi."
+      }
+    }
+  },
+  {
+    "id": "victoria-memorial",
+    "slug": "victoria-memorial",
+    "name": "Victoria Memorial",
+    "category": "Museum",
+    "region": "Kolkata, West Bengal",
+    "lat": 22.5449,
+    "lng": 88.3426,
+    "distanceKm": 13.9,
+    "image": "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 39,
+    "priceInr": 30,
+    "openHours": "10:00 AM – 5:00 PM (Closed Mondays)",
+    "summary": "Now a museum housing 28,394 artefacts including rare paintings, manuscripts, royal portraits, and the famous 'Twilight of the Raj' gallery on India's independence movement.",
+    "history": "Built between 1906 and 1921 in memory of Queen Victoria using white Makrana marble. Lord Curzon conceived it as a 'Taj of the British Empire'. Designed by William Emerson.",
+    "zone": "Eastern",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Monday",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "अब 28,394 कलाकृतियों वाला संग्रहालय जिसमें दुर्लभ चित्र, पांडुलिपियाँ और स्वतंत्रता आंदोलन की गैलरी शामिल है।",
+        "history": "1906 और 1921 के बीच रानी विक्टोरिया की याद में सफेद मकराना संगमरमर से निर्मित। लॉर्ड कर्ज़न ने इसे 'ब्रिटिश साम्राज्य का ताज' माना।"
+      },
+      "es": {
+        "summary": "Ahora un museo con 28.394 artefactos incluyendo pinturas raras y una galería sobre el movimiento de independencia de India.",
+        "history": "Construido entre 1906 y 1921 en memoria de la Reina Victoria usando mármol blanco Makrana. Lord Curzon lo concibió como un 'Taj del Imperio Británico'."
+      }
+    }
+  },
+  {
+    "id": "jagannath-temple-puri",
+    "slug": "jagannath-temple-puri",
+    "name": "Jagannath Temple Puri",
+    "category": "Temple",
+    "region": "Puri, Odisha",
+    "lat": 19.8049,
+    "lng": 85.8179,
+    "distanceKm": 5.0,
+    "image": "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 40,
+    "priceInr": 0,
+    "openHours": "5:00 AM – 11:00 PM",
+    "summary": "One of the four sacred Char Dham pilgrimage sites. Famous for the annual Rath Yatra (Chariot Festival) which draws millions. Only Hindus are allowed inside.",
+    "history": "Built in the 12th century by King Anantavarman Chodaganga Deva of the Eastern Ganga dynasty. The temple's origin is linked to the legend of King Indradyumna.",
+    "zone": "Eastern",
+    "type": "Religious",
+    "googleRating": 4.6,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "चार पवित्र चार धाम तीर्थ स्थलों में से एक। वार्षिक रथ यात्रा के लिए प्रसिद्ध। केवल हिंदू प्रवेश कर सकते हैं।",
+        "history": "12वीं शताब्दी में पूर्वी गंग वंश के राजा अनंतवर्मन चोडगंग देव ने इसे बनवाया। मंदिर की उत्पत्ति राजा इंद्रद्युम्न की कथा से जुड़ी है।"
+      },
+      "es": {
+        "summary": "Uno de los cuatro sitios sagrados Char Dham. Famoso por el festival anual Rath Yatra. Solo se permite la entrada a hindúes.",
+        "history": "Construido en el siglo XII por el Rey Anantavarman Chodaganga Deva. El origen del templo está vinculado a la leyenda del Rey Indradyumna."
+      }
+    }
+  },
+  {
+    "id": "howrah-bridge",
+    "slug": "howrah-bridge",
+    "name": "Howrah Bridge",
+    "category": "Bridge",
+    "region": "Kolkata, West Bengal",
+    "lat": 22.5851,
+    "lng": 88.3468,
+    "distanceKm": 14.0,
+    "image": "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 40,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "One of the busiest cantilever bridges in the world, carrying 100,000+ vehicles and countless pedestrians daily. An enduring symbol of Kolkata's resilience and identity.",
+    "history": "Opened in 1943 during World War II, replacing a pontoon bridge from 1874. Built without nuts or bolts — the entire structure is held together by rivets. Named Rabindra Setu in 1965.",
+    "zone": "Eastern",
+    "type": "Historical",
+    "googleRating": 4.3,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 0.5,
+    "translations": {
+      "hi": {
+        "summary": "दुनिया के सबसे व्यस्त कैंटिलीवर पुलों में से एक, रोज़ाना 100,000+ वाहनों को ले जाता है। कोलकाता की पहचान का प्रतीक।",
+        "history": "1943 में द्वितीय विश्व युद्ध के दौरान खोला गया। बिना नट या बोल्ट के बनाया गया — पूरी संरचना रिवेट्स से जुड़ी है। 1965 में रवींद्र सेतु नाम दिया गया।"
+      },
+      "es": {
+        "summary": "Uno de los puentes voladizos más transitados del mundo, con más de 100.000 vehículos diarios. Símbolo perdurable de Kolkata.",
+        "history": "Inaugurado en 1943 durante la Segunda Guerra Mundial. Construido sin tuercas ni tornillos — toda la estructura se mantiene con remaches."
+      }
+    }
+  },
+  {
+    "id": "sundarbans",
+    "slug": "sundarbans",
+    "name": "Sundarbans",
+    "category": "National Park",
+    "region": "South 24 Parganas, West Bengal",
+    "lat": 21.9497,
+    "lng": 89.1833,
+    "distanceKm": 4.8,
+    "image": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 68,
+    "priceInr": 300,
+    "openHours": "Varies by boat tour",
+    "summary": "The world's largest mangrove forest spanning 10,000 sq km across India and Bangladesh. Home to the Royal Bengal Tiger and over 260 bird species.",
+    "history": "Designated a UNESCO World Heritage Site in 1987. The name means 'beautiful forest' from the Sundari trees that dominate the mangrove ecosystem. Human habitation dates back centuries.",
+    "zone": "Eastern",
+    "type": "Natural",
+    "googleRating": 4.3,
+    "bestTime": "September to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 8.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत और बांग्लादेश में 10,000 वर्ग किमी में फैला दुनिया का सबसे बड़ा मैंग्रोव वन। रॉयल बंगाल टाइगर का घर।",
+        "history": "1987 में यूनेस्को विश्व धरोहर स्थल घोषित। नाम सुंदरी वृक्षों से आता है जो मैंग्रोव पारिस्थितिकी तंत्र में प्रमुख हैं।"
+      },
+      "es": {
+        "summary": "El bosque de manglares más grande del mundo, con 10.000 km² entre India y Bangladesh. Hogar del tigre real de Bengala.",
+        "history": "Designado Patrimonio de la Humanidad en 1987. El nombre significa 'bosque hermoso' por los árboles Sundari del ecosistema de manglares."
+      }
+    }
+  },
+  {
+    "id": "goa-beaches",
+    "slug": "goa-beaches",
+    "name": "Goa Beaches (Calangute)",
+    "category": "Beach",
+    "region": "Goa, Goa",
+    "lat": 15.5449,
+    "lng": 73.7553,
+    "distanceKm": 4.6,
+    "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 66,
+    "priceInr": 0,
+    "openHours": "Open 24 Hours",
+    "summary": "India's premier beach destination blending Portuguese heritage with Indian culture. The Old Goa churches are a separate UNESCO World Heritage Site.",
+    "history": "Goa was a Portuguese colony for 450 years (1510-1961). The fusion of Portuguese and Indian cultures created a unique coastal identity. Calangute became the 'Queen of Beaches' in the 1960s hippie era.",
+    "zone": "Western",
+    "type": "Beach",
+    "googleRating": 4.2,
+    "bestTime": "November to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 4.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत का प्रमुख समुद्र तट गंतव्य। पुराने गोवा के चर्च अलग यूनेस्को विश्व धरोहर स्थल हैं।",
+        "history": "गोवा 450 वर्षों (1510-1961) तक पुर्तगाली उपनिवेश था। पुर्तगाली और भारतीय संस्कृतियों के मिश्रण ने एक अनूठी तटीय पहचान बनाई।"
+      },
+      "es": {
+        "summary": "El principal destino de playa de India combinando herencia portuguesa con cultura india.",
+        "history": "Goa fue colonia portuguesa durante 450 años (1510-1961). La fusión de culturas portuguesa e india creó una identidad costera única."
+      }
+    }
+  },
+  {
+    "id": "rann-of-kutch",
+    "slug": "rann-of-kutch",
+    "name": "Rann of Kutch",
+    "category": "Natural Landscape",
+    "region": "Kutch, Gujarat",
+    "lat": 23.7337,
+    "lng": 69.8597,
+    "distanceKm": 10.2,
+    "image": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 47,
+    "priceInr": 100,
+    "openHours": "6:00 AM – 6:00 PM (Rann Utsav: Nov-Feb)",
+    "summary": "World's largest salt desert spanning 7,505 sq km. The white desert under full moonlight is a surreal experience. Rann Utsav (Nov-Feb) celebrates local crafts, music, and culture.",
+    "history": "The Great Rann of Kutch was once part of the Arabian Sea. Geological uplift over millions of years created this vast salt desert. The Rann Utsav festival began in 2006.",
+    "zone": "Western",
+    "type": "Natural",
+    "googleRating": 4.5,
+    "bestTime": "November to February",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 6.0,
+    "translations": {
+      "hi": {
+        "summary": "7,505 वर्ग किमी में फैला दुनिया का सबसे बड़ा नमक रेगिस्तान। पूर्णिमा की रात सफेद रेगिस्तान अलौकिक दिखता है।",
+        "history": "कच्छ का रण कभी अरब सागर का हिस्सा था। लाखों वर्षों में भूगर्भीय उत्थान ने इस विशाल नमक रेगिस्तान का निर्माण किया। रण उत्सव 2006 में शुरू हुआ।"
+      },
+      "es": {
+        "summary": "El desierto de sal más grande del mundo con 7.505 km². La experiencia bajo la luna llena es surrealista.",
+        "history": "El Gran Rann de Kutch fue parte del Mar Arábigo. El levantamiento geológico creó este vasto desierto de sal. El festival Rann Utsav comenzó en 2006."
+      }
+    }
+  },
+  {
+    "id": "somnath-temple",
+    "slug": "somnath-temple",
+    "name": "Somnath Temple",
+    "category": "Temple",
+    "region": "Veraval, Gujarat",
+    "lat": 20.888,
+    "lng": 70.4013,
+    "distanceKm": 12.9,
+    "image": "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 44,
+    "priceInr": 0,
+    "openHours": "6:00 AM – 9:30 PM",
+    "summary": "First among the twelve Jyotirlinga shrines of Lord Shiva. Its repeated destruction and reconstruction symbolises the resilience of Hindu civilisation.",
+    "history": "First built in gold by Soma (Moon God) in legend, the temple was destroyed and rebuilt at least 6 times. The current structure was reconstructed in 1951 under Sardar Patel's initiative after independence.",
+    "zone": "Western",
+    "type": "Religious",
+    "googleRating": 4.7,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 1.5,
+    "translations": {
+      "hi": {
+        "summary": "भगवान शिव के बारह ज्योतिर्लिंगों में पहला। इसका बार-बार विनाश और पुनर्निर्माण हिंदू सभ्यता की अदम्यता का प्रतीक है।",
+        "history": "किंवदंती में सोम (चंद्र देव) ने इसे सोने से बनाया। मंदिर कम से कम 6 बार नष्ट और पुनर्निर्मित हुआ। वर्तमान संरचना 1951 में सरदार पटेल की पहल पर बनाई गई।"
+      },
+      "es": {
+        "summary": "Primero entre los doce santuarios Jyotirlinga de Lord Shiva. Su destrucción y reconstrucción simbolizan la resiliencia de la civilización hindú.",
+        "history": "Según la leyenda, fue construido en oro por Soma (Dios Luna). El templo fue destruido y reconstruido al menos 6 veces. La estructura actual fue reconstruida en 1951."
+      }
+    }
+  },
+  {
+    "id": "mehrangarh-fort",
+    "slug": "mehrangarh-fort",
+    "name": "Mehrangarh Fort",
+    "category": "Fort",
+    "region": "Jodhpur, Rajasthan",
+    "lat": 26.2986,
+    "lng": 73.0183,
+    "distanceKm": 6.6,
+    "image": "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 41,
+    "priceInr": 200,
+    "openHours": "9:00 AM – 5:00 PM",
+    "summary": "One of India's largest and best-preserved forts. Houses an excellent museum of royal palanquins, costumes, and paintings. Featured in The Dark Knight Rises.",
+    "history": "Built in 1459 by Rao Jodha, the founder of Jodhpur. Perched 125 metres above the city on a rocky hill, it has seven gates — each built to commemorate a military victory.",
+    "zone": "Western",
+    "type": "Historical",
+    "googleRating": 4.7,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत के सबसे बड़े और सबसे अच्छे संरक्षित किलों में से एक। शाही पालकियों, वेशभूषा और चित्रों का उत्कृष्ट संग्रहालय।",
+        "history": "1459 में जोधपुर के संस्थापक राव जोधा ने इसे बनवाया। शहर से 125 मीटर ऊपर चट्टानी पहाड़ी पर स्थित, इसमें सात द्वार हैं — प्रत्येक एक सैन्य विजय की याद में।"
+      },
+      "es": {
+        "summary": "Uno de los fuertes más grandes y mejor conservados de India. Alberga un excelente museo de palanquines reales y pinturas.",
+        "history": "Construido en 1459 por Rao Jodha, fundador de Jodhpur. Situado 125 metros sobre la ciudad, tiene siete puertas conmemorando victorias militares."
+      }
+    }
+  },
+  {
+    "id": "sanchi-stupa",
+    "slug": "sanchi-stupa",
+    "name": "Sanchi Stupa",
+    "category": "Monument",
+    "region": "Sanchi, Madhya Pradesh",
+    "lat": 23.4793,
+    "lng": 77.7399,
+    "distanceKm": 5.7,
+    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 47,
+    "priceInr": 30,
+    "openHours": "8:30 AM – 5:00 PM",
+    "summary": "UNESCO World Heritage Site. The oldest stone structure in India. The four toranas depict scenes from Buddha's life and are masterpieces of early Indian art.",
+    "history": "Originally commissioned by Emperor Ashoka in the 3rd century BCE to house Buddha's relics. The Great Stupa was enlarged in the 2nd century BCE with elaborate carved gateways (toranas).",
+    "zone": "Central",
+    "type": "Historical",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "यूनेस्को विश्व धरोहर स्थल। भारत की सबसे पुरानी पत्थर की संरचना। चार तोरण बुद्ध के जीवन के दृश्यों को दर्शाते हैं।",
+        "history": "मूल रूप से तीसरी शताब्दी ईसा पूर्व में सम्राट अशोक द्वारा बुद्ध के अवशेषों को रखने के लिए बनवाया गया। महान स्तूप को दूसरी शताब्दी ईसा पूर्व में विस्तारित किया गया।"
+      },
+      "es": {
+        "summary": "Patrimonio de la Humanidad. La estructura de piedra más antigua de India. Las toranas son obras maestras del arte indio temprano.",
+        "history": "Encargada originalmente por el emperador Ashoka en el siglo III a.C. para albergar reliquias de Buda. Fue ampliada en el siglo II a.C. con elaboradas puertas talladas (toranas)."
+      }
+    }
+  },
+  {
+    "id": "mandu",
+    "slug": "mandu",
+    "name": "Mandu (Rupmati Pavilion)",
+    "category": "Ruins",
+    "region": "Mandu, Madhya Pradesh",
+    "lat": 22.3332,
+    "lng": 75.3964,
+    "distanceKm": 10.8,
+    "image": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 68,
+    "priceInr": 25,
+    "openHours": "Sunrise – Sunset",
+    "summary": "Known as the 'City of Joy'. The Rupmati Pavilion offers panoramic views of the Narmada valley. The Jahaz Mahal (Ship Palace) appears to float between two lakes.",
+    "history": "A medieval hill fortress city established by the Paramara dynasty in the 10th century. It became the capital of the Malwa Sultanate under Hoshang Shah in the 15th century.",
+    "zone": "Central",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "July to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 4.0,
+    "translations": {
+      "hi": {
+        "summary": "'खुशियों का शहर'। रूपमती मंडप से नर्मदा घाटी का मनोरम दृश्य। जहाज़ महल दो झीलों के बीच तैरता हुआ प्रतीत होता है।",
+        "history": "10वीं शताब्दी में परमार राजवंश द्वारा स्थापित मध्यकालीन पहाड़ी किला शहर। 15वीं शताब्दी में होशंग शाह के तहत मालवा सल्तनत की राजधानी बनी।"
+      },
+      "es": {
+        "summary": "Conocida como la 'Ciudad de la Alegría'. El Pabellón Rupmati ofrece vistas panorámicas del valle del Narmada.",
+        "history": "Ciudad-fortaleza medieval establecida por la dinastía Paramara en el siglo X. Se convirtió en capital del Sultanato de Malwa bajo Hoshang Shah."
+      }
+    }
+  },
+  {
+    "id": "kaziranga-national-park",
+    "slug": "kaziranga-national-park",
+    "name": "Kaziranga National Park",
+    "category": "National Park",
+    "region": "Golaghat, Assam",
+    "lat": 26.5775,
+    "lng": 93.1711,
+    "distanceKm": 10.1,
+    "image": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 61,
+    "priceInr": 250,
+    "openHours": "7:00 AM – 3:30 PM (Nov to Apr)",
+    "summary": "Home to two-thirds of the world's one-horned rhinoceroses. Also has the highest density of tigers among protected areas and large populations of Asian elephants and wild buffalo.",
+    "history": "Established as a reserve in 1905 by the Viceroy Lord Curzon after his wife's visit highlighted the rhinoceros decline. Became a national park in 1974 and a UNESCO site in 1985.",
+    "zone": "North-Eastern",
+    "type": "Natural",
+    "googleRating": 4.5,
+    "bestTime": "November to April",
+    "weeklyOff": "Closed May–October",
+    "timeNeeded": 6.0,
+    "translations": {
+      "hi": {
+        "summary": "दुनिया के दो-तिहाई एक-सींग वाले गैंडों का घर। संरक्षित क्षेत्रों में बाघों का सबसे अधिक घनत्व भी यहाँ है।",
+        "history": "1905 में वायसराय लॉर्ड कर्ज़न द्वारा एक रिज़र्व के रूप में स्थापित। 1974 में राष्ट्रीय उद्यान और 1985 में यूनेस्को स्थल बना।"
+      },
+      "es": {
+        "summary": "Hogar de dos tercios de los rinocerontes de un cuerno del mundo. También tiene la mayor densidad de tigres entre áreas protegidas.",
+        "history": "Establecido como reserva en 1905 por el Virrey Lord Curzon. Se convirtió en parque nacional en 1974 y sitio UNESCO en 1985."
+      }
+    }
+  },
+  {
+    "id": "tawang-monastery",
+    "slug": "tawang-monastery",
+    "name": "Tawang Monastery",
+    "category": "Monastery",
+    "region": "Tawang, Arunachal Pradesh",
+    "lat": 27.5861,
+    "lng": 91.8595,
+    "distanceKm": 5.6,
+    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 46,
+    "priceInr": 0,
+    "openHours": "7:00 AM – 6:00 PM",
+    "summary": "The largest monastery in India and second-largest in the world after Lhasa's Potala Palace. Houses a 28-foot gilded statue of Buddha and an invaluable library of Buddhist texts.",
+    "history": "Founded in 1680-81 by Merak Lama Lodre Gyatso according to the wishes of the 5th Dalai Lama. It is the birthplace of the 6th Dalai Lama, Tsangyang Gyatso.",
+    "zone": "North-Eastern",
+    "type": "Religious",
+    "googleRating": 4.6,
+    "bestTime": "March to October",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "भारत का सबसे बड़ा और दुनिया का दूसरा सबसे बड़ा मठ। 28 फीट की सोने की बुद्ध प्रतिमा और अमूल्य बौद्ध ग्रंथ पुस्तकालय।",
+        "history": "1680-81 में मेरक लामा लोद्रे ग्यात्सो ने 5वें दलाई लामा की इच्छा के अनुसार इसकी स्थापना की। यह 6वें दलाई लामा, त्संगयांग ग्यात्सो, का जन्मस्थान है।"
+      },
+      "es": {
+        "summary": "El monasterio más grande de India y segundo más grande del mundo. Alberga una estatua dorada de Buda de 28 pies.",
+        "history": "Fundado en 1680-81 por Merak Lama Lodre Gyatso según los deseos del 5to Dalái Lama. Es el lugar de nacimiento del 6to Dalái Lama."
+      }
+    }
+  },
+  {
+    "id": "living-root-bridges",
+    "slug": "living-root-bridges",
+    "name": "Living Root Bridges",
+    "category": "Natural Wonder",
+    "region": "Cherrapunji, Meghalaya",
+    "lat": 25.2857,
+    "lng": 91.7297,
+    "distanceKm": 15.2,
+    "image": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 67,
+    "priceInr": 0,
+    "openHours": "Daylight hours",
+    "summary": "Unique bio-engineering marvels found nowhere else in the world. The Double Decker Root Bridge at Nongriat is the most famous. A UNESCO World Heritage nomination is pending.",
+    "history": "Created by the Khasi and Jaintia tribes over centuries by training the aerial roots of Ficus elastica trees across rivers. Some bridges are over 500 years old and grow stronger with age.",
+    "zone": "North-Eastern",
+    "type": "Natural",
+    "googleRating": 4.7,
+    "bestTime": "October to May",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 6.0,
+    "translations": {
+      "hi": {
+        "summary": "दुनिया में कहीं और नहीं पाए जाने वाले अनूठे जैव-इंजीनियरिंग चमत्कार। नोंगरियाट का डबल डेकर रूट ब्रिज सबसे प्रसिद्ध है।",
+        "history": "खासी और जयंतिया जनजातियों ने सदियों में फ़ाइकस इलास्टिका पेड़ों की हवाई जड़ों को नदियों पर प्रशिक्षित करके बनाया। कुछ पुल 500 वर्ष से अधिक पुराने हैं।"
+      },
+      "es": {
+        "summary": "Maravillas de bioingeniería únicas en el mundo. El Puente de Raíces de Doble Piso en Nongriat es el más famoso.",
+        "history": "Creados por las tribus Khasi y Jaintia durante siglos entrenando las raíces aéreas de árboles Ficus elastica. Algunos puentes tienen más de 500 años."
+      }
+    }
+  },
+  {
+    "id": "ram-mandir",
+    "slug": "ram-mandir",
+    "name": "Ram Mandir",
+    "category": "Temple",
+    "region": "Ayodhya, Uttar Pradesh",
+    "lat": 26.7955,
+    "lng": 82.194,
+    "distanceKm": 12.5,
+    "image": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 40,
+    "priceInr": 0,
+    "openHours": "7:00 AM – 11:30 PM",
+    "summary": "One of the most significant religious constructions of the 21st century. The Nagara-style temple uses pink Bansi Paharpur sandstone and is designed to last 1,000 years.",
+    "history": "Inaugurated on 22 January 2024 by the Prime Minister. Built at Ram Janmabhoomi, the believed birthplace of Lord Ram. Construction followed a 2019 Supreme Court verdict resolving a centuries-old dispute.",
+    "zone": "Northern",
+    "type": "Religious",
+    "googleRating": 4.9,
+    "bestTime": "October to March",
+    "weeklyOff": "Open All Days",
+    "timeNeeded": 2.0,
+    "translations": {
+      "hi": {
+        "summary": "21वीं सदी के सबसे महत्वपूर्ण धार्मिक निर्माणों में से एक। नागर शैली का मंदिर गुलाबी बंसी पहाड़पुर बलुआ पत्थर से बना है।",
+        "history": "22 जनवरी 2024 को प्रधानमंत्री द्वारा उद्घाटन। राम जन्मभूमि पर निर्मित, जिसे भगवान राम का जन्मस्थान माना जाता है। 2019 के सुप्रीम कोर्ट के फ़ैसले के बाद निर्माण हुआ।"
+      },
+      "es": {
+        "summary": "Una de las construcciones religiosas más significativas del siglo XXI. Diseñado en estilo Nagara para durar 1.000 años.",
+        "history": "Inaugurado el 22 de enero de 2024 por el Primer Ministro. Construido en Ram Janmabhoomi, el supuesto lugar de nacimiento del Señor Ram."
+      }
+    }
+  },
+  {
+    "id": "statue-of-unity",
+    "slug": "statue-of-unity",
+    "name": "Statue of Unity",
+    "category": "Monument",
+    "region": "Kevadiya, Gujarat",
+    "lat": 21.838,
+    "lng": 73.7191,
+    "distanceKm": 5.9,
+    "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 34,
+    "priceInr": 350,
+    "openHours": "8:00 AM – 6:00 PM (Closed Mondays)",
+    "summary": "World's tallest statue at 182 metres — twice the height of the Statue of Liberty. Honours Sardar Vallabhbhai Patel, who unified 562 princely states into the Indian Union.",
+    "history": "Inaugurated on 31 October 2018 (Sardar Patel's 143rd birthday). Designed by Ram V. Sutar and built by Larsen & Toubro in 33 months. Cost approximately ₹2,989 crore.",
+    "zone": "Western",
+    "type": "Historical",
+    "googleRating": 4.4,
+    "bestTime": "October to February",
+    "weeklyOff": "Monday",
+    "timeNeeded": 3.0,
+    "translations": {
+      "hi": {
+        "summary": "182 मीटर पर दुनिया की सबसे ऊंची प्रतिमा — स्टैच्यू ऑफ़ लिबर्टी से दोगुनी ऊंची। सरदार पटेल को समर्पित जिन्होंने 562 रियासतों को एकजुट किया।",
+        "history": "31 अक्टूबर 2018 (सरदार पटेल की 143वीं जयंती) पर उद्घाटन। राम वी. सुतार ने डिज़ाइन किया और लार्सन एंड टुब्रो ने 33 महीनों में बनाया।"
+      },
+      "es": {
+        "summary": "La estatua más alta del mundo con 182 metros — el doble de la Estatua de la Libertad. Honra a Sardar Patel, quien unificó 562 estados principescos.",
+        "history": "Inaugurada el 31 de octubre de 2018. Diseñada por Ram V. Sutar y construida en 33 meses. Costó aproximadamente ₹2.989 crores."
+      }
+    }
+  },
+  {
+    "id": "lotus-temple",
+    "slug": "lotus-temple",
+    "name": "Lotus Temple",
+    "category": "Temple",
+    "region": "New Delhi, Delhi",
+    "lat": 28.5535,
+    "lng": 77.2588,
+    "distanceKm": 8.4,
+    "image": "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "crowdPercent": 74,
+    "priceInr": 0,
+    "openHours": "9:00 AM – 5:30 PM (Closed Mondays)",
+    "summary": "Bahá'í House of Worship open to people of all faiths. Won numerous architectural awards including the Globeart Academy Award. Attracts 4+ million visitors annually.",
+    "history": "Completed in 1986, designed by Iranian-Canadian architect Fariborz Sahba. The 27 free-standing marble-clad petals form a lotus flower. It took 10 years and $10 million to build.",
+    "zone": "Northern",
+    "type": "Religious",
+    "googleRating": 4.5,
+    "bestTime": "October to March",
+    "weeklyOff": "Monday",
+    "timeNeeded": 1.0,
+    "translations": {
+      "hi": {
+        "summary": "सभी धर्मों के लोगों के लिए खुला बहाई उपासना गृह। कई वास्तुशिल्प पुरस्कार जीते। सालाना 4+ मिलियन आगंतुक।",
+        "history": "1986 में पूर्ण, ईरानी-कनाडाई वास्तुकार फ़रीबोर्ज़ साहबा द्वारा डिज़ाइन। 27 मुक्त-खड़ी संगमरमर की पंखुड़ियाँ कमल का फूल बनाती हैं।"
+      },
+      "es": {
+        "summary": "Casa de Adoración Bahá'í abierta a personas de todas las religiones. Ganó numerosos premios arquitectónicos. Atrae más de 4 millones de visitantes anuales.",
+        "history": "Completado en 1986, diseñado por el arquitecto iraní-canadiense Fariborz Sahba. Los 27 pétalos revestidos de mármol forman una flor de loto."
       }
     }
   },
@@ -171,35 +1566,6 @@
       "es": {
         "summary": "Una maravilla geométrica de 3.500 escalones que desciende 13 pisos bajo tierra — uno de los pozos escalonados más profundos e impresionantes de la India.",
         "history": "Construido en el siglo IX por el rey Chanda de la dinastía Nikumbha, Chand Baori fue diseñado para conservar agua en la región árida, mostrando a la vez una intrincada precisión matemática en sus escaleras."
-      }
-    }
-  },
-  {
-    "id": "hawa-mahal",
-    "slug": "hawa-mahal",
-    "name": "Hawa Mahal",
-    "category": "Architecture",
-    "region": "Jaipur, Rajasthan",
-    "lat": 26.9239,
-    "lng": 75.8267,
-    "distanceKm": 12.1,
-    "image": "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80",
-    "gallery": [
-      "https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80"
-    ],
-    "crowdPercent": 66,
-    "priceInr": 200,
-    "openHours": "9:00 AM – 4:30 PM",
-    "summary": "A five-storey pink sandstone facade with 953 small windows, built to let royal women observe street life unseen.",
-    "history": "Constructed in 1799 by Maharaja Sawai Pratap Singh, the honeycomb facade allowed cool air to circulate, functioning as an early form of natural air conditioning.",
-    "translations": {
-      "hi": {
-        "summary": "953 छोटी खिड़कियों वाला पांच मंज़िला गुलाबी बलुआ पत्थर का अग्रभाग, जिसे शाही महिलाओं को बिना देखे सड़क का जीवन देखने के लिए बनाया गया था।",
-        "history": "1799 में महाराजा सवाई प्रताप सिंह द्वारा निर्मित, मधुमक्खी के छत्ते जैसा अग्रभाग ठंडी हवा को प्रसारित होने देता था, जो प्राकृतिक वातानुकूलन के एक प्रारंभिक रूप के रूप में कार्य करता था।"
-      },
-      "es": {
-        "summary": "Una fachada de arenisca rosada de cinco pisos con 953 pequeñas ventanas, construida para que las mujeres reales observaran la vida callejera sin ser vistas.",
-        "history": "Construido en 1799 por el Maharajá Sawai Pratap Singh, la fachada de panal permitía la circulación de aire fresco, funcionando como una forma temprana de aire acondicionado natural."
       }
     }
   },

@@ -65,7 +65,10 @@ export function MapSelectorClient({
       <SiteMapLazy
         sites={filtered}
         selectedId={selected?.id}
-        onSelect={setSelected}
+        onSelect={(site) => {
+          setSelected(site);
+          setFiltersOpen(false);
+        }}
         flyTo={selected ? { lat: selected.lat, lng: selected.lng } : undefined}
         className="h-full w-full"
       />
@@ -121,57 +124,106 @@ export function MapSelectorClient({
       {/* Filter panel — top-right overlay */}
       <div className="absolute right-4 top-24 z-[1000] md:right-8 md:top-28">
         <button
-          onClick={() => setFiltersOpen((o) => !o)}
-          className="glass-panel flex items-center gap-2 rounded-full px-4 py-3 font-label text-xs uppercase tracking-widest text-foreground transition-colors hover:text-accent"
+          onClick={() => {
+            setFiltersOpen((o) => !o);
+            if (!filtersOpen && selected) {
+              setSelected(undefined); // Close slide-in panel so it does not overlap with filter panel
+            }
+          }}
+          className={cn(
+            "glass-panel flex items-center gap-2 rounded-full px-4 py-2.5 font-label text-xs uppercase tracking-widest text-foreground shadow-xl backdrop-blur-md transition-all hover:text-accent cursor-pointer",
+            filtersOpen ? "border-accent bg-accent/20 text-accent font-semibold" : "border-hairline"
+          )}
         >
           <Icon name="tune" className="text-base" />
           {t("map.filters")}
+          {(category !== "All" || crowdFilter !== "Any") && (
+            <span className="flex h-2 w-2 rounded-full bg-accent animate-pulse" />
+          )}
         </button>
+
         {filtersOpen && (
-          <div className="glass-panel absolute right-0 top-full mt-2 w-72 rounded-xl p-5">
-            <div className="mb-5">
-              <span className="mb-2 block font-label text-xs uppercase tracking-widest text-foreground-muted">
-                {t("map.category")}
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {CATEGORIES.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setCategory(c)}
-                    className={cn(
-                      "rounded-full border px-3 py-1.5 font-label text-[10px] uppercase tracking-widest transition-colors",
-                      category === c
-                        ? "border-accent bg-accent/10 text-accent"
-                        : "border-hairline text-foreground-muted hover:border-accent/40",
-                    )}
-                  >
-                    {t(categoryLabelKey(c))}
-                  </button>
-                ))}
+          <>
+            {/* Click-outside backdrop */}
+            <div
+              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px]"
+              onClick={() => setFiltersOpen(false)}
+            />
+            <div className="glass-panel absolute right-0 top-full z-50 mt-2 max-h-[70vh] w-72 overflow-y-auto rounded-2xl border border-hairline bg-surface/95 p-5 shadow-2xl backdrop-blur-xl">
+              <div className="mb-4 flex items-center justify-between border-b border-hairline pb-3">
+                <span className="font-headline text-xs font-semibold uppercase tracking-wider text-accent">
+                  {t("map.filters")}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  className="rounded-full p-1 text-foreground-muted hover:bg-surface hover:text-foreground cursor-pointer"
+                  aria-label="Close filters"
+                >
+                  <Icon name="close" className="text-base" />
+                </button>
               </div>
-            </div>
-            <div>
-              <span className="mb-2 block font-label text-xs uppercase tracking-widest text-foreground-muted">
-                {t("map.crowdLevel")}
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {CROWD_FILTERS.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setCrowdFilter(c)}
-                    className={cn(
-                      "rounded-full border px-3 py-1.5 font-label text-[10px] uppercase tracking-widest transition-colors",
-                      crowdFilter === c
-                        ? "border-accent bg-accent/10 text-accent"
-                        : "border-hairline text-foreground-muted hover:border-accent/40",
-                    )}
-                  >
-                    {t(crowdFilterKey[c])}
-                  </button>
-                ))}
+
+              <div className="mb-5">
+                <span className="mb-2 block font-label text-xs uppercase tracking-widest text-foreground-muted">
+                  {t("map.category")}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {CATEGORIES.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setCategory(c)}
+                      className={cn(
+                        "rounded-full border px-3 py-1 font-label text-[10px] uppercase tracking-widest transition-colors cursor-pointer",
+                        category === c
+                          ? "border-accent bg-accent/15 text-accent font-bold"
+                          : "border-hairline text-foreground-muted hover:border-accent/40 hover:text-foreground",
+                      )}
+                    >
+                      {t(categoryLabelKey(c))}
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              <div>
+                <span className="mb-2 block font-label text-xs uppercase tracking-widest text-foreground-muted">
+                  {t("map.crowdLevel")}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {CROWD_FILTERS.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setCrowdFilter(c)}
+                      className={cn(
+                        "rounded-full border px-3 py-1 font-label text-[10px] uppercase tracking-widest transition-colors cursor-pointer",
+                        crowdFilter === c
+                          ? "border-accent bg-accent/15 text-accent font-bold"
+                          : "border-hairline text-foreground-muted hover:border-accent/40 hover:text-foreground",
+                      )}
+                    >
+                      {t(crowdFilterKey[c])}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {(category !== "All" || crowdFilter !== "Any") && (
+                <div className="mt-4 border-t border-hairline pt-3 text-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCategory("All");
+                      setCrowdFilter("Any");
+                    }}
+                    className="font-label text-[10px] uppercase tracking-wider text-accent hover:underline cursor-pointer"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
+          </>
         )}
       </div>
 
