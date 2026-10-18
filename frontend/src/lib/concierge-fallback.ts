@@ -35,11 +35,11 @@ const VERIFIED_GUIDES = [
 function isHinglish(text: string): boolean {
   const lower = text.toLowerCase();
   const hinglishWords = [
-    "kya", "ye", "yeh", "hai", "hain", "vakt", "waqt", "jaane", "jane", "ke", "liye",
+    "kya", "ye", "yeh", "yah", "hai", "hain", "vakt", "waqt", "jaane", "jane", "ke", "liye",
     "batao", "kahan", "kaha", "kaun", "kitna", "kitne", "kaise", "bheed", "shukriya",
     "shandar", "aaj", "kal", "parso", "subah", "shaam", "dikhaye", "milega", "chahiye",
     "karun", "karein", "ghoomne", "dekhne", "kaisi", "accha", "achha", "sahi", "safar",
-    "imarat", "jagah", "bhookh", "hoga", "hogi", "bataiye"
+    "imarat", "jagah", "bhookh", "hoga", "hogi", "bataiye", "jaana", "jana", "tajmahal"
   ];
   return hinglishWords.some((w) => new RegExp(`\\b${w}\\b`, "i").test(lower));
 }
@@ -57,6 +57,7 @@ function getLiveCrowdTelemetry() {
 
 export function generateConciergeResponse(query: string, lang = "en"): string {
   const q = query.toLowerCase().trim();
+  const cleanQ = q.replace(/[^a-z0-9]/g, "");
   const crowd = getLiveCrowdTelemetry();
   const hinglish = isHinglish(query);
   const isDevanagari = /[\u0900-\u097F]/.test(query);
@@ -66,7 +67,17 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     const sName = site.name.toLowerCase().replace("the ", "");
     const sSlug = site.slug.toLowerCase().replace(/-/g, " ");
     const sCity = site.region.split(",")[0].trim().toLowerCase();
-    return q.includes(sName) || q.includes(sSlug) || (q.includes(sCity) && sCity.length > 3);
+    const cleanName = sName.replace(/[^a-z0-9]/g, "");
+    const cleanSlug = sSlug.replace(/[^a-z0-9]/g, "");
+
+    return (
+      q.includes(sName) ||
+      q.includes(sSlug) ||
+      cleanQ.includes(cleanName) ||
+      cleanQ.includes(cleanSlug) ||
+      (q.includes(sCity) && sCity.length > 3) ||
+      (cleanQ.includes("taj") && (cleanName.includes("taj") || cleanSlug.includes("taj")))
+    );
   });
 
   if (matchedSite) {

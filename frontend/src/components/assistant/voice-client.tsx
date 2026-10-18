@@ -9,6 +9,18 @@ import { cn } from "@/lib/cn";
 import { useSpeechToText, useTextToSpeech } from "@/hooks/use-speech";
 import { languages, type LanguageCode } from "@/i18n/config";
 import { sendMessageToAssistant } from "@/lib/assistant";
+import { FormattedMessage } from "@/components/assistant/formatted-message";
+
+function cleanTextForSpeech(text: string): string {
+  return text
+    .replace(/\*\*/g, "")
+    .replace(/\*/g, "")
+    .replace(/^[-•*]\s*/gm, "")
+    .replace(/₹/g, "Rupees ")
+    .replace(/\(([^)]+)\)/g, ", $1,")
+    .replace(/\n+/g, ". ")
+    .trim();
+}
 
 export function VoiceClient() {
   const { t, i18n } = useTranslation();
@@ -60,7 +72,7 @@ export function VoiceClient() {
         setTranscript("");
 
         // 2. Speak reply and wait for audio to fully finish
-        await speak(reply.text, langCode);
+        await speak(cleanTextForSpeech(reply.text), langCode);
 
         // 3. Grace cooldown (800ms) for room echo to dissipate
         await new Promise((r) => setTimeout(r, 800));
@@ -138,7 +150,12 @@ export function VoiceClient() {
         </div>
 
         {/* Live Audio Reactive Orb */}
-        <div className="relative mb-16 flex h-48 w-48 items-center justify-center md:h-64 md:w-64">
+        <div
+          className={cn(
+            "relative flex items-center justify-center transition-all duration-300",
+            assistantReply ? "mb-6 h-28 w-28 md:h-36 md:w-36" : "mb-12 h-44 w-44 md:h-56 md:w-56"
+          )}
+        >
           <div
             className="absolute inset-0 rounded-full border border-accent/20 transition-transform duration-100"
             style={{
@@ -152,7 +169,10 @@ export function VoiceClient() {
             }}
           />
           <div
-            className="flex h-32 w-32 items-center justify-center rounded-full border border-accent/50 bg-gradient-to-tr from-accent/20 to-accent shadow-[0_0_50px_rgba(201,162,75,0.3)] backdrop-blur-sm transition-transform duration-100 md:h-40 md:w-40"
+            className={cn(
+              "flex items-center justify-center rounded-full border border-accent/50 bg-gradient-to-tr from-accent/20 to-accent shadow-[0_0_50px_rgba(201,162,75,0.3)] backdrop-blur-sm transition-all duration-100",
+              assistantReply ? "h-20 w-20 md:h-24 md:w-24" : "h-32 w-32 md:h-40 md:w-40"
+            )}
             style={{
               transform: `scale(${1 + micLevel * 0.2})`,
             }}
@@ -160,27 +180,40 @@ export function VoiceClient() {
             <Icon
               name={isSpeaking ? "volume_up" : "graphic_eq"}
               filled
-              className={cn("text-5xl text-background md:text-6xl", isSpeaking && "animate-pulse")}
+              className={cn("text-background transition-all", assistantReply ? "text-3xl md:text-4xl" : "text-5xl md:text-6xl", isSpeaking && "animate-pulse")}
             />
           </div>
         </div>
 
         {/* Transcript or Assistant Response */}
-        <div className="min-h-[80px] w-full px-4 text-center">
-          <p className="font-headline text-xl font-light leading-relaxed text-foreground transition-opacity duration-300 md:text-3xl">
-            {transcript ? (
-              <span className="text-accent">&ldquo;{transcript}&rdquo;</span>
-            ) : assistantReply ? (
-              <span className="text-foreground line-clamp-3 font-normal">&ldquo;{assistantReply}&rdquo;</span>
-            ) : (
+        <div className="w-full max-w-2xl px-4 text-center">
+          {transcript ? (
+            <p className="font-headline text-xl font-light leading-relaxed text-accent animate-pulse md:text-2xl">
+              &ldquo;{transcript}&rdquo;
+            </p>
+          ) : assistantReply ? (
+            <div className="mx-auto max-h-64 w-full overflow-y-auto rounded-2xl border border-hairline bg-surface/90 p-5 text-left shadow-2xl backdrop-blur-md">
+              <div className="mb-3 flex items-center justify-between border-b border-hairline pb-2">
+                <span className="flex items-center gap-2 font-label text-xs uppercase tracking-widest text-accent">
+                  <Icon name="auto_awesome" className="text-sm" />
+                  Heritage Concierge
+                </span>
+                <span className="font-label text-xs text-foreground-muted">
+                  {isSpeaking ? "Speaking aloud…" : "Tap mic below to ask follow-up"}
+                </span>
+              </div>
+              <FormattedMessage text={assistantReply} />
+            </div>
+          ) : (
+            <p className="font-headline text-xl font-light leading-relaxed text-foreground transition-opacity duration-300 md:text-3xl">
               <span className={visible ? "opacity-100" : "opacity-0"}>
                 &ldquo;{phrases[phraseIndex]}&rdquo;
               </span>
-            )}
-          </p>
+            </p>
+          )}
         </div>
 
-        <span className="mt-6 rounded-full border border-hairline px-4 py-1.5 font-label text-xs uppercase tracking-widest text-foreground-muted">
+        <span className="mt-4 rounded-full border border-hairline px-4 py-1.5 font-label text-xs uppercase tracking-widest text-foreground-muted">
           {t("assistant.voice.autoDetected", { language: languages[currentLanguage].label })}
         </span>
       </main>
