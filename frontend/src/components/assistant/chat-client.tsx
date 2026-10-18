@@ -44,7 +44,7 @@ export function ChatClient() {
     let streamed = "";
     const reply = await sendMessageToAssistant(
       trimmed,
-      (input) => t("assistant.chat.stubResponse", { input }),
+      undefined,
       (token) => {
         streamed += token;
         setMessages((m) =>

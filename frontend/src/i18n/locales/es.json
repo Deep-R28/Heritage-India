@@ -243,7 +243,7 @@
       "languageLabel": "Idioma: {{language}}",
       "suggestions": ["Reservar un historiador", "Mostrar sitios tranquilos cercanos", "¿Cuál es el código de vestimenta?"],
       "seed": "Namasté. Soy tu conserje de Heritage India. ¿Cómo puedo mejorar tu viaje hoy? ¿Buscas exploración histórica o un relajo refinado?",
-      "stubResponse": "(Respuesta de prueba) Escuché: \"{{input}}\". Un modelo de conserje real responderá esto una vez conectado."
+      "stubResponse": "Con gusto le ayudaré. Puede explorar monumentos históricos, verificar el aforo en tiempo real y contratar guías certificados de la ASI."
     },
     "voice": {
       "title": "Conserje Heritage",

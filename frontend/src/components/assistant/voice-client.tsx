@@ -55,9 +55,7 @@ export function VoiceClient() {
       stop();
 
       try {
-        const reply = await sendMessageToAssistant(query, (input) =>
-          t("assistant.chat.stubResponse", { input })
-        );
+        const reply = await sendMessageToAssistant(query);
         setAssistantReply(reply.text);
         setTranscript("");
 
