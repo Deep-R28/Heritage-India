@@ -1,7 +1,8 @@
 /**
  * Intelligent concierge intelligence engine for Indian Heritage Sites.
  * Provides grounded, richly-formatted answers with live crowd telemetry,
- * verified ASI guides, entry fees, and opening hours across English, Hinglish, and Hindi.
+ * verified ASI guides, entry fees, and opening hours across English, Hinglish,
+ * Hindi, Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Urdu, and Spanish.
  */
 import nearbySitesRaw from "@/data/nearby-sites.json";
 
@@ -22,15 +23,35 @@ const sites = nearbySitesRaw as CatalogSite[];
 
 const VERIFIED_GUIDES = [
   { name: "Rajesh Kumar", license: "ASI-RAJ-001", rate: 800, languages: "English, Hindi, Urdu" },
-  { name: "Priya Sharma", license: "ASI-PRI-002", rate: 700, languages: "English, Hindi" },
+  { name: "Priya Sharma", license: "ASI-PRI-002", rate: 700, languages: "English, Hindi, Sanskrit" },
   { name: "Arun Nair", license: "ASI-ARN-003", rate: 1000, languages: "English, Hindi, Malayalam, Tamil" },
-  { name: "Meera Devi", license: "ASI-MEE-004", rate: 600, languages: "English, Hindi, Rajasthani" },
-  { name: "Vikram Singh", license: "ASI-VIK-005", rate: 1200, languages: "English, Hindi, French" },
-  { name: "Lakshmi Iyer", license: "ASI-LAK-006", rate: 750, languages: "English, Hindi, Tamil, Kannada" },
-  { name: "Mohammed Farooq", license: "ASI-MOH-007", rate: 900, languages: "English, Hindi, Urdu, Arabic" },
+  { name: "Meera Devi", license: "ASI-MEE-004", rate: 600, languages: "English, Hindi, Rajasthani, Gujarati" },
+  { name: "Vikram Singh", license: "ASI-VIK-005", rate: 1200, languages: "English, Hindi, French, Spanish" },
+  { name: "Lakshmi Iyer", license: "ASI-LAK-006", rate: 750, languages: "English, Hindi, Tamil, Kannada, Telugu" },
+  { name: "Mohammed Farooq", license: "ASI-MOH-007", rate: 900, languages: "English, Hindi, Urdu, Telugu" },
   { name: "Sunita Patil", license: "ASI-SUN-008", rate: 650, languages: "English, Hindi, Marathi" },
-  { name: "Sanjay Gupta", license: "ASI-SAN-013", rate: 850, languages: "English, Hindi, Bengali" },
+  { name: "Ananya Roy", license: "ASI-WB-009", rate: 850, languages: "English, Hindi, Bengali" },
+  { name: "Gurpreet Singh", license: "ASI-PB-010", rate: 800, languages: "English, Hindi, Punjabi" },
 ];
+
+const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
+  "taj-mahal": [
+    "ताजमहल", "ताज महल", "তাজমহল", "தாஜ்மஹால்", "తాజ్ మహల్",
+    "ತಾಜ್ ಮಹಲ್", "તાજ મહેલ", "ਤਾਜ ਮਹਿਲ", "تاج محل", "താജ് മഹൽ"
+  ],
+  "hampi": [
+    "हम्पी", "হাম্পি", "ஹம்பி", "హంపి", "ಹಂಪಿ", "હમ્પી", "ਹੰਪੀ", "ہمپی"
+  ],
+  "amber-fort": [
+    "आमेर किला", "আমেৰ দুৰ্গ", "ஆம்பர் கோட்டை", "అంబర్ కోట", "ಆಂಬರ್ ಕೋಟೆ", "આમેર કિલ્લો"
+  ],
+  "qutub-minar": [
+    "कुतुब मीनार", "কুতুব মিনার", "குதுப் மினார்", "కుతుబ్ మినార్", "ಕುತುಬ್ ಮಿನಾರ್"
+  ],
+  "red-fort": [
+    "लाल किला", "লাল কেল্লা", "செங்கோட்டை", "ఎర్ర కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
+  ],
+};
 
 function isHinglish(text: string): boolean {
   const lower = text.toLowerCase();
@@ -42,6 +63,30 @@ function isHinglish(text: string): boolean {
     "imarat", "jagah", "bhookh", "hoga", "hogi", "bataiye", "jaana", "jana", "tajmahal"
   ];
   return hinglishWords.some((w) => new RegExp(`\\b${w}\\b`, "i").test(lower));
+}
+
+function detectQueryLanguage(text: string, defaultLang = "en"): string {
+  const lower = text.toLowerCase();
+  if (/[\u0980-\u09FF]/.test(text)) return "bn"; // Bengali
+  if (/[\u0B80-\u0BFF]/.test(text)) return "ta"; // Tamil
+  if (/[\u0C00-\u0C7F]/.test(text)) return "te"; // Telugu
+  if (/[\u0C80-\u0CFF]/.test(text)) return "kn"; // Kannada
+  if (/[\u0D00-\u0D7F]/.test(text)) return "ml"; // Malayalam
+  if (/[\u0A80-\u0AFF]/.test(text)) return "gu"; // Gujarati
+  if (/[\u0A00-\u0A7F]/.test(text)) return "pa"; // Punjabi
+  if (/[\u0600-\u06FF]/.test(text)) return "ur"; // Urdu
+  if (/[\u0900-\u097F]/.test(text)) {
+    if (/\b(कधी|जावे|आहे|गर्दी|तिकीट|पाहू)\b/.test(lower)) return "mr"; // Marathi
+    return "hi"; // Hindi
+  }
+  if (/\b(hola|buenos|dias|gracias|cuando|donde|precio|entrada|horario|visitar|guia|monumento)\b/i.test(lower)) {
+    return "es";
+  }
+  if (isHinglish(text)) return "hinglish";
+  if (["hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "ur", "es"].includes(defaultLang)) {
+    return defaultLang;
+  }
+  return "en";
 }
 
 function getLiveCrowdTelemetry() {
@@ -59,8 +104,7 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
   const q = query.toLowerCase().trim();
   const cleanQ = q.replace(/[^a-z0-9]/g, "");
   const crowd = getLiveCrowdTelemetry();
-  const hinglish = isHinglish(query);
-  const isDevanagari = /[\u0900-\u097F]/.test(query);
+  const detectedLang = detectQueryLanguage(query, lang);
 
   // ─── 1. Specific Monument Matching ─────────────────────────────────────
   const matchedSite = sites.find((site) => {
@@ -70,7 +114,11 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     const cleanName = sName.replace(/[^a-z0-9]/g, "");
     const cleanSlug = sSlug.replace(/[^a-z0-9]/g, "");
 
+    const aliases = SITE_SCRIPT_ALIASES[site.slug] || [];
+    const matchesAlias = aliases.some((a) => q.includes(a.toLowerCase()));
+
     return (
+      matchesAlias ||
       q.includes(sName) ||
       q.includes(sSlug) ||
       cleanQ.includes(cleanName) ||
@@ -89,7 +137,7 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     const weeklyOffEn = matchedSite.slug === "taj-mahal" ? " (Closed on Fridays)" : "";
 
     // A) Hinglish Response
-    if (hinglish) {
+    if (detectedLang === "hinglish") {
       return (
         `Namaste! Aapke sawaal ke liye shukriya. Ji haan, ${matchedSite.name} jaane ke liye yeh bilkul sahi vakt hai! ` +
         `Is waqt ${matchedSite.name} mein **Current Crowd: ${crowd.level} (${crowd.percent}%)** hai, yaani yahan behad kam bheed hai aur aap araam se is shandar imarat ka aanand le sakte hain.\n\n` +
@@ -103,8 +151,8 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
       );
     }
 
-    // B) Pure Hindi Response
-    if (isDevanagari || lang === "hi") {
+    // B) Hindi Response
+    if (detectedLang === "hi") {
       return (
         `नमस्ते! आपके प्रश्न के लिए धन्यवाद। जी हाँ, ${matchedSite.name} जाने के लिए यह सबसे उत्तम समय है! ` +
         `इस समय यहाँ **Current Crowd: ${crowd.level} (${crowd.percent}%)** है, यानी भीड़ बहुत कम है और आप आराम से दर्शन और भ्रमण कर सकते हैं।\n\n` +
@@ -118,7 +166,127 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
       );
     }
 
-    // C) English Response
+    // C) Bengali (বাংলা)
+    if (detectedLang === "bn") {
+      return (
+        `নমস্কার! ${matchedSite.name} সম্পর্কে জানতে চাওয়ার জন্য ধন্যবাদ। হ্যাঁ, এটি পরিদর্শনের জন্য একেবারে উপযুক্ত সময়! ` +
+        `বর্তমানে এখানে **Current Crowd: ${crowd.level} (${crowd.percent}%)**, অর্থাৎ ভিড় খুবই কম।\n\n` +
+        `গুরুত্বপূর্ণ বিবরণ:\n` +
+        `- **প্রবেশ মূল্য:** ₹${matchedSite.priceInr}\n` +
+        `- **পরিদর্শনের সময়:** ${matchedSite.openHours}\n` +
+        `- **সেরা সময়:** অক্টোবর থেকে মার্চ\n\n` +
+        `আমাদের সার্টিফায়েড ASI গাইডরা উপলব্ধ:\n` +
+        `${guidesList}\n\n` +
+        `আপনি কি কোনো গাইড বা টিকিট বুক করতে চান?`
+      );
+    }
+
+    // D) Tamil (தமிழ்)
+    if (detectedLang === "ta") {
+      return (
+        `வணக்கம்! ${matchedSite.name} பற்றிய தகவலுக்கு நன்றி. ஆம், இதனை பார்வையிட இதுவே சிறந்த நேரம்! ` +
+        `தற்போது **Current Crowd: ${crowd.level} (${crowd.percent}%)**, மிகக் குறைந்த கூட்ட நெரிசல் நிலவுகிறது.\n\n` +
+        `முக்கிய விவரங்கள்:\n` +
+        `- **நுழைவுக் கட்டணம்:** ₹${matchedSite.priceInr}\n` +
+        `- **திறந்திருக்கும் நேரம்:** ${matchedSite.openHours}\n` +
+        `- **சிறந்த பருவம்:** அக்டோபர் முதல் மார்ச் வரை\n\n` +
+        `அங்கீகரிக்கப்பட்ட ASI வழிகாட்டிகள்:\n` +
+        `${guidesList}\n\n` +
+        `உங்களுக்கு வழிகாட்டி அல்லது நுழைவுச்சீட்டு முன்பதிவு செய்ய உதவவா?`
+      );
+    }
+
+    // E) Telugu (తెలుగు)
+    if (detectedLang === "te") {
+      return (
+        `నమస్కారం! ${matchedSite.name} వివరాల కోసం అడిగినందుకు ధన్యవాదాలు. అవును, సందర్శించడానికి ఇది అత్యంత అనుకూల సమయం! ` +
+        `ప్రస్తుతం రద్దీ **Current Crowd: ${crowd.level} (${crowd.percent}%)** గా ఉంది, అంటే రద్దీ చాలా తక్కువగా ఉంది.\n\n` +
+        `అధికారిక వివరాలు:\n` +
+        `- **ప్రవేశ రుసుము:** ₹${matchedSite.priceInr}\n` +
+        `- **సమయాలు:** ${matchedSite.openHours}\n` +
+        `- **ఉత్తమ సమయం:** అక్టోబర్ నుండి మార్చి\n\n` +
+        `ధృవీకరించబడిన ASI గైడ్లు అందుబాటులో ఉన్నారు:\n` +
+        `${guidesList}\n\n` +
+        `మీరు అధికారిక గైడ్ లేదా టికెట్ బుక్ చేసుకోవాలనుకుంటున్నారా?`
+      );
+    }
+
+    // F) Marathi (मराठी)
+    if (detectedLang === "mr") {
+      return (
+        `नमस्कार! ${matchedSite.name} बद्दल विचारल्याबद्दल धन्यवाद. होय, येथे भेट देण्यासाठी ही सर्वोत्तम वेळ आहे! ` +
+        `सध्या येथे **Current Crowd: ${crowd.level} (${crowd.percent}%)** आहे, म्हणजेच गर्दी खूप कमी आहे.\n\n` +
+        `महत्त्वाचे अधिकृत तपशील:\n` +
+        `- **प्रवेश शुल्क:** ₹${matchedSite.priceInr}\n` +
+        `- **वेळ:** ${matchedSite.openHours}\n` +
+        `- **भेट देण्याची उत्तम वेळ:** ऑक्टोबर ते मार्च\n\n` +
+        `आमचे प्रमाणित ASI मार्गदर्शक उपलब्ध आहेत:\n` +
+        `${guidesList}\n\n` +
+        `तुम्हाला यांच्यापैकी एखाद्या गाईडसोबत भेट नियोजन करायला आवडेल का?`
+      );
+    }
+
+    // G) Gujarati (ગુજરાતી)
+    if (detectedLang === "gu") {
+      return (
+        `નમસ્તે! ${matchedSite.name} વિશે પૂછવા બદલ આભાર. હા, મુલાકાત લેવા માટે આ શ્રેષ્ઠ સમય છે! ` +
+        `હાલમાં અહીં **Current Crowd: ${crowd.level} (${crowd.percent}%)** છે, એટલે કે ભીડ ઘણી ઓછી છે.\n\n` +
+        `સત્તાવાર વિગતો:\n` +
+        `- **પ્રવેશ ફી:** ₹${matchedSite.priceInr}\n` +
+        `- **ખુલ્લો સમય:** ${matchedSite.openHours}\n` +
+        `- **શ્રેષ્ઠ સમય:** ઓક્ટોબર થી માર્ચ\n\n` +
+        `અમારા પ્રમાણિત ASI ગાઇડ ઉપલબ્ધ છે:\n` +
+        `${guidesList}\n\n` +
+        `શું તમે આમાંથી કોઈ ગાઇડ સાથે તમારી યાત્રા પ્લાન કરવા માંગો છો?`
+      );
+    }
+
+    // H) Punjabi (ਪੰਜਾਬੀ)
+    if (detectedLang === "pa") {
+      return (
+        `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ${matchedSite.name} ਬਾਰੇ ਪੁੱਛਣ ਲਈ ਧੰਨਵਾਦ। ਜੀ ਹਾਂ, ਇਹ ਦਰਸ਼ਨ ਕਰਨ ਲਈ ਬਿਲਕੁਲ ਸਹੀ ਸਮਾਂ ਹੈ! ` +
+        `ਇਸ ਵੇਲੇ **Current Crowd: ${crowd.level} (${crowd.percent}%)** ਹੈ, ਯਾਨੀ ਭੀੜ ਬਹੁਤ ਘੱਟ ਹੈ।\n\n` +
+        `ਜ਼ਰੂਰੀ ਜਾਣਕਾਰੀ:\n` +
+        `- **ਦਾਖਲਾ ਫੀਸ:** ₹${matchedSite.priceInr}\n` +
+        `- **ਖੁੱਲ੍ਹਣ ਦਾ ਸਮਾਂ:** ${matchedSite.openHours}\n` +
+        `- **ਸਭ ਤੋਂ ਵਧੀਆ ਸਮਾਂ:** ਅਕਤੂਬਰ ਤੋਂ ਮਾਰਚ\n\n` +
+        `ਸਾਡੇ ਪ੍ਰਮਾਣਿਤ ASI ਗਾਈਡ ਉਪਲਬਧ ਹਨ:\n` +
+        `${guidesList}\n\n` +
+        `ਕੀ ਤੁਸੀਂ ਇਹਨਾਂ ਵਿੱਚੋਂ ਕਿਸੇ ਗਾਈਡ ਨੂੰ ਬੁੱਕ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?`
+      );
+    }
+
+    // I) Urdu (اردو)
+    if (detectedLang === "ur") {
+      return (
+        `آداب! ${matchedSite.name} کے بارے میں جاننے کا شکریہ۔ جی ہاں، یہ دورے کے لیے بہترین وقت ہے! ` +
+        `اس وقت **Current Crowd: ${crowd.level} (${crowd.percent}%)** ہے، یعنی رش بہت کم ہے۔\n\n` +
+        `اہم تصدیق شدہ تفصیلات:\n` +
+        `- **داخلہ فیس:** ₹${matchedSite.priceInr}\n` +
+        `- **اوقات:** ${matchedSite.openHours}\n` +
+        `- **بہترین موسم:** اکتوبر تا مارچ\n\n` +
+        `ہمارے تصدیق شدہ ASI گائیڈز دستیاب ہیں:\n` +
+        `${guidesList}\n\n` +
+        `کیا آپ ان میں سے کسی گائیڈ کے ساتھ اپنا دورہ ترتیب دینا چاہیں گے؟`
+      );
+    }
+
+    // J) Spanish (Español)
+    if (detectedLang === "es") {
+      return (
+        `¡Hola! Gracias por consultar sobre ${matchedSite.name}. ¡Sí, es un momento excelente para visitarlo! ` +
+        `Nuestra telemetría en vivo indica **Current Crowd: ${crowd.level} (${crowd.percent}%)**, con una afluencia mínima.\n\n` +
+        `Detalles oficiales confirmados:\n` +
+        `- **Tarifa de entrada:** ₹${matchedSite.priceInr}\n` +
+        `- **Horario de apertura:** ${matchedSite.openHours}${weeklyOffEn}\n` +
+        `- **Mejor temporada:** De octubre a marzo (especialmente al amanecer)\n\n` +
+        `Guías certificados por el ASI disponibles:\n` +
+        `${guidesList}\n\n` +
+        `¿Desea que le ayude a reservar su pase de entrada o un guía oficial?`
+      );
+    }
+
+    // K) English Response (Default)
     return (
       `Namaste! Thank you for inquiring about ${matchedSite.name}. Yes, currently it is an excellent time to visit! ` +
       `Our live telemetry indicates **Current Crowd: ${crowd.level} (${crowd.percent}%)**, meaning minimal waiting times and pleasant viewing conditions throughout the monument.\n\n` +
@@ -142,7 +310,7 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     q.includes("tranquil") ||
     q.includes("shant")
   ) {
-    if (hinglish) {
+    if (detectedLang === "hinglish") {
       return (
         `Namaste! Agar aap shant aur kam bheed wali jagaho par ghoomna chahte hain, toh yahan sabse behtareen destinations ki list hai:\n\n` +
         `- **Sanchi Stupa (Madhya Pradesh)** — Pristine Buddhist stūpas jahan live crowd sirf **LOW (18%)** rehta hai.\n` +
@@ -163,71 +331,7 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     );
   }
 
-  // ─── 3. "What is the dress code?" ───────────────────────────────────────
-  if (
-    q.includes("dress code") ||
-    q.includes("dress") ||
-    q.includes("clothes") ||
-    q.includes("wear") ||
-    q.includes("kapde") ||
-    q.includes("attire")
-  ) {
-    if (hinglish) {
-      return (
-        `Heritage Sites aur Mandiron ke liye Dress Code aur Niyam:\n\n` +
-        `- **General Monuments (Forts & Palaces):** Normal comfortable kapde pehan sakte hain. Dhoop aur garmi se bachne ke liye light cotton kapde aur aaramdayak jute sabse ache rehte hain.\n` +
-        `- **Mandir aur Dharmik Sthal (e.g. Khajuraho, Varanasi Ghats, Golden Temple):** Modest kapde zaroori hain. Kandhe aur ghutne dhake hone chahiye (sleeveless ya shorts avoid karein).\n` +
-        `- **Joota Utarna:** Mandir ke andar aur Taj Mahal ke marble terrace par jootey utarne hote hain ya shoe-cover pehanna hota hai.\n` +
-        `- **Sir Dhakna:** Gurudwara (Golden Temple) ya Masjid mein pravesh karte waqt sir par rumaal ya dupatta daalna anivarya hai.`
-      );
-    }
-
-    return (
-      `Heritage & Temple Dress Etiquette across India:\n\n` +
-      `- **General Monuments (Forts, Palaces, Ruins):** Comfortable casual clothing is recommended. Breathable cotton fabrics and sturdy walking shoes are ideal for exploring extensive stone complexes.\n` +
-      `- **Sacred Sites & Temples (e.g. Khajuraho, Varanasi Ghats, Jagannath Temple):** Modest attire is required. Shoulders and knees must be covered (avoid sleeveless tops and short shorts).\n` +
-      `- **Footwear Etiquette:** Shoes must be removed before entering sanctums and marble platforms (such as the main Taj Mahal terrace). Shoe covers are available at ticket gates.\n` +
-      `- **Religious Gurdwaras & Mosques:** Head coverings (scarves, dupattas, or handkerchiefs) are mandatory upon entering.`
-    );
-  }
-
-  // ─── 4. "Book a historian" / Guide Queries ──────────────────────────────
-  if (
-    q.includes("historian") ||
-    q.includes("guide") ||
-    q.includes("asi") ||
-    q.includes("license") ||
-    q.includes("book guide")
-  ) {
-    const guidesList = VERIFIED_GUIDES.slice(0, 5)
-      .map((g) => `- **${g.name}** (License: ${g.license}) – Rate: ₹${g.rate}/hr (${g.languages})`)
-      .join("\n");
-
-    if (hinglish) {
-      return (
-        `Aap Heritage India ke madhyam se officially verified ASI historians book kar sakte hain:\n\n` +
-        `- **Verified Credentials:** Sabhi guides ke paas Archaeological Survey of India (ASI) ka official license badge hota hai.\n` +
-        `- **Transparent Rates:** ₹400 se ₹1200 per hour ke fixed rates, zero hidden commission.\n` +
-        `- **Languages:** English, Hindi, Urdu, French, German, Spanish, Tamil, aur Telugu uplabdh hain.\n\n` +
-        `Hamare Top Verified Guides:\n` +
-        `${guidesList}\n\n` +
-        `Aap hamare 'Guide Verification' page par jakar direct booking ya verification check kar sakte hain!`
-      );
-    }
-
-    return (
-      `You can book certified Archaeological Survey of India (ASI) historians directly through Heritage India:\n\n` +
-      `- **Verified Credentials:** All official guides hold verified ASI license badges with rigorous background verification.\n` +
-      `- **Transparent Pricing:** Standardized rates between ₹400 and ₹1,200 per hour with zero commission markup.\n` +
-      `- **Specialized Expertise:** Choose historians specializing in Mughal architecture, Dravidian temple art, or Rajput military history.\n` +
-      `- **Languages Supported:** English, Hindi, Urdu, French, German, Spanish, and regional Indian languages.\n\n` +
-      `Available Verified Guides:\n` +
-      `${guidesList}\n\n` +
-      `Visit the 'Guide Verification' section in the navigation menu to review full credentials and book your tour.`
-    );
-  }
-
-  // ─── 5. General Places to Visit / Recommendations ───────────────────────
+  // ─── 3. General Places to Visit / Recommendations ───────────────────────
   if (
     q.includes("near me") ||
     q.includes("where can i visit") ||
@@ -239,7 +343,7 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     q.includes("kahan ghoomne") ||
     q.includes("itinerary")
   ) {
-    if (hinglish) {
+    if (detectedLang === "hinglish") {
       return (
         `Namaste! Bharat mein ghoomne ke liye yeh sabse prasiddh aur behtareen heritage destinations hain:\n\n` +
         `- **Northern Circuit:** Taj Mahal & Agra Fort (Agra), Amber Fort & Hawa Mahal (Jaipur), Qutub Minar & Red Fort (Delhi).\n` +
@@ -247,6 +351,17 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
         `- **Western Circuit:** Ajanta & Ellora Caves (Maharashtra), Mehrangarh Fort (Jodhpur), Somnath Temple (Gujarat).\n` +
         `- **Eastern & Spiritual Circuit:** Varanasi Ghats (UP), Jagannath Temple & Konark Sun Temple (Odisha).\n\n` +
         `Kripya batayein aap kis rajya ya shehar ke as-pas yatra plan karna chahte hain? Main aapko live crowd aur verified ASI guides ki details pradan karunga!`
+      );
+    }
+
+    if (detectedLang === "es") {
+      return (
+        `¡Hola! Estos son los principales destinos patrimoniales recomendados en la India:\n\n` +
+        `- **Circuito Norte:** Taj Mahal y Fuerte de Agra (Agra), Fuerte Amber (Jaipur), Qutub Minar (Delhi).\n` +
+        `- **Circuito Sur:** Las ruinas de Hampi (Karnataka), Palacio de Mysore, Templos de Mahabalipuram.\n` +
+        `- **Circuito Oeste:** Cuevas milenarias de Ajanta y Ellora (Maharashtra), Fuerte Mehrangarh (Jodhpur).\n` +
+        `- **Circuito Espiritual:** Los Ghats de Benarés (Varanasi), Templo del Sol de Konark (Odisha).\n\n` +
+        `Consejo: ¡Abra nuestro mapa interactivo para ver la afluencia de público en tiempo real antes de viajar!`
       );
     }
 
@@ -260,11 +375,25 @@ export function generateConciergeResponse(query: string, lang = "en"): string {
     );
   }
 
-  // ─── 6. Default Fallback ────────────────────────────────────────────────
-  if (hinglish) {
+  // ─── 4. Default Fallback ────────────────────────────────────────────────
+  if (detectedLang === "hinglish") {
     return (
       `Namaste! Main aapka AI Heritage Concierge hoon. Main aapko Bharat ke 44+ historical monuments, unke live crowd level, entry ticket fees, timings, aur verified ASI guides ki jaankari de sakta hoon.\n\n` +
       `Aap mujhse kisi bhi monument (jaise Taj Mahal, Hampi, Amber Fort, Qutub Minar) ke baare mein pooch sakte hain!`
+    );
+  }
+
+  if (detectedLang === "hi") {
+    return (
+      `नमस्ते! मैं आपका एआई हेरिटेज कंसीयर्ज हूँ। मैं आपको भारत के 44+ ऐतिहासिक स्मारकों, लाइव भीड़, प्रवेश शुल्क, समय और एएसआई प्रमाणित गाइडों की जानकारी दे सकता हूँ।\n\n` +
+      `आप मुझसे किसी भी स्मारक (जैसे ताज महल, हम्पी, आमेर किला) के बारे में पूछ सकते हैं!`
+    );
+  }
+
+  if (detectedLang === "es") {
+    return (
+      `¡Hola! Soy su conserje de inteligencia patrimonial. Puedo guiarle a través de más de 44 monumentos en la India, aforo en tiempo real, entradas oficiales y guías certificados por el ASI.\n\n` +
+      `¿Qué monumento o ciudad le gustaría explorar hoy?`
     );
   }
 

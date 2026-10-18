@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "അന്വേഷിക്കുക",
+    "guides": "ഗൈഡുകൾ",
+    "pricing": "നിരക്കുകൾ",
+    "about": "ഞങ്ങളെക്കുറിച്ച്",
+    "signUp": "സൈൻ അപ്പ്",
+    "login": "ലോഗിൻ",
+    "dashboard": "ഡാഷ്‌ബോർഡ്",
+    "myTrips": "യാത്രകൾ",
+    "settings": "ക്രമീകരണങ്ങൾ",
+    "logOut": "ലോഗൗട്ട്"
+  },
+  "footer": {
+    "tagline": "ഭാരതീയ പൈതൃകത്തിന്റെ അവിസ്മരണീയ അനുഭവം.",
+    "sitemap": "സൈറ്റ്മാപ്പ്",
+    "privacy": "സ്വകാര്യതാ നയം",
+    "terms": "വ്യവസ്ഥകൾ",
+    "cookies": "കുക്കികൾ",
+    "newsletter": "വാർത്താപത്രിക"
+  },
+  "common": {
+    "viewDetails": "വിശദാംശങ്ങൾ കാണുക",
+    "loading": "ലോഡ് ചെയ്യുന്നു...",
+    "language": "ഭാഷ",
+    "theme": "തീം",
+    "accessibility": "ലഭ്യത",
+    "back": "പിന്നോട്ട്",
+    "continue": "തുടരുക"
+  },
+  "categories": {
+    "all": "എല്ലാം",
+    "monument": "സ്മാരകം",
+    "fort": "കോട്ട",
+    "palace": "കൊട്ടാരം",
+    "ancientCity": "പുരാതന നഗരം",
+    "stepwell": "കിണർ",
+    "architecture": "ശില്പകല",
+    "naturalHeritage": "പ്രകൃതിദത്ത പൈതൃകം"
+  },
+  "assistant": {
+    "fab": { "label": "സഹായം ചോദിക്കുക" },
+    "chat": {
+      "leftTitleLine1": "നിങ്ങളുടെ വ്യക്തിഗത",
+      "leftTitleLine2": "പൈതൃക സഹായി",
+      "leftBody": "ഇന്ത്യയിലെ ചരിത്രസ്മാരകങ്ങൾ, തത്സമയ തിരക്ക്, ഔദ്യോഗിക ASI ഗൈഡുകൾ എന്നിവ അറിയുക.",
+      "header": "പൈതൃക സഹായി",
+      "voiceModeLink": "വോയ്സ് മോഡ്",
+      "inputPlaceholder": "ചോദ്യങ്ങൾ ചോദിക്കുക...",
+      "changeMode": "മോഡ് മാറ്റുക",
+      "languageLabel": "ഭാഷ: {{language}}"
+    },
+    "voice": {
+      "title": "വോയ്സ് സഹായി",
+      "listening": "കേൾക്കുന്നു...",
+      "muted": "മൈക്ക് ഓഫ് ആണ്",
+      "autoDetected": "കണ്ടെത്തിയ ഭാഷ: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "ഔദ്യോഗിക ASI ഗൈഡ് പരിശോധന",
+    "subtitle": "ബുക്കിംഗിന് മുൻപ് ഗൈഡിന്റെ ലൈസൻസോ പേരോ പരിശോധിക്കുക.",
+    "experience": "പരിചയം",
+    "yearsShort": "വർഷങ്ങൾ",
+    "rating": "റേറ്റിംഗ്",
+    "verifiedSeal": "ASI സാക്ഷ്യപ്പെടുത്തിയത്"
+  },
+  "explore": {
+    "searchPlaceholder": "സ്ഥലങ്ങൾ, നഗരങ്ങൾ, ക്ഷേത്രങ്ങൾ തിരയുക..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "തത്സമയ തിരക്ക്",
+      "quiet": "വളരെ കുറഞ്ഞ തിരക്ക് — സന്ദർശനത്തിന് ഏറ്റവും അനുയോജ്യം.",
+      "moderate": "മിതമായ തിരക്ക്.",
+      "busy": "കൂടുതൽ തിരക്ക്."
+    },
+    "viewOnMap": "മാപ്പിൽ കാണുക",
+    "findGuide": "ഗൈഡിനെ കണ്ടെത്തുക"
+  }
+}

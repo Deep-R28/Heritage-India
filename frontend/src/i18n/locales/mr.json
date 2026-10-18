@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "अन्वेषण करा",
+    "guides": "मार्गदर्शक",
+    "pricing": "दर पत्रक",
+    "about": "आमच्याबद्दल",
+    "signUp": "साइन अप करा",
+    "login": "लॉग इन करा",
+    "dashboard": "डॅशबोर्ड",
+    "myTrips": "माझ्या सहली",
+    "settings": "सेटिंग्ज",
+    "logOut": "लॉग आउट"
+  },
+  "footer": {
+    "tagline": "भारतीय ऐतिहासिक वारशाचा समृद्ध अनुभव.",
+    "sitemap": "साइटमॅप",
+    "privacy": "गोपनीयता धोरण",
+    "terms": "सेवा अटी",
+    "cookies": "कुकीज",
+    "newsletter": "वृत्तपत्र"
+  },
+  "common": {
+    "viewDetails": "तपशील पहा",
+    "loading": "लोड होत आहे...",
+    "language": "भाषा",
+    "theme": "थीम",
+    "accessibility": "सुलभता",
+    "back": "मागे जा",
+    "continue": "पुढे जा"
+  },
+  "categories": {
+    "all": "सर्व",
+    "monument": "स्मारक",
+    "fort": "किल्ला",
+    "palace": "राजवाडा",
+    "ancientCity": "प्राचीन शहर",
+    "stepwell": "बारव / बावडी",
+    "architecture": "वास्तुकला",
+    "naturalHeritage": "नैसर्गिक वारसा"
+  },
+  "assistant": {
+    "fab": { "label": "कन्सियर्जला विचारा" },
+    "chat": {
+      "leftTitleLine1": "तुमचा वैयक्तिक",
+      "leftTitleLine2": "हेरिटेज कन्सियर्ज",
+      "leftBody": "भारतातील ऐतिहासिक स्थळे, थेट गर्दी आणि अधिकृत ASI गाईड्सची माहिती मिळवा.",
+      "header": "हेरिटेज सहाय्यक",
+      "voiceModeLink": "व्हॉइस मोड",
+      "inputPlaceholder": "तुमचा प्रश्न विचारा...",
+      "changeMode": "मोड बदला",
+      "languageLabel": "भाषा: {{language}}"
+    },
+    "voice": {
+      "title": "व्हॉइस कन्सियर्ज",
+      "listening": "ऐकत आहे...",
+      "muted": "माइक बंद",
+      "autoDetected": "ओळखलेली भाषा: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "अधिकृत ASI गाईड पडताळणी",
+    "subtitle": "बुकिंग करण्यापूर्वी कोणत्याही गाईडचा परवाना किंवा नाव तपासा.",
+    "experience": "अनुभव",
+    "yearsShort": "वर्षे",
+    "rating": "रेटिंग",
+    "verifiedSeal": "ASI प्रमाणित"
+  },
+  "explore": {
+    "searchPlaceholder": "किल्ले, शहरे किंवा मंदिरे शोधा..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "थेट गर्दीची स्थिती",
+      "quiet": "अतिशय कमी गर्दी — भेट देण्यासाठी उत्तम वेळ.",
+      "moderate": "मध्यम गर्दी.",
+      "busy": "जास्त गर्दी — पर्यायी स्थळांचा विचार करा."
+    },
+    "viewOnMap": "नकाशावर पहा",
+    "findGuide": "गाईड शोधा"
+  }
+}

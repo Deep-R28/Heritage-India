@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "دریافت کریں",
+    "guides": "رہنما (گائیڈز)",
+    "pricing": "قیمتیں",
+    "about": "ہمارے بارے میں",
+    "signUp": "سائن اپ",
+    "login": "لاگ ان",
+    "dashboard": "ڈیش بورڈ",
+    "myTrips": "میرے اسفار",
+    "settings": "ترتیبات",
+    "logOut": "لاگ آؤٹ"
+  },
+  "footer": {
+    "tagline": "ہندوستانی تاریخ اور ورثے کا شاندار تجربہ۔",
+    "sitemap": "سائٹ کا نقشہ",
+    "privacy": "رازداری کی پالیسی",
+    "terms": "شرائط",
+    "cookies": "کوکیز",
+    "newsletter": "نیوز لیٹر"
+  },
+  "common": {
+    "viewDetails": "تفصیلات دیکھیں",
+    "loading": "لوڈ ہو رہا ہے...",
+    "language": "زبان",
+    "theme": "تھیم",
+    "accessibility": "رسائی",
+    "back": "پیچھے",
+    "continue": "جاری رکھیں"
+  },
+  "categories": {
+    "all": "سبھی",
+    "monument": "یادگار",
+    "fort": "قلعہ",
+    "palace": "محل",
+    "ancientCity": "قدیم شہر",
+    "stepwell": "باؤلی",
+    "architecture": "طرزِ تعمیر",
+    "naturalHeritage": "قدرتی ورثہ"
+  },
+  "assistant": {
+    "fab": { "label": "رہنما سے پوچھیں" },
+    "chat": {
+      "leftTitleLine1": "آپ کا ذاتی",
+      "leftTitleLine2": "ہیریٹیج دربان",
+      "leftBody": "ہندوستان کے تاریخی مقامات، براہِ راست رش اور تصدیق شدہ ASI گائیڈز کے بارے میں جانیے۔",
+      "header": "ہیریٹیج اسسٹنٹ",
+      "voiceModeLink": "صوتی موڈ",
+      "inputPlaceholder": "اپنا سوال لکھیے...",
+      "changeMode": "موڈ تبدیل کریں",
+      "languageLabel": "زبان: {{language}}"
+    },
+    "voice": {
+      "title": "صوتی دربان",
+      "listening": "سن رہا ہے...",
+      "muted": "مائیک بند ہے",
+      "autoDetected": "شناخت شدہ زبان: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "سرکاری ASI گائیڈز کی تصدیق",
+    "subtitle": "بکنگ کرنے سے پہلے کسی بھی گائیڈ کا لائسنس یا نام تصدیق کریں۔",
+    "experience": "تجربہ",
+    "yearsShort": "سال",
+    "rating": "ریٹنگ",
+    "verifiedSeal": "ASI سے تصدیق شدہ"
+  },
+  "explore": {
+    "searchPlaceholder": "مقامات، شہر یا قلعے تلاش کریں..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "براہِ راست رش",
+      "quiet": "بہت کم رش — دورے کے لیے بہترین وقت۔",
+      "moderate": "درمیانہ رش۔",
+      "busy": "شدید رش — متبادل مقامات پر غور کریں۔"
+    },
+    "viewOnMap": "نقشے پر دیکھیں",
+    "findGuide": "گائیڈ تلاش کریں"
+  }
+}

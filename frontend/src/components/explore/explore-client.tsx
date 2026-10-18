@@ -37,6 +37,19 @@ export function ExploreClient({
     }
   }, [initialSiteSlug, localizedSites]);
 
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const list: string[] = JSON.parse(localStorage.getItem("heritage_saved_sites") || "[]");
+        setSavedIds(new Set(list));
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
+
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
 
@@ -244,17 +257,30 @@ export function ExploreClient({
                     type="button"
                     onClick={async (e) => {
                       e.stopPropagation();
-                      try {
+                      const isSaved = savedIds.has(site.id) || savedIds.has(site.slug);
+                      const next = new Set(savedIds);
+                      if (isSaved) {
+                        next.delete(site.id);
+                        next.delete(site.slug);
+                        setSavedIds(next);
+                        await api.me.removeSavedSite(site.id);
+                      } else {
+                        next.add(site.id);
+                        setSavedIds(next);
                         await api.me.saveSite(site.id);
-                        alert(`Added ${site.name} to Saved Sites!`);
-                      } catch {
-                        // ignore
                       }
                     }}
-                    className="p-1 text-foreground-muted hover:text-accent"
-                    title="Save to My Sites"
+                    className={`p-1.5 transition-colors ${
+                      savedIds.has(site.id) || savedIds.has(site.slug)
+                        ? "text-accent"
+                        : "text-foreground-muted hover:text-accent"
+                    }`}
+                    title={savedIds.has(site.id) || savedIds.has(site.slug) ? "Saved to Dashboard" : "Save to My Sites"}
                   >
-                    <Icon name="bookmark_border" className="text-base" />
+                    <Icon
+                      name={savedIds.has(site.id) || savedIds.has(site.slug) ? "bookmark" : "bookmark_border"}
+                      className="text-base"
+                    />
                   </button>
                   <Link
                     href={`/sites/${site.slug}`}

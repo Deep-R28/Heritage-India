@@ -21,6 +21,11 @@ export function CheckoutView() {
 
   const [site, setSite] = useState<ApiSite | null>(null);
   const [guide, setGuide] = useState<ApiGuide | null>(null);
+  const [availableGuides, setAvailableGuides] = useState<ApiGuide[]>([]);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [guideLanguageFilter, setGuideLanguageFilter] = useState("All");
+  const [guideSearchQuery, setGuideSearchQuery] = useState("");
+
   const [partySize, setPartySize] = useState(2);
   const [visitDate, setVisitDate] = useState(initialDate);
   const [paymentMethod, setPaymentMethod] = useState<"CARD" | "UPI">("UPI");
@@ -41,13 +46,14 @@ export function CheckoutView() {
         const siteData = await api.sites.bySlug(siteSlug);
         setSite(siteData);
 
-        if (guideId) {
-          const guideRes = await api.guides.verify(guideId);
-          if (guideRes.guide) setGuide(guideRes.guide);
-        } else {
-          // Pick a default verified guide
-          const guidesRes = await api.guides.verify();
-          if (guidesRes.guides && guidesRes.guides.length > 0) {
+        const guidesRes = await api.guides.verify();
+        if (guidesRes.guides && guidesRes.guides.length > 0) {
+          setAvailableGuides(guidesRes.guides);
+          if (guideId) {
+            const matched = guidesRes.guides.find((g) => g.id === guideId || g.licenseId === guideId);
+            if (matched) setGuide(matched);
+            else setGuide(guidesRes.guides[0]);
+          } else {
             setGuide(guidesRes.guides[0]);
           }
         }
@@ -110,6 +116,34 @@ export function CheckoutView() {
     }
   };
 
+  const filteredGuides = availableGuides.filter((g) => {
+    const matchesSearch =
+      g.name.toLowerCase().includes(guideSearchQuery.toLowerCase()) ||
+      g.languages.some((l) => l.toLowerCase().includes(guideSearchQuery.toLowerCase())) ||
+      (g.licenseId && g.licenseId.toLowerCase().includes(guideSearchQuery.toLowerCase()));
+
+    const matchesLang =
+      guideLanguageFilter === "All" ||
+      g.languages.some((l) => l.toLowerCase().includes(guideLanguageFilter.toLowerCase()));
+
+    return matchesSearch && matchesLang;
+  });
+
+  const allGuideLanguages = [
+    "All",
+    "English",
+    "Hindi",
+    "Spanish",
+    "Tamil",
+    "Urdu",
+    "French",
+    "German",
+    "Bengali",
+    "Punjabi",
+    "Telugu",
+    "Marathi",
+  ];
+
   if (loading) {
     return (
       <div className="mx-auto max-w-content px-6 py-16 text-center">
@@ -163,18 +197,79 @@ export function CheckoutView() {
               </div>
             )}
 
-            {guide && (
-              <div className="mt-4 flex items-center justify-between rounded-lg border border-hairline bg-surface-hover/30 p-3">
-                <div className="flex items-center gap-2.5">
-                  <Icon name="verified_user" className="text-lg text-accent" />
-                  <div>
-                    <p className="font-headline text-xs text-foreground">{guide.name}</p>
-                    <p className="font-body text-[10px] text-foreground-muted">ASI Licensed ({guide.licenseId})</p>
+            {/* Guide Selection Status Card */}
+            <div className="mt-6 border-t border-hairline pt-4">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-label text-xs uppercase tracking-wider text-foreground-muted">
+                  Official Guide Service
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowGuideModal(true)}
+                  className="font-label text-xs uppercase tracking-wider text-accent hover:underline"
+                >
+                  {guide ? "Change Guide" : "+ Add Guide"}
+                </button>
+              </div>
+
+              {guide ? (
+                <div className="rounded-lg border border-accent/30 bg-accent/5 p-3.5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
+                        <Icon name="verified_user" className="text-xl" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-headline text-sm font-semibold text-foreground">{guide.name}</p>
+                          <Badge tone="verified">ASI Verified</Badge>
+                        </div>
+                        <p className="mt-0.5 font-label text-[10px] uppercase text-foreground-muted">
+                          License: {guide.licenseId} &middot; {guide.experienceYears} yrs exp
+                        </p>
+                        <p className="mt-1 font-body text-xs text-accent">
+                          Languages: {guide.languages.join(", ")}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-mono text-xs font-semibold text-foreground">₹{guide.ratePerHourINR * 3}</span>
+                      <p className="text-[10px] text-foreground-muted">3 hrs tour</p>
+                    </div>
+                  </div>
+                  <div className="mt-2.5 flex justify-end gap-3 border-t border-hairline/60 pt-2 text-[11px]">
+                    <button
+                      type="button"
+                      onClick={() => setGuide(null)}
+                      className="text-foreground-muted hover:text-red-400"
+                    >
+                      Remove (Entry Only)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowGuideModal(true)}
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      Choose Different Guide →
+                    </button>
                   </div>
                 </div>
-                <span className="font-mono text-xs text-foreground">₹{guide.ratePerHourINR * 3}</span>
-              </div>
-            )}
+              ) : (
+                <div className="flex items-center justify-between rounded-lg border border-hairline border-dashed bg-surface/50 p-3.5">
+                  <div>
+                    <p className="font-headline text-xs text-foreground">No Guide Selected</p>
+                    <p className="text-[11px] text-foreground-muted">Entry tickets only. You can add a certified ASI guide anytime.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowGuideModal(true)}
+                    className="shrink-0 rounded bg-accent px-3 py-1.5 font-label text-xs font-semibold uppercase text-background hover:bg-accent/90"
+                  >
+                    Select Guide
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Config: Date & Party Size */}
             <div className="mt-6 grid grid-cols-2 gap-4 border-t border-hairline pt-4">
@@ -211,7 +306,7 @@ export function CheckoutView() {
               </div>
               {guide && (
                 <div className="flex justify-between">
-                  <span>Certified Guide (3 hours)</span>
+                  <span>Certified ASI Guide ({guide.name}, 3 hrs)</span>
                   <span className="font-mono text-foreground">₹{guideFeeTotal.toLocaleString("en-IN")}</span>
                 </div>
               )}
@@ -250,15 +345,15 @@ export function CheckoutView() {
               Select your preferred secure transaction method (Test Mode).
             </p>
 
-            {/* Tabs */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            {/* Payment Method Switcher */}
+            <div className="mt-6 grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setPaymentMethod("UPI")}
-                className={`flex items-center justify-center gap-2 rounded-xl border p-3.5 font-label text-xs uppercase tracking-wider transition-all ${
+                className={`flex items-center justify-center gap-2 rounded-lg border p-3 font-label text-xs uppercase tracking-wider transition-all ${
                   paymentMethod === "UPI"
-                    ? "border-accent bg-accent/10 text-accent font-semibold"
-                    : "border-hairline bg-surface text-foreground-muted hover:bg-surface-hover hover:text-foreground"
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-hairline bg-surface text-foreground-muted hover:bg-surface-hover"
                 }`}
               >
                 <Icon name="qr_code_2" className="text-lg" />
@@ -267,10 +362,10 @@ export function CheckoutView() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod("CARD")}
-                className={`flex items-center justify-center gap-2 rounded-xl border p-3.5 font-label text-xs uppercase tracking-wider transition-all ${
+                className={`flex items-center justify-center gap-2 rounded-lg border p-3 font-label text-xs uppercase tracking-wider transition-all ${
                   paymentMethod === "CARD"
-                    ? "border-accent bg-accent/10 text-accent font-semibold"
-                    : "border-hairline bg-surface text-foreground-muted hover:bg-surface-hover hover:text-foreground"
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-hairline bg-surface text-foreground-muted hover:bg-surface-hover"
                 }`}
               >
                 <Icon name="credit_card" className="text-lg" />
@@ -280,32 +375,37 @@ export function CheckoutView() {
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               {paymentMethod === "UPI" ? (
-                <div className="space-y-4 rounded-xl border border-hairline bg-surface-hover/20 p-6">
-                  <div>
-                    <label className="block font-label text-xs uppercase tracking-wider text-foreground-muted">
-                      UPI Virtual Payment Address (VPA)
-                    </label>
-                    <div className="relative mt-2">
-                      <input
-                        type="text"
-                        value={upiId}
-                        onChange={(e) => setUpiId(e.target.value)}
-                        placeholder="username@okhdfcbank"
-                        required
-                        className="w-full rounded-lg border border-hairline bg-surface px-4 py-2.5 font-body text-sm text-foreground focus:border-accent focus:outline-none"
-                      />
-                      <span className="absolute right-3 top-2.5 font-mono text-xs text-accent">BHIM UPI</span>
+                <div className="space-y-4 rounded-xl border border-hairline bg-surface-hover/20 p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
+                      <Icon name="mobile_friendly" className="text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="font-headline text-sm text-foreground">Instant UPI Payment</h3>
+                      <p className="font-body text-xs text-foreground-muted">
+                        Pay securely using Google Pay, PhonePe, Paytm, or BHIM.
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 pt-2 text-xs text-foreground-muted">
-                    <Icon name="security" className="text-base text-verified" />
-                    <span>Instant authorization via Google Pay, PhonePe, Paytm, or CRED</span>
+
+                  <div>
+                    <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">
+                      Virtual Payment Address (UPI ID)
+                    </label>
+                    <input
+                      type="text"
+                      value={upiId}
+                      onChange={(e) => setUpiId(e.target.value)}
+                      placeholder="username@okhdfcbank"
+                      required
+                      className="mt-1 w-full rounded-lg border border-hairline bg-surface px-3 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
+                    />
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4 rounded-xl border border-hairline bg-surface-hover/20 p-6">
+                <div className="space-y-4">
                   <div>
-                    <label className="block font-label text-xs uppercase tracking-wider text-foreground-muted">
+                    <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">
                       Cardholder Full Name
                     </label>
                     <input
@@ -313,12 +413,12 @@ export function CheckoutView() {
                       value={cardName}
                       onChange={(e) => setCardName(e.target.value)}
                       required
-                      className="mt-2 w-full rounded-lg border border-hairline bg-surface px-4 py-2.5 font-body text-sm text-foreground focus:border-accent focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-hairline bg-surface px-3 py-2.5 font-body text-sm text-foreground focus:border-accent focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-label text-xs uppercase tracking-wider text-foreground-muted">
+                    <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">
                       Card Number
                     </label>
                     <input
@@ -326,13 +426,13 @@ export function CheckoutView() {
                       value={cardNumber}
                       onChange={(e) => setCardNumber(e.target.value)}
                       required
-                      className="mt-2 w-full rounded-lg border border-hairline bg-surface px-4 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-hairline bg-surface px-3 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-label text-xs uppercase tracking-wider text-foreground-muted">
+                      <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">
                         Expiry (MM/YY)
                       </label>
                       <input
@@ -340,51 +440,217 @@ export function CheckoutView() {
                         value={cardExpiry}
                         onChange={(e) => setCardExpiry(e.target.value)}
                         required
-                        className="mt-2 w-full rounded-lg border border-hairline bg-surface px-4 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
+                        className="mt-1 w-full rounded-lg border border-hairline bg-surface px-3 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block font-label text-xs uppercase tracking-wider text-foreground-muted">
+                      <label className="block font-label text-[10px] uppercase tracking-wider text-foreground-muted">
                         CVV / CVC
                       </label>
                       <input
                         type="password"
-                        maxLength={4}
                         value={cardCvc}
                         onChange={(e) => setCardCvc(e.target.value)}
                         required
-                        className="mt-2 w-full rounded-lg border border-hairline bg-surface px-4 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
+                        maxLength={4}
+                        className="mt-1 w-full rounded-lg border border-hairline bg-surface px-3 py-2.5 font-mono text-sm text-foreground focus:border-accent focus:outline-none"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Trust & Security Badge Row */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-6 text-xs text-foreground-muted">
-                <div className="flex items-center gap-2">
-                  <Icon name="lock" className="text-base text-accent" />
-                  <span>256-Bit TLS End-to-End Encryption</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="verified_user" className="text-base text-verified" />
-                  <span>PCI-DSS Level 1 Compliant</span>
-                </div>
+              {/* Security Trust Badges */}
+              <div className="flex items-center justify-between border-t border-hairline pt-4 font-body text-xs text-foreground-muted">
+                <span className="flex items-center gap-1.5">
+                  <Icon name="lock" className="text-sm text-accent" /> 256-Bit TLS End-to-End Encryption
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Icon name="verified" className="text-sm text-accent" /> PCI-DSS Level 1 Compliant
+                </span>
               </div>
 
               {/* Submit CTA */}
               <button
                 type="submit"
                 disabled={submitting}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-4 font-label text-sm uppercase tracking-widest text-background shadow-lg shadow-accent/20 transition-all hover:bg-accent/90 disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-3 font-label text-sm font-semibold uppercase tracking-widest text-obsidian shadow-lg shadow-accent/20 transition-all hover:bg-accent/90 disabled:opacity-50"
               >
-                <Icon name="lock" className="text-base" />
-                {submitting ? "Processing Reservation..." : `Pay ₹${grandTotal.toLocaleString("en-IN")} Securely`}
+                {submitting ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-obsidian border-t-transparent" />
+                    <span>Processing Secure Reservation...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icon name="lock" className="text-base" />
+                    <span>Pay ₹{grandTotal.toLocaleString("en-IN")} Securely</span>
+                  </>
+                )}
               </button>
             </form>
           </Card>
         </div>
       </div>
+
+      {/* Interactive Guide Selection Modal */}
+      {showGuideModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-md">
+          <div className="glass-panel flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-hairline shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-hairline px-6 py-4">
+              <div>
+                <h3 className="font-headline text-xl text-foreground">Choose Your Certified ASI Guide</h3>
+                <p className="font-body text-xs text-foreground-muted">
+                  Select an official historian fluent in your preferred language and historical interest.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowGuideModal(false)}
+                className="rounded-full p-2 text-foreground-muted hover:bg-surface hover:text-accent"
+              >
+                <Icon name="close" className="text-xl" />
+              </button>
+            </div>
+
+            {/* Filter and Search Bar */}
+            <div className="space-y-3 border-b border-hairline bg-surface/40 p-4">
+              <div className="relative">
+                <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground-muted" />
+                <input
+                  type="text"
+                  value={guideSearchQuery}
+                  onChange={(e) => setGuideSearchQuery(e.target.value)}
+                  placeholder="Search by guide name, license ID, or language..."
+                  className="w-full rounded-lg border border-hairline bg-surface py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-foreground-muted focus:border-accent focus:outline-none"
+                />
+              </div>
+
+              {/* Language Chips */}
+              <div className="flex flex-wrap gap-1.5 overflow-x-auto py-1">
+                {allGuideLanguages.map((lang) => (
+                  <button
+                    key={lang}
+                    type="button"
+                    onClick={() => setGuideLanguageFilter(lang)}
+                    className={`rounded-full px-2.5 py-1 font-label text-[11px] uppercase tracking-wider transition-all ${
+                      guideLanguageFilter === lang
+                        ? "bg-accent text-background font-bold shadow-sm"
+                        : "border border-hairline bg-surface text-foreground-muted hover:border-accent/40 hover:text-foreground"
+                    }`}
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Guide List */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-3">
+              {/* Option to visit without guide */}
+              <div
+                onClick={() => {
+                  setGuide(null);
+                  setShowGuideModal(false);
+                }}
+                className={`cursor-pointer rounded-xl border p-4 transition-all hover:border-accent/50 ${
+                  guide === null
+                    ? "border-accent bg-accent/10"
+                    : "border-hairline bg-surface/30"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline bg-surface text-foreground-muted">
+                      <Icon name="person_off" className="text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-headline text-sm font-semibold text-foreground">Self-Guided Exploration (No Guide)</h4>
+                      <p className="text-xs text-foreground-muted">Book monument admission tickets only without guide services.</p>
+                    </div>
+                  </div>
+                  <span className="font-mono text-xs font-semibold text-emerald-400">₹0 (Entry Only)</span>
+                </div>
+              </div>
+
+              {filteredGuides.map((g) => {
+                const isSelected = guide?.id === g.id;
+                return (
+                  <div
+                    key={g.id}
+                    onClick={() => {
+                      setGuide(g);
+                      setShowGuideModal(false);
+                    }}
+                    className={`cursor-pointer rounded-xl border p-4 transition-all hover:border-accent/60 ${
+                      isSelected
+                        ? "border-accent bg-accent/10 shadow-md"
+                        : "border-hairline bg-surface/50 hover:bg-surface"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3.5">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent font-headline font-bold text-base">
+                          {g.name.split(" ").map((w) => w[0]).join("")}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-headline text-base font-semibold text-foreground">{g.name}</h4>
+                            <Badge tone={g.licenseStatus === "VERIFIED" ? "verified" : "warning"}>
+                              {g.licenseStatus === "VERIFIED" ? "ASI Certified" : "Unverified"}
+                            </Badge>
+                          </div>
+                          <p className="font-label text-xs text-foreground-muted">
+                            License: {g.licenseId} &middot; {g.experienceYears} Years Experience
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {g.languages.map((l) => (
+                              <span
+                                key={l}
+                                className="rounded bg-surface-container px-2 py-0.5 font-label text-[10px] text-accent border border-hairline"
+                              >
+                                {l}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-right shrink-0">
+                        <div className="font-mono text-base font-bold text-accent">₹{g.ratePerHourINR}/hr</div>
+                        <p className="text-[10px] text-foreground-muted">₹{g.ratePerHourINR * 3} for 3 hrs</p>
+                        <button
+                          type="button"
+                          className={`mt-2 rounded px-3 py-1 font-label text-xs font-semibold uppercase ${
+                            isSelected
+                              ? "bg-accent text-background"
+                              : "border border-hairline bg-surface text-foreground hover:border-accent"
+                          }`}
+                        >
+                          {isSelected ? "Selected" : "Select"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between border-t border-hairline bg-surface/60 px-6 py-3 text-xs text-foreground-muted">
+              <span>All ASI guides undergo background security and archival history testing.</span>
+              <button
+                type="button"
+                onClick={() => setShowGuideModal(false)}
+                className="font-label uppercase tracking-wider text-accent hover:underline"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

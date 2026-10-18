@@ -43,7 +43,39 @@ export function DashboardView() {
           api.me.dashboard().catch(() => null),
           api.me.savedSites().catch(() => []),
         ]);
-        if (dashRes) setData(dashRes);
+
+        let localBookings = [];
+        if (typeof window !== "undefined") {
+          try {
+            localBookings = JSON.parse(localStorage.getItem("heritage_bookings") || "[]");
+          } catch {
+            localBookings = [];
+          }
+        }
+
+        if (dashRes) {
+          const mergedBookings = [...localBookings, ...(dashRes.upcomingBookings || [])];
+          const seen = new Set<string>();
+          const uniqueBookings = [];
+          for (const b of mergedBookings) {
+            const key = b.reference || b.id;
+            if (!seen.has(key)) {
+              seen.add(key);
+              uniqueBookings.push(b);
+            }
+          }
+
+          setData({
+            ...dashRes,
+            stats: {
+              ...dashRes.stats,
+              savedSites: savedRes.length || dashRes.stats.savedSites,
+              guidesBooked: uniqueBookings.filter((b) => Boolean(b.guide)).length || dashRes.stats.guidesBooked,
+            },
+            upcomingBookings: uniqueBookings,
+          });
+        }
+
         if (savedRes) setSavedSites(savedRes);
       } finally {
         setLoading(false);

@@ -52,6 +52,176 @@
   },
   {
     "id": "g-1004",
+    "name": "Rajesh Kumar",
+    "asiId": "ASI-RAJ-001",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 10,
+    "languages": ["English", "Hindi", "Urdu"],
+    "specialty": "Indo-Islamic & Mughal Heritage",
+    "region": "Agra & Delhi",
+    "rateInr": 800,
+    "rating": 4.9,
+    "translations": {
+      "hi": { "specialty": "इंडो-इस्लामिक और मुगल विरासत" },
+      "es": { "specialty": "Patrimonio Indo-Islámico y Mogol" }
+    }
+  },
+  {
+    "id": "g-1005",
+    "name": "Priya Sharma",
+    "asiId": "ASI-PRI-002",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 9,
+    "languages": ["English", "Hindi", "Sanskrit"],
+    "specialty": "Vedic Philosophy & Sacred Ghats",
+    "region": "Varanasi, Uttar Pradesh",
+    "rateInr": 700,
+    "rating": 4.8,
+    "translations": {
+      "hi": { "specialty": "वैदिक दर्शन और प्राचीन घाट" },
+      "es": { "specialty": "Filosofía Védica y Ghats Sagrados" }
+    }
+  },
+  {
+    "id": "g-1006",
+    "name": "Arun Nair",
+    "asiId": "ASI-ARN-003",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 11,
+    "languages": ["English", "Malayalam", "Tamil", "Hindi"],
+    "specialty": "Dravidian Temple Sculpture & Spices Route",
+    "region": "Kochi & Madurai",
+    "rateInr": 1000,
+    "rating": 4.9,
+    "translations": {
+      "hi": { "specialty": "द्रविड़ मंदिर शिल्प और प्राचीन मसाले मार्ग" },
+      "es": { "specialty": "Escultura Dravídica y Ruta de las Especias" }
+    }
+  },
+  {
+    "id": "g-1007",
+    "name": "Meera Devi",
+    "asiId": "ASI-MEE-004",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 7,
+    "languages": ["English", "Hindi", "Rajasthani", "Gujarati"],
+    "specialty": "Mewar Royalty & Miniature Art",
+    "region": "Udaipur & Jodhpur",
+    "rateInr": 600,
+    "rating": 4.7,
+    "translations": {
+      "hi": { "specialty": "मेवाड़ राजघराना और लघु चित्रकला" },
+      "es": { "specialty": "Realeza Mewar y Arte en Miniatura" }
+    }
+  },
+  {
+    "id": "g-1008",
+    "name": "Vikram Singh",
+    "asiId": "ASI-VIK-005",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 14,
+    "languages": ["English", "Hindi", "French", "Spanish"],
+    "specialty": "Mughal Dynastic Chronicles & Architecture",
+    "region": "Delhi & Agra",
+    "rateInr": 1200,
+    "rating": 5.0,
+    "translations": {
+      "hi": { "specialty": "मुगल इतिहास और स्थापत्य" },
+      "es": { "specialty": "Crónicas Dinásticas Mogoles" }
+    }
+  },
+  {
+    "id": "g-1009",
+    "name": "Lakshmi Iyer",
+    "asiId": "ASI-LAK-006",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 10,
+    "languages": ["English", "Tamil", "Telugu", "Kannada", "Hindi"],
+    "specialty": "Pallava Shore Sculptures & UNESCO Sites",
+    "region": "Mahabalipuram & Kanchipuram",
+    "rateInr": 750,
+    "rating": 4.8,
+    "translations": {
+      "hi": { "specialty": "पल्लव कालीन मूर्तिकला और यूनेस्को धरोहर" },
+      "es": { "specialty": "Esculturas Costeras Pallava y Sitios UNESCO" }
+    }
+  },
+  {
+    "id": "g-1010",
+    "name": "Mohammed Farooq",
+    "asiId": "ASI-MOH-007",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 13,
+    "languages": ["English", "Hindi", "Urdu", "Telugu"],
+    "specialty": "Qutb Shahi Fortresses & Nizams Heritage",
+    "region": "Hyderabad, Telangana",
+    "rateInr": 900,
+    "rating": 4.9,
+    "translations": {
+      "hi": { "specialty": "कुतुब शाही किले और निजामों की विरासत" },
+      "es": { "specialty": "Fortalezas Qutb Shahi y Patrimonio de los Nizams" }
+    }
+  },
+  {
+    "id": "g-1011",
+    "name": "Sunita Patil",
+    "asiId": "ASI-SUN-008",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 8,
+    "languages": ["English", "Marathi", "Hindi"],
+    "specialty": "Ancient Rock-Cut Buddhist Cave Murals",
+    "region": "Ajanta & Ellora, Maharashtra",
+    "rateInr": 650,
+    "rating": 4.7,
+    "translations": {
+      "hi": { "specialty": "अजंता-एलोरा बौद्ध भित्तिचित्र और गुफाएं" },
+      "es": { "specialty": "Murales Budistas en Cuevas Excavadas en Roca" }
+    }
+  },
+  {
+    "id": "g-1012",
+    "name": "Ananya Roy",
+    "asiId": "ASI-WB-009",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 9,
+    "languages": ["English", "Bengali", "Hindi"],
+    "specialty": "Colonial Heritage & Kalinga Temple Art",
+    "region": "Kolkata & Puri",
+    "rateInr": 850,
+    "rating": 4.8,
+    "translations": {
+      "hi": { "specialty": "औपनिवेशिक विरासत और कलिंग मंदिर कला" },
+      "es": { "specialty": "Patrimonio Colonial y Arte de Templos Kalinga" }
+    }
+  },
+  {
+    "id": "g-1013",
+    "name": "Gurpreet Singh",
+    "asiId": "ASI-PB-010",
+    "verified": true,
+    "photo": null,
+    "experienceYears": 10,
+    "languages": ["English", "Punjabi", "Hindi"],
+    "specialty": "Sikh Heritage & Partition History",
+    "region": "Amritsar, Punjab",
+    "rateInr": 800,
+    "rating": 4.9,
+    "translations": {
+      "hi": { "specialty": "सिख विरासत और विभाजन का इतिहास" },
+      "es": { "specialty": "Patrimonio Sikh e Historia de la Partición" }
+    }
+  },
+  {
+    "id": "g-1014",
     "name": "Suresh Naik",
     "asiId": null,
     "verified": false,

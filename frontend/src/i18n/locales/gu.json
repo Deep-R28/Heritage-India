@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "શોધો",
+    "guides": "ગાઇડ્સ",
+    "pricing": "ભાવ પત્રક",
+    "about": "અમારા વિશે",
+    "signUp": "સાઇન અપ",
+    "login": "લૉગ ઇન",
+    "dashboard": "ડેશબોર્ડ",
+    "myTrips": "મારી યાત્રાઓ",
+    "settings": "સેટિંગ્સ",
+    "logOut": "લૉગ આઉટ"
+  },
+  "footer": {
+    "tagline": "ભારતીય વારસાનો ભવ્ય અનુભવ.",
+    "sitemap": "સાઇટમેપ",
+    "privacy": "ગોપનીયતા નીતિ",
+    "terms": "શરતો",
+    "cookies": "કૂકીઝ",
+    "newsletter": "ન્યૂઝલેટર"
+  },
+  "common": {
+    "viewDetails": "વિગતવાર જુઓ",
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "language": "ભાષા",
+    "theme": "થીમ",
+    "accessibility": "સરળતા",
+    "back": "પાછા જાઓ",
+    "continue": "આગળ વધો"
+  },
+  "categories": {
+    "all": "બધા",
+    "monument": "સ્મારક",
+    "fort": "કિલ્લો",
+    "palace": "મહેલ",
+    "ancientCity": "પ્રાચીન નગર",
+    "stepwell": "વાવ",
+    "architecture": "સ્થાપત્ય",
+    "naturalHeritage": "કુદરતી વારસો"
+  },
+  "assistant": {
+    "fab": { "label": "કન્સિયર્જને પૂછો" },
+    "chat": {
+      "leftTitleLine1": "તમારો અંગત",
+      "leftTitleLine2": "હેરિટેજ કન્સિયર્જ",
+      "leftBody": "ભારતના ઐતિહાસિક સ્મારકો, લાઇવ ભીડ અને અધિકૃત ASI ગાઇડ્સ વિશે માહિતી મેળવો.",
+      "header": "હેરિટેજ સહાયક",
+      "voiceModeLink": "વૉઇસ મોડ",
+      "inputPlaceholder": "તમારો પ્રશ્ન પૂછો...",
+      "changeMode": "મોડ બદલો",
+      "languageLabel": "ભાષા: {{language}}"
+    },
+    "voice": {
+      "title": "વૉઇસ કન્સિયર્જ",
+      "listening": "સાંભળી રહ્યું છે...",
+      "muted": "માઇક બંધ છે",
+      "autoDetected": "ઓળખાયેલી ભાષા: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "સત્તાવાર ASI ગાઇડ ચકાસણી",
+    "subtitle": "બુકિંગ કરતાં પહેલાં ગાઇડનું લાઇસન્સ અથવા નામ ચકાસો.",
+    "experience": "અનુભવ",
+    "yearsShort": "વર્ષ",
+    "rating": "રેટિંગ",
+    "verifiedSeal": "ASI પ્રમાણિત"
+  },
+  "explore": {
+    "searchPlaceholder": "સ્થળો, શહેરો કે મંદિરો શોધો..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "લાઇવ ભીડ સ્થિતિ",
+      "quiet": "ખૂબ જ ઓછી ભીડ — મુલાકાત માટે શ્રેષ્ઠ સમય.",
+      "moderate": "મધ્યમ ભીડ.",
+      "busy": "વધારે ભીડ — વૈકલ્પિક સ્થળો ધ્યાનમાં લો."
+    },
+    "viewOnMap": "નકશા પર જુઓ",
+    "findGuide": "ગાઇડ શોધો"
+  }
+}

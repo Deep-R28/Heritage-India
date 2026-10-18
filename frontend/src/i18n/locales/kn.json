@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "ಅನ್ವೇಷಿಸಿ",
+    "guides": "ಮಾರ್ಗದರ್ಶಿಗಳು",
+    "pricing": "ದರಪಟ್ಟಿ",
+    "about": "ನಮ್ಮ ಬಗ್ಗೆ",
+    "signUp": "ಸೈನ್ ಅಪ್",
+    "login": "ಲಾಗಿನ್",
+    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "myTrips": "ನನ್ನ ಪ್ರವಾಸಗಳು",
+    "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "logOut": "ಲಾಗ್ ಔಟ್"
+  },
+  "footer": {
+    "tagline": "ಭಾರತೀಯ ಪರಂಪರೆಯ ಭವ್ಯ ಅನುಭವ.",
+    "sitemap": "ಸೈಟ್‌ಮ್ಯಾಪ್",
+    "privacy": "ಗೌಪ್ಯತೆ ನೀತಿ",
+    "terms": "ನಿಯಮಗಳು",
+    "cookies": "ಕುಕೀಗಳು",
+    "newsletter": "ಸುದ್ದಿಪತ್ರ"
+  },
+  "common": {
+    "viewDetails": "ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "language": "ಭಾಷೆ",
+    "theme": "ಥೀಮ್",
+    "accessibility": "ಪ್ರವೇಶಸಾಧ್ಯತೆ",
+    "back": "ಹಿಂದಕ್ಕೆ",
+    "continue": "ಮುಂದುವರಿಸಿ"
+  },
+  "categories": {
+    "all": "ಎಲ್ಲವೂ",
+    "monument": "ಸ್ಮಾರಕ",
+    "fort": "ಕೋಟೆ",
+    "palace": "ಅರಮನೆ",
+    "ancientCity": "ಪ್ರಾಚೀನ ನಗರ",
+    "stepwell": "ಕಲ್ಯಾಣಿ / ಬಾವಿ",
+    "architecture": "ವಾಸ್ತುಶಿಲ್ಪ",
+    "naturalHeritage": "ನೈಸರ್ಗಿಕ ಪರಂಪರೆ"
+  },
+  "assistant": {
+    "fab": { "label": "ಸಹಾಯ ಕೇಳಿ" },
+    "chat": {
+      "leftTitleLine1": "ನಿಮ್ಮ ವೈಯಕ್ತಿಕ",
+      "leftTitleLine2": "ಪರಂಪರೆ ಸಹಾಯಕಿ",
+      "leftBody": "ಭಾರತದ ಐತಿಹಾಸಿಕ ತಾಣಗಳು, ಲೈವ್ ಜನದಟ್ಟಣೆ ಮತ್ತು ASI ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ತಿಳಿಯಿರಿ.",
+      "header": "ಪರಂಪರೆ ಸಹಾಯಕ",
+      "voiceModeLink": "ಧ್ವನಿ ಮೋಡ್",
+      "inputPlaceholder": "ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...",
+      "changeMode": "ಮೋಡ್ ಬದಲಾಯಿಸಿ",
+      "languageLabel": "ಭಾಷೆ: {{language}}"
+    },
+    "voice": {
+      "title": "ಧ್ವನಿ ಸಹಾಯಕ",
+      "listening": "ಕೇಳಿಸಿಕೊಳ್ಳುತ್ತಿದೆ...",
+      "muted": "ಮೈಕ್ ಆಫ್ ಆಗಿದೆ",
+      "autoDetected": "ಗುರುತಿಸಲಾದ ಭಾಷೆ: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "ಅಧಿಕೃತ ASI ಮಾರ್ಗದರ್ಶಿ ಪರಿಶೀಲನೆ",
+    "subtitle": "ಬುಕಿಂಗ್ ಮಾಡುವ ಮೊದಲು ಮಾರ್ಗದರ್ಶಿಯ ಹೆಸರು ಅಥವಾ ಪರವಾನಗಿ ಪರಿಶೀಲಿಸಿ.",
+    "experience": "ಅನುಭವ",
+    "yearsShort": "ವರ್ಷಗಳು",
+    "rating": "ರೇಟಿಂಗ್",
+    "verifiedSeal": "ASI ಪ್ರಮಾಣೀಕೃತ"
+  },
+  "explore": {
+    "searchPlaceholder": "ಸ್ಥಳಗಳು, ನಗರಗಳು ಅಥವಾ ದೇವಾಲಯಗಳನ್ನು ಹುಡುಕಿ..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "ಲೈವ್ ಜನದಟ್ಟಣೆ",
+      "quiet": "ತುಂಬಾ ಕಡಿಮೆ ಜನದಟ್ಟಣೆ — ಭೇಟಿ ನೀಡಲು ಉತ್ತಮ ಸಮಯ.",
+      "moderate": "ಮಧ್ಯಮ ಜನದಟ್ಟಣೆ.",
+      "busy": "ಹೆಚ್ಚು ಜನದಟ್ಟಣೆ — ಪರ್ಯಾಯ ಸ್ಥಳಗಳನ್ನು ಪರಿಗಣಿಸಿ."
+    },
+    "viewOnMap": "ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿ",
+    "findGuide": "ಮಾರ್ಗದರ್ಶಿ ಹುಡುಕಿ"
+  }
+}

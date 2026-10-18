@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "ਖੋਜੋ",
+    "guides": "ਗਾਈਡ",
+    "pricing": "ਕੀਮਤਾਂ",
+    "about": "ਸਾਡੇ ਬਾਰੇ",
+    "signUp": "ਸਾਈਨ ਅੱਪ",
+    "login": "ਲਾਗਇਨ",
+    "dashboard": "ਡੈਸ਼ਬੋਰਡ",
+    "myTrips": "ਮੇਰੇ ਸਫ਼ਰ",
+    "settings": "ਸੈਟਿੰਗਾਂ",
+    "logOut": "ਲਾਗ ਆਊਟ"
+  },
+  "footer": {
+    "tagline": "ਭਾਰਤੀ ਵਿਰਾਸਤ ਦਾ ਅਦਭੁਤ ਅਤੇ ਸ਼ਾਹੀ ਅਨੁਭਵ।",
+    "sitemap": "ਸਾਈਟਮੈਪ",
+    "privacy": "ਨਿੱਜਤਾ ਨੀਤੀ",
+    "terms": "ਨਿਯਮ",
+    "cookies": "ਕੂਕੀਜ਼",
+    "newsletter": "ਖ਼ਬਰਨਾਮਾ"
+  },
+  "common": {
+    "viewDetails": "ਵੇਰਵੇ ਦੇਖੋ",
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
+    "language": "ਭਾਸ਼ਾ",
+    "theme": "ਥੀਮ",
+    "accessibility": "ਪਹੁੰਚਯੋਗਤਾ",
+    "back": "ਪਿੱਛੇ",
+    "continue": "ਜਾਰੀ ਰੱਖੋ"
+  },
+  "categories": {
+    "all": "ਸਾਰੇ",
+    "monument": "ਸਮਾਰਕ",
+    "fort": "ਕਿਲ੍ਹਾ",
+    "palace": "ਮਹਿਲ",
+    "ancientCity": "ਪੁਰਾਤਨ ਸ਼ਹਿਰ",
+    "stepwell": "ਬਾਉਲੀ",
+    "architecture": "ਇਮਾਰਤਸਾਜ਼ੀ",
+    "naturalHeritage": "ਕੁਦਰਤੀ ਵਿਰਾਸਤ"
+  },
+  "assistant": {
+    "fab": { "label": "ਸਹਾਇਤਾ ਲਵੋ" },
+    "chat": {
+      "leftTitleLine1": "ਤੁਹਾਡਾ ਨਿੱਜੀ",
+      "leftTitleLine2": "ਵਿਰਾਸਤ ਸਹਾਇਕ",
+      "leftBody": "ਭਾਰਤ ਦੇ ਇਤਿਹਾਸਕ ਅਸਥਾਨਾਂ, ਲਾਈਵ ਭੀੜ ਅਤੇ ਪ੍ਰਮਾਣਿਤ ASI ਗਾਈਡਾਂ ਬਾਰੇ ਜਾਣੋ।",
+      "header": "ਵਿਰਾਸਤ ਸਹਾਇਕ",
+      "voiceModeLink": "ਆਵਾਜ਼ ਮੋਡ",
+      "inputPlaceholder": "ਆਪਣਾ ਸਵਾਲ ਪੁੱਛੋ...",
+      "changeMode": "ਮੋਡ ਬਦਲੋ",
+      "languageLabel": "ਭਾਸ਼ਾ: {{language}}"
+    },
+    "voice": {
+      "title": "ਆਵਾਜ਼ ਕੰਸੀਅਰਜ",
+      "listening": "ਸੁਣ ਰਿਹਾ ਹੈ...",
+      "muted": "ਮਾਈਕ ਬੰਦ ਹੈ",
+      "autoDetected": "ਪਛਾਣੀ ਗਈ ਭਾਸ਼ਾ: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "ਅਧਿਕਾਰਤ ASI ਗਾਈਡ ਪੜਤਾਲ",
+    "subtitle": "ਬੁਕਿੰਗ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਾਈਡ ਦਾ ਲਾਇਸੰਸ ਜਾਂ ਨਾਂ ਤਸਦੀਕ ਕਰੋ।",
+    "experience": "ਤਜਰਬਾ",
+    "yearsShort": "ਸਾਲ",
+    "rating": "ਰੇਟਿੰਗ",
+    "verifiedSeal": "ASI ਪ੍ਰਮਾਣਿਤ"
+  },
+  "explore": {
+    "searchPlaceholder": "ਅਸਥਾਨ, ਸ਼ਹਿਰ ਜਾਂ ਕਿਲ੍ਹੇ ਖੋਜੋ..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "ਲਾਈਵ ਭੀੜ",
+      "quiet": "ਬਹੁਤ ਘੱਟ ਭੀੜ — ਦਰਸ਼ਨਾਂ ਲਈ ਸਭ ਤੋਂ ਵਧੀਆ ਸਮਾਂ।",
+      "moderate": "ਦਰਮਿਆਨੀ ਭੀੜ।",
+      "busy": "ਬਹੁਤ ਜ਼ਿਆਦਾ ਭੀੜ।"
+    },
+    "viewOnMap": "ਨਕਸ਼ੇ 'ਤੇ ਦੇਖੋ",
+    "findGuide": "ਗਾਈਡ ਲੱਭੋ"
+  }
+}

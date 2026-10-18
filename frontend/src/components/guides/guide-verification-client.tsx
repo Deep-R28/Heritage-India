@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import type { Guide } from "@/lib/data";
 import type { PricingData } from "@/components/pricing/pricing-types";
@@ -91,8 +92,30 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
                 </div>
               </div>
 
+              {/* Action bar for booking */}
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="font-label text-xs uppercase tracking-wider text-foreground-muted">Standard Rate:</span>
+                  <span className="font-mono text-sm font-semibold text-accent">₹{guide.rateInr}/hr</span>
+                  <span className="text-[11px] text-foreground-muted">(&asymp; ₹{guide.rateInr * 3} for 3 hrs)</span>
+                </div>
+                {guide.verified ? (
+                  <Link
+                    href={`/checkout?guide=${guide.id}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-background shadow transition-all hover:bg-accent/90"
+                  >
+                    <Icon name="calendar_today" className="text-sm" />
+                    Book This Guide
+                  </Link>
+                ) : (
+                  <span className="font-label text-xs uppercase tracking-wider text-warning">
+                    Unverified &middot; Booking Disabled
+                  </span>
+                )}
+              </div>
+
               {!guide.verified && (
-                <div className="mt-6 flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/10 p-4">
+                <div className="mt-4 flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/10 p-4">
                   <Icon name="warning" className="mt-0.5 text-warning" />
                   <p className="font-body text-sm text-foreground-muted">{t("guides.unverifiedWarning")}</p>
                 </div>

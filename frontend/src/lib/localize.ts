@@ -19,7 +19,7 @@ function langCode(lang: string): LanguageCode {
 export function localizeSite(site: Site, lang: string): Site {
   const code = langCode(lang);
   if (code === "en") return site;
-  const t = site.translations?.[code];
+  const t = (site.translations as Record<string, { summary?: string; history?: string } | undefined>)?.[code];
   if (!t) return site;
   return { ...site, summary: t.summary ?? site.summary, history: t.history ?? site.history };
 }
@@ -27,7 +27,7 @@ export function localizeSite(site: Site, lang: string): Site {
 export function localizeGuide(guide: Guide, lang: string): Guide {
   const code = langCode(lang);
   if (code === "en") return guide;
-  const t = guide.translations?.[code];
+  const t = (guide.translations as Record<string, { specialty?: string } | undefined>)?.[code];
   if (!t?.specialty) return guide;
   return { ...guide, specialty: t.specialty };
 }
@@ -35,7 +35,7 @@ export function localizeGuide(guide: Guide, lang: string): Guide {
 export function localizePricing(pricing: PricingData, lang: string): PricingData {
   const code = langCode(lang);
   if (code === "en") return pricing;
-  const t = pricing.translations?.[code];
+  const t = (pricing.translations as Record<string, { feeBreakdownNote?: string; guideRateTiers?: string[] } | undefined>)?.[code];
   if (!t) return pricing;
   return {
     ...pricing,

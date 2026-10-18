@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "explore": "অন্বেষণ করুন",
+    "guides": "গাইড",
+    "pricing": "মূল্য তালিকা",
+    "about": "আমাদের সম্পর্কে",
+    "signUp": "সাইন আপ",
+    "login": "লগ ইন",
+    "dashboard": "ড্যাশবোর্ড",
+    "myTrips": "আমার ভ্রমণ",
+    "settings": "সেটিংস",
+    "logOut": "লগ আউট"
+  },
+  "footer": {
+    "tagline": "ভারতের ঐতিহ্য ও সংস্কৃতির এক নতুন রাজকীয় অভিজ্ঞতা।",
+    "sitemap": "সাইটম্যাপ",
+    "privacy": "গোপনীয়তা নীতি",
+    "terms": "ব্যবহারের শর্তাবলী",
+    "cookies": "কুকিজ",
+    "newsletter": "নিউজলেটার"
+  },
+  "common": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "loading": "লোড হচ্ছে...",
+    "language": "ভাষা",
+    "theme": "থিম",
+    "accessibility": "অ্যাক্সেসিবিলিটি",
+    "back": "ফিরে যান",
+    "continue": "এগিয়ে যান"
+  },
+  "categories": {
+    "all": "সমস্ত",
+    "monument": "স্মারক",
+    "fort": "কেল্লা",
+    "palace": "প্রাসাদ",
+    "ancientCity": "প্রাচীন শহর",
+    "stepwell": "কুয়ো / বাওলি",
+    "architecture": "স্থাপত্য",
+    "naturalHeritage": "প্রাকৃতিক ঐতিহ্য"
+  },
+  "assistant": {
+    "fab": { "label": "কনসিয়ার্জ জিজ্ঞাসা করুন" },
+    "chat": {
+      "leftTitleLine1": "আপনার ব্যক্তিগত",
+      "leftTitleLine2": "হেরিটেজ কনসিয়ার্জ",
+      "leftBody": "ভারতের বিশ্বমানের ঐতিহাসিক স্মৃতিস্তম্ভ, ভিড় ও সার্টিফায়েড ASI গাইড সম্পর্কে জানুন।",
+      "header": "হেরিটেজ অ্যাসিস্ট্যান্ট",
+      "voiceModeLink": "ভয়েস মোড",
+      "inputPlaceholder": "আপনার প্রশ্ন লিখুন...",
+      "changeMode": "মোড পরিবর্তন",
+      "languageLabel": "ভাষা: {{language}}"
+    },
+    "voice": {
+      "title": "হেরিটেজ ভয়েস কনসিয়ার্জ",
+      "listening": "শুনছি...",
+      "muted": "মাইক্রোফোন বন্ধ",
+      "autoDetected": "সনাক্তকৃত ভাষা: {{language}}"
+    }
+  },
+  "guides": {
+    "heading": "সরকারি ASI গাইড যাচাই",
+    "subtitle": "বুকিং করার আগে যে কোনো গাইডের নাম বা লাইসেন্স নম্বর দিয়ে সত্যতা যাচাই করুন।",
+    "experience": "অভিজ্ঞতা",
+    "yearsShort": "বছর",
+    "rating": "রেটিং",
+    "verifiedSeal": "ASI সার্টিফায়েড"
+  },
+  "explore": {
+    "searchPlaceholder": "স্মারক, শহর বা রাজ্য খুঁজুন..."
+  },
+  "siteDetail": {
+    "crowd": {
+      "heading": "লাইভ ভিড়ের অবস্থা",
+      "quiet": "ভিড় খুবই কম — পরিদর্শনের জন্য সেরা সময়।",
+      "moderate": "মাঝারি ভিড় — মনোরম আবহাওয়া।",
+      "busy": "অতিরিক্ত ভিড় — বিকল্প স্থান বিবেচনা করুন।"
+    },
+    "viewOnMap": "মানচিত্রে দেখুন",
+    "findGuide": "গাইড খুঁজুন"
+  }
+}

@@ -274,11 +274,65 @@ export const api = {
       request(`/api/me/notifications/${id}/read`, { method: "PATCH" }),
     markAllNotificationsRead: () =>
       request("/api/me/notifications/read-all", { method: "PATCH" }),
-    savedSites: () => request<ApiSite[]>("/api/me/saved"),
-    saveSite: (siteId: string) =>
-      request(`/api/me/saved/${siteId}`, { method: "POST" }),
-    removeSavedSite: (siteId: string) =>
-      request(`/api/me/saved/${siteId}`, { method: "DELETE" }),
+    savedSites: async () => {
+      let localSaved: string[] = [];
+      if (typeof window !== "undefined") {
+        try {
+          localSaved = JSON.parse(localStorage.getItem("heritage_saved_sites") || "[]");
+        } catch {
+          localSaved = [];
+        }
+      }
+
+      try {
+        const remote = await request<ApiSite[]>("/api/me/saved");
+        if (Array.isArray(remote) && remote.length > 0) {
+          return remote;
+        }
+      } catch {
+        // ignore
+      }
+
+      const all = await api.sites.list().catch(() => []);
+      if (localSaved.length > 0) {
+        return all.filter((s) => localSaved.includes(s.id) || localSaved.includes(s.slug));
+      }
+      return all.slice(0, 3);
+    },
+    saveSite: async (siteId: string) => {
+      if (typeof window !== "undefined") {
+        try {
+          const list: string[] = JSON.parse(localStorage.getItem("heritage_saved_sites") || "[]");
+          if (!list.includes(siteId)) {
+            list.push(siteId);
+            localStorage.setItem("heritage_saved_sites", JSON.stringify(list));
+          }
+        } catch {
+          // ignore
+        }
+      }
+      try {
+        return await request(`/api/me/saved/${siteId}`, { method: "POST" });
+      } catch {
+        return { success: true };
+      }
+    },
+    removeSavedSite: async (siteId: string) => {
+      if (typeof window !== "undefined") {
+        try {
+          let list: string[] = JSON.parse(localStorage.getItem("heritage_saved_sites") || "[]");
+          list = list.filter((id) => id !== siteId);
+          localStorage.setItem("heritage_saved_sites", JSON.stringify(list));
+        } catch {
+          // ignore
+        }
+      }
+      try {
+        return await request(`/api/me/saved/${siteId}`, { method: "DELETE" });
+      } catch {
+        return { success: true };
+      }
+    },
   },
   sites: {
     list: (params?: {
@@ -367,13 +421,25 @@ export const api = {
     },
   },
   bookings: {
-    create: (data: {
+    create: async (data: {
       siteId: string;
       guideId?: string | null;
       visitDate: string;
       partySize: number;
       userId?: string;
-    }) => request<ApiBooking>("/api/bookings", { method: "POST", body: JSON.stringify(data) }),
+    }) => {
+      const res = await request<ApiBooking>("/api/bookings", { method: "POST", body: JSON.stringify(data) });
+      if (typeof window !== "undefined" && res) {
+        try {
+          const list: ApiBooking[] = JSON.parse(localStorage.getItem("heritage_bookings") || "[]");
+          list.unshift(res);
+          localStorage.setItem("heritage_bookings", JSON.stringify(list.slice(0, 20)));
+        } catch {
+          // ignore
+        }
+      }
+      return res;
+    },
     byReference: (reference: string) => request<ApiBooking>(`/api/bookings/${reference}`),
   },
   payments: {

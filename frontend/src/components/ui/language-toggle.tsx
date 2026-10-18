@@ -23,7 +23,7 @@ export function LanguageToggle({ className }: { className?: string }) {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="glass-panel absolute right-0 top-full z-50 mt-2 min-w-[140px] overflow-hidden rounded-lg py-1">
+          <div className="glass-panel absolute right-0 top-full z-50 mt-2 max-h-80 min-w-[160px] overflow-y-auto rounded-lg py-1 shadow-xl">
             {Object.entries(languages).map(([code, { nativeLabel }]) => (
               <button
                 key={code}
