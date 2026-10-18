@@ -16,7 +16,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const replyText = generateConciergeResponse(message, language, sessionId);
+    const history = body.history || [];
+    const replyText = generateConciergeResponse(message, language, sessionId, history);
 
     if (stream) {
       const encoder = new TextEncoder();

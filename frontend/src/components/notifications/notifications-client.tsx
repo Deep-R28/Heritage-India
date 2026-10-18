@@ -24,6 +24,13 @@ const typeTone: Record<NotificationItem["type"], string> = {
 function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record<string, unknown>) => string, lang: string) {
   const eventDate = item.eventDate ? formatLocaleDate(item.eventDate, lang) : undefined;
   if (item.type === "booking") {
+    // If the notification item carries its own dynamic title/message from real-time booking:
+    if (item.site && item.site.includes("Booking")) {
+      return {
+        title: item.site,
+        message: item.guide || t("notifications.types.bookingConfirmed.message", { guide: "ASI Guide", site: "Monument", date: eventDate }),
+      };
+    }
     const key = item.variant === "cancelled" ? "bookingCancelled" : "bookingConfirmed";
     return {
       title: t(`notifications.types.${key}.title`),
@@ -44,7 +51,7 @@ function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record
 
 export function NotificationsClient({ initial }: { initial: NotificationItem[] }) {
   const { t, i18n } = useTranslation();
-  const [items, setItems] = useState(initial);
+  const [items, setItems] = useState<NotificationItem[]>(initial);
 
   const groups = useMemo(() => {
     const map = new Map<string, NotificationItem[]>();
@@ -57,6 +64,56 @@ export function NotificationsClient({ initial }: { initial: NotificationItem[] }
 
   const unreadCount = items.filter((i) => !i.read).length;
 
+  const handleMarkAllRead = async () => {
+    setItems((prev) => prev.map((i) => ({ ...i, read: true })));
+    try {
+      await fetch("/api/me/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markAll: true }),
+      });
+      window.dispatchEvent(new CustomEvent("heritage-notifications-updated", { detail: { unreadCount: 0 } }));
+    } catch (e) {
+      console.warn("Failed to mark all as read:", e);
+    }
+  };
+
+  const handleClearAll = async () => {
+    setItems([]);
+    try {
+      await fetch("/api/me/notifications", { method: "DELETE" });
+      window.dispatchEvent(new CustomEvent("heritage-notifications-updated", { detail: { unreadCount: 0 } }));
+    } catch (e) {
+      console.warn("Failed to clear notifications:", e);
+    }
+  };
+
+  const handleDismissOne = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setItems((prev) => prev.filter((i) => i.id !== id));
+    try {
+      await fetch(`/api/me/notifications?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      window.dispatchEvent(new CustomEvent("heritage-notifications-updated"));
+    } catch (err) {
+      console.warn("Failed to delete notification:", err);
+    }
+  };
+
+  const handleItemClick = async (item: NotificationItem) => {
+    if (item.read) return;
+    setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, read: true } : i)));
+    try {
+      await fetch("/api/me/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item.id }),
+      });
+      window.dispatchEvent(new CustomEvent("heritage-notifications-updated"));
+    } catch (err) {
+      console.warn("Failed to mark notification read:", err);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-content px-6 py-16 md:px-8">
       <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
@@ -66,14 +123,27 @@ export function NotificationsClient({ initial }: { initial: NotificationItem[] }
             {unreadCount > 0 ? t("notifications.unread", { count: unreadCount }) : t("notifications.allCaughtUp")}
           </p>
         </div>
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={unreadCount === 0}
-          onClick={() => setItems((prev) => prev.map((i) => ({ ...i, read: true })))}
-        >
-          {t("notifications.markAllRead")}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={unreadCount === 0}
+            onClick={handleMarkAllRead}
+            className="cursor-pointer"
+          >
+            {t("notifications.markAllRead")}
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={items.length === 0}
+            onClick={handleClearAll}
+            className="cursor-pointer border-hairline text-foreground-muted hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
+          >
+            <Icon name="delete_sweep" className="mr-1 text-base" />
+            Clear All
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-10">
@@ -88,9 +158,10 @@ export function NotificationsClient({ initial }: { initial: NotificationItem[] }
                 return (
                   <Card
                     key={item.id}
+                    onClick={() => handleItemClick(item)}
                     className={cn(
-                      "flex items-start gap-4 p-5 transition-colors",
-                      !item.read && "border-accent/40",
+                      "group relative flex items-start gap-4 p-5 transition-all cursor-pointer hover:border-accent/40",
+                      !item.read && "border-accent/50 bg-accent/[0.02]",
                     )}
                   >
                     <div
@@ -101,13 +172,22 @@ export function NotificationsClient({ initial }: { initial: NotificationItem[] }
                     >
                       <Icon name={typeIcon[item.type]} className="text-lg" />
                     </div>
-                    <div className="min-w-0 flex-grow">
+                    <div className="min-w-0 flex-grow pr-8">
                       <div className="mb-1 flex items-center gap-2">
                         <h3 className="font-headline text-base text-foreground">{copy.title}</h3>
                         {!item.read && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />}
                       </div>
                       <p className="font-body text-sm text-foreground-muted">{copy.message}</p>
                     </div>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDismissOne(item.id, e)}
+                      className="absolute right-3 top-3 rounded-full p-1.5 text-foreground-muted opacity-0 transition-opacity hover:bg-surface-elevated hover:text-foreground group-hover:opacity-100 cursor-pointer"
+                      title="Dismiss notification"
+                      aria-label="Dismiss"
+                    >
+                      <Icon name="close" className="text-base" />
+                    </button>
                   </Card>
                 );
               })}
@@ -115,9 +195,15 @@ export function NotificationsClient({ initial }: { initial: NotificationItem[] }
           </div>
         ))}
         {items.length === 0 && (
-          <p className="py-16 text-center font-body text-sm text-foreground-muted">
-            {t("notifications.empty")}
-          </p>
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-hairline bg-surface-hover text-foreground-muted">
+              <Icon name="notifications_none" className="text-2xl" />
+            </div>
+            <h3 className="font-headline text-lg text-foreground">No notifications</h3>
+            <p className="mt-1 font-body text-sm text-foreground-muted">
+              You are all caught up! When you book passes or certified guides, alerts will appear here.
+            </p>
+          </div>
         )}
       </div>
     </div>

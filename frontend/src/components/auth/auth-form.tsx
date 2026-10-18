@@ -1,23 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/components/ui/icon";
 import { useAuth } from "@/hooks/use-auth";
+import { api } from "@/lib/api";
 
 const HERO_IMAGE = "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=1200&q=80";
 
 export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login, signup } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const isSignup = mode === "signup";
+
+  const redirectParam = searchParams.get("redirect");
+  const fromCheckout = searchParams.get("from") === "checkout";
+  const siteNameParam = searchParams.get("siteName");
+
+  const querySuffix = searchParams.toString() ? `?${searchParams.toString()}` : "";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,9 +40,38 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
     try {
       if (isSignup) {
         await signup({ name: fullname, email, password });
-        router.push("/onboarding");
       } else {
         await login({ email, password });
+      }
+
+      // Check if there is a pending booking draft to auto-finalize
+      if (typeof window !== "undefined") {
+        const rawDraft = sessionStorage.getItem("pending_booking_draft");
+        if (rawDraft) {
+          try {
+            const draft = JSON.parse(rawDraft);
+            const booking = await api.bookings.create({
+              siteId: draft.siteId,
+              guideId: draft.guideId,
+              visitDate: draft.visitDate,
+              partySize: draft.partySize,
+              leadVisitor: draft.leadVisitor,
+              amountPaid: draft.totalINR,
+            });
+            sessionStorage.removeItem("pending_booking_draft");
+            router.push(`/checkout/success?ref=${booking.reference}&fromAuth=true`);
+            return;
+          } catch (autoErr) {
+            console.warn("Auto-booking after auth failed:", autoErr);
+          }
+        }
+      }
+
+      if (redirectParam) {
+        router.push(redirectParam);
+      } else if (isSignup) {
+        router.push("/onboarding");
+      } else {
         router.push("/dashboard");
       }
     } catch (err: unknown) {
@@ -70,23 +107,44 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
       </div>
 
       {/* Right: form */}
-      <div className="relative z-10 flex h-2/3 w-full items-center justify-center bg-background p-6 md:h-full md:w-1/2 md:bg-transparent md:p-12">
-        <div className="glass-panel relative flex w-full max-w-md flex-col overflow-hidden rounded-xl p-8 md:p-12">
+      <div className="relative z-10 flex h-2/3 w-full items-center justify-center bg-background p-6 md:h-full md:w-1/2 md:bg-transparent md:p-12 overflow-y-auto">
+        <div className="glass-panel relative flex w-full max-w-md flex-col overflow-hidden rounded-xl p-8 md:p-12 my-auto">
+          {/* Reservation Prompt Banner if coming from Checkout */}
+          {fromCheckout && (
+            <div className="mb-6 rounded-xl border border-accent/40 bg-accent/10 p-3.5 animate-in fade-in duration-200">
+              <div className="flex items-start gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
+                  <Icon name="confirmation_number" className="text-base" />
+                </div>
+                <div>
+                  <h4 className="font-headline text-sm font-semibold text-foreground">
+                    Final Step to Confirm Booking
+                  </h4>
+                  <p className="mt-1 font-body text-xs text-foreground-muted leading-relaxed">
+                    Please {isSignup ? "create an account" : "log in"} to finalize tickets for{" "}
+                    <span className="font-semibold text-accent">{siteNameParam || "your heritage destination"}</span>.
+                    Your booking and verified guide will be automatically linked to your personal dashboard!
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mb-8 flex border-b border-hairline">
             <Link
-              href="/signup"
+              href={`/signup${querySuffix}`}
               className={cn(
                 "flex-1 pb-3 text-center font-headline text-lg tracking-wide transition-colors",
-                isSignup ? "border-b-2 border-accent text-accent" : "text-foreground-muted hover:text-accent",
+                isSignup ? "border-b-2 border-accent text-accent font-semibold" : "text-foreground-muted hover:text-accent",
               )}
             >
               {t("auth.signUpTab")}
             </Link>
             <Link
-              href="/login"
+              href={`/login${querySuffix}`}
               className={cn(
                 "flex-1 pb-3 text-center font-headline text-lg tracking-wide transition-colors",
-                !isSignup ? "border-b-2 border-accent text-accent" : "text-foreground-muted hover:text-accent",
+                !isSignup ? "border-b-2 border-accent text-accent font-semibold" : "text-foreground-muted hover:text-accent",
               )}
             >
               {t("auth.loginTab")}
@@ -108,12 +166,14 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
                   placeholder=" "
                   required
                   type="text"
+                  autoComplete="name"
                 />
-                <label className="museum-label pointer-events-none absolute left-0 top-0" htmlFor="fullname">
-                  {t("auth.fullName")}
+                <label className="museum-label" htmlFor="fullname">
+                  {t("auth.nameLabel")}
                 </label>
               </div>
             )}
+
             <div className="relative flex flex-col-reverse">
               <input
                 className="museum-input w-full pb-2 pt-4"
@@ -122,55 +182,59 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
                 placeholder=" "
                 required
                 type="email"
+                autoComplete="email"
               />
-              <label className="museum-label pointer-events-none absolute left-0 top-0" htmlFor="email">
-                {t("auth.email")}
+              <label className="museum-label" htmlFor="email">
+                {t("auth.emailLabel")}
               </label>
             </div>
-            <div className="group relative flex flex-col-reverse">
+
+            <div className="relative flex flex-col-reverse">
               <input
-                className="museum-input w-full pb-2 pr-10 pt-4"
+                className="museum-input w-full pb-2 pt-4 pr-10"
                 id="password"
                 name="password"
                 placeholder=" "
                 required
                 type={showPassword ? "text" : "password"}
+                autoComplete={isSignup ? "new-password" : "current-password"}
               />
-              <label className="museum-label pointer-events-none absolute left-0 top-0" htmlFor="password">
-                {t("auth.password")}
+              <label className="museum-label" htmlFor="password">
+                {t("auth.passwordLabel")}
               </label>
               <button
-                aria-label="Toggle password visibility"
                 type="button"
-                onClick={() => setShowPassword((s) => !s)}
-                className="absolute bottom-2 right-0 text-foreground-muted transition-colors hover:text-accent"
+                onClick={() => setShowPassword((p) => !p)}
+                className="absolute right-0 bottom-2 text-foreground-muted hover:text-foreground p-1 cursor-pointer"
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                <Icon name="visibility" className="text-[20px]" />
+                <Icon name={showPassword ? "visibility_off" : "visibility"} className="text-sm" />
               </button>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="group mt-6 flex w-full items-center justify-center gap-2 rounded bg-accent px-6 py-4 font-body font-semibold text-accent-foreground transition-colors hover:opacity-90 disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3.5 font-label text-xs font-bold uppercase tracking-wider text-background shadow transition-all hover:bg-accent/90 disabled:opacity-50 cursor-pointer"
             >
-              <span>{loading ? "..." : isSignup ? t("auth.createAccount") : t("auth.logIn")}</span>
-              <Icon name="arrow_forward" className="transition-transform group-hover:translate-x-1" />
+              {loading ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
+                  <span>Connecting...</span>
+                </>
+              ) : (
+                <span>
+                  {fromCheckout
+                    ? isSignup
+                      ? "Create Account & Confirm Booking"
+                      : "Log In & Confirm Booking"
+                    : isSignup
+                    ? t("auth.signUpButton")
+                    : t("auth.loginButton")}
+                </span>
+              )}
             </button>
-
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={() => router.push("/explore")}
-                className="font-body text-sm tracking-wide text-foreground-muted transition-colors hover:text-accent"
-              >
-                {t("auth.continueAsGuest")}
-              </button>
-            </div>
           </form>
-
-          <div className="pointer-events-none absolute right-0 top-0 m-4 h-16 w-16 rounded-tr-xl border-r border-t border-accent/40 opacity-50" />
-          <div className="pointer-events-none absolute bottom-0 left-0 m-4 h-16 w-16 rounded-bl-xl border-b border-l border-accent/40 opacity-50" />
         </div>
       </div>
     </div>

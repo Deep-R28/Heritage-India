@@ -7,7 +7,9 @@
  * Supports multi-turn conversational booking flows:
  * - State/City discovery ("what all tourist places tickets you provide")
  * - Dynamic visitor inquiry without defaulting to Taj Mahal or 2 members
- * - Best-rated guide estimation & alternative economical guides
+ * - Accurate natural language date parsing ("21st october" -> 2026-10-21)
+ * - User-specified guide persistence (e.g. "under Rajesh Kumar as guide")
+ * - Economical alternative guides when user says "out of budget" / "expensive"
  * - Non-database site detection
  * - Night-time closed hours guidance
  * - Real alternative options for tourist sites and guides
@@ -66,7 +68,7 @@ const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
     "कुतुब मीनार", "কুতুব মিনার", "குதுப் மினார்", "కుతుబ్ మినార్", "ಕುತುಬ್ ಮಿನಾರ್"
   ],
   "red-fort": [
-    "लाल किला", "লাল কেল্লা", "செங்கோட்டை", "ఎర్ర కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
+    "लाल किला", "लाल केल्ला", "செங்கோட்டை", "ఎర్ర కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
   ],
   "hawa-mahal": [
     "हवा महल", "হাওয়া মহল", "ஹவா மஹால்", "హవా మహల్", "ಹವಾ ಮಹಲ್", "હવા મહેલ", "ਹਵਾ ਮਹਿਲ", "ہوا محل"
@@ -78,7 +80,7 @@ const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
     "चांद बावड़ी", "চাঁদ বাওরি", "சந்த் பௌரி", "చాంద్ బావోరి", "ಚಾಂದ್ ಬಾವೊರಿ"
   ],
   "kerala-backwaters": [
-    "केरल बैकवाटर", "কেরালা ব্যাকওয়াটার", "கேரளா பேக்வாட்டர்ஸ்", "కేరళ బ్యాక్‌வாటర్స్", "കേരള ബാക്ക്‌വാട്ടേഴ്‌സ്"
+    "केरल बैकवाटर", "কেরালা ব্যাকওয়াটার", "கேரளா பேக்வாட்டர்ஸ்", "కేరళ బ్యాక్‌వాటర్స్", "കേരള ബാക്ക്‌വാട്ടേഴ്‌സ്"
   ],
 };
 
@@ -156,7 +158,7 @@ export function isHinglish(text: string): boolean {
     "shandar", "aaj", "kal", "parso", "subah", "shaam", "dikhaye", "milega", "chahiye",
     "karun", "karein", "ghoomne", "dekhne", "kaisi", "accha", "achha", "sahi", "safar",
     "imarat", "jagah", "bhookh", "hoga", "hogi", "bataiye", "jaana", "jana", "tajmahal",
-    "kardo", "karo", "karna", "tikkat", "bina", "mehenga", "zyada", "kripya", "vikalp", "dusra"
+    "kardo", "karo", "karna", "tikkat", "bina", "mehenga", "zyada", "kripya", "vikalp", "dusra", "paise"
   ];
   return hinglishWords.some((w) => new RegExp(`\\b${w}\\b`, "i").test(lower));
 }
@@ -194,6 +196,134 @@ function getLiveCrowdTelemetry() {
     return { level: "MODERATE", percent: 46, goodTimeToVisit: true };
   }
   return { level: "LOW", percent: 18, goodTimeToVisit: true };
+}
+
+const MONTH_MAP: Record<string, number> = {
+  january: 1, jan: 1,
+  february: 2, feb: 2,
+  march: 3, mar: 3,
+  april: 4, apr: 4,
+  may: 5,
+  june: 6, jun: 6,
+  july: 7, jul: 7,
+  august: 8, aug: 8,
+  september: 9, sep: 9, sept: 9,
+  october: 10, oct: 10,
+  november: 11, nov: 11,
+  december: 12, dec: 12,
+};
+
+/**
+ * Robust date parser supporting natural expressions like "21st october", "october 21", "21/10", "tomorrow", etc.
+ */
+export function parseDateFromQuery(query: string, ist: ReturnType<typeof getISTContext>): string {
+  const q = query.toLowerCase();
+
+  // 1. Explicit ISO YYYY-MM-DD
+  const isoMatch = q.match(/\b(202\d-\d{2}-\d{2})\b/);
+  if (isoMatch) return isoMatch[1];
+
+  const currentYear = 2026;
+
+  // 2. Pattern: "21st october", "21 october", "21st of oct"
+  const dayMonthMatch = q.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s+(\d{4}))?\b/i);
+  if (dayMonthMatch) {
+    const day = parseInt(dayMonthMatch[1], 10);
+    const mName = dayMonthMatch[2].toLowerCase();
+    const month = MONTH_MAP[mName] || 10;
+    const year = dayMonthMatch[3] ? parseInt(dayMonthMatch[3], 10) : currentYear;
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+
+  // 3. Pattern: "october 21st", "oct 21", "october 21"
+  const monthDayMatch = q.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s+(\d{4}))?\b/i);
+  if (monthDayMatch) {
+    const mName = monthDayMatch[1].toLowerCase();
+    const month = MONTH_MAP[mName] || 10;
+    const day = parseInt(monthDayMatch[2], 10);
+    const year = monthDayMatch[3] ? parseInt(monthDayMatch[3], 10) : currentYear;
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+
+  // 4. Pattern: 21/10/2026 or 21-10-2026 or 21/10
+  const slashMatch = q.match(/\b(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{4}))?\b/);
+  if (slashMatch) {
+    const day = parseInt(slashMatch[1], 10);
+    const month = parseInt(slashMatch[2], 10);
+    const year = slashMatch[3] ? parseInt(slashMatch[3], 10) : currentYear;
+    if (day <= 31 && month <= 12) {
+      return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    }
+  }
+
+  // 5. Relative dates
+  if (q.includes("today") || q.includes("aaj")) return ist.todayStr;
+  if (q.includes("tomorrow") || q.includes("kal")) return ist.tomorrowStr;
+  if (q.includes("parso") || q.includes("day after tomorrow")) {
+    const d = new Date(Date.now() + 86400000 * 2);
+    return d.toISOString().split("T")[0];
+  }
+
+  return ist.tomorrowStr;
+}
+
+export function parseSlotFromQuery(query: string): string {
+  const q = query.toLowerCase();
+  if (q.includes("sunrise") || q.includes("6am") || q.includes("7am") || q.includes("06:00")) {
+    return "06:00 AM (Sunrise Slot)";
+  }
+  if (q.includes("afternoon") || q.includes("dopahar") || q.includes("12pm") || q.includes("1pm") || q.includes("2pm") || q.includes("12:00") || q.includes("14:00")) {
+    return "12:00 PM (Afternoon Slot)";
+  }
+  if (q.includes("sunset") || q.includes("shaam") || q.includes("evening") || q.includes("3pm") || q.includes("4pm") || q.includes("5pm") || q.includes("15:00") || q.includes("16:00") || q.includes("17:00")) {
+    return "03:00 PM (Sunset Slot)";
+  }
+  if (q.includes("10am") || q.includes("10 am") || q.includes("10:00") || q.includes("morning") || q.includes("subah") || q.includes("9am") || q.includes("9 am")) {
+    return "09:00 AM (Morning Slot)";
+  }
+  return "09:00 AM (Morning Slot)";
+}
+
+/**
+ * Extracts a guide requested by name or keyword
+ */
+export function extractRequestedGuide(query: string): VerifiedGuideInfo | null {
+  const lower = query.toLowerCase();
+  if (lower.includes("rajesh kumar") || lower.includes("rajesh") || /\b(?:option\s*1|#1|first\s+guide)\b/i.test(lower)) {
+    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-01") || null;
+  }
+  if (lower.includes("priya sharma") || lower.includes("priya") || /\b(?:option\s*2|#2|second\s+guide)\b/i.test(lower)) {
+    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-02") || null;
+  }
+  if (lower.includes("meera devi") || lower.includes("meera") || /\b(?:option\s*3|#3|third\s+guide)\b/i.test(lower)) {
+    return VERIFIED_GUIDES.find((g) => g.id === "G-DEL-04") || null;
+  }
+  if (lower.includes("arun nair") || lower.includes("arun")) {
+    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-03") || null;
+  }
+  if (lower.includes("vikram singh") || lower.includes("vikram")) {
+    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-05") || null;
+  }
+  if (
+    lower.includes("self") ||
+    lower.includes("no guide") ||
+    lower.includes("without guide") ||
+    lower.includes("bina guide") ||
+    /\b(?:option\s*4|#4|fourth|bina\s*guide)\b/i.test(lower)
+  ) {
+    return VERIFIED_GUIDES.find((g) => g.id === "none") || null;
+  }
+  return null;
+}
+
+export function isDateMentionedInQuery(query: string): boolean {
+  const q = query.toLowerCase();
+  return (
+    /\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(q) ||
+    /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(\d{1,2})/i.test(q) ||
+    /\b(tomorrow|kal|today|aaj|parso|202\d-\d{2}-\d{2})\b/i.test(q) ||
+    /\b\d{1,2}[\/\-]\d{1,2}\b/.test(q)
+  );
 }
 
 /**
@@ -306,7 +436,12 @@ function matchSpecificMonument(query: string): CatalogSite | null {
  * Main dialogue engine handling multi-turn state/city discovery, dynamic party size,
  * guide negotiation, non-database rejection, night-time closing, and login reminders.
  */
-export function generateConciergeResponse(query: string, lang = "en", sessionId?: string): string {
+export function generateConciergeResponse(
+  query: string,
+  lang = "en",
+  sessionId?: string,
+  history?: Array<{ role: string; text?: string; content?: string }>
+): string {
   const q = query.toLowerCase().trim();
   const cleanQ = q.replace(/[^a-z0-9]/g, "");
   const ist = getISTContext();
@@ -317,6 +452,61 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
   const state: BookingSessionState = sessionStates.get(activeKey) || {
     step: "idle",
   };
+
+  // Reconstruct state from history if present and session is idle or newly loaded
+  if (state.step === "idle" && history && history.length > 0) {
+    const combinedHistory = history.map((h) => h.text || h.content || "").join(" ");
+    const lastAssistant = [...history].reverse().find((h) => h.role === "assistant")?.text || "";
+
+    const histMon = matchSpecificMonument(combinedHistory);
+    if (histMon) {
+      state.siteSlug = histMon.slug;
+      state.siteName = histMon.name;
+    }
+
+    const histPartyMatch =
+      combinedHistory.match(/\b(\d+)\s*(?:member|members|visitor|visitors|ticket|tickets|people|person|persons)\b/i) ||
+      combinedHistory.match(/\bfor\s+(\d+)\b/i);
+    if (histPartyMatch) {
+      state.partySize = parseInt(histPartyMatch[1], 10);
+    }
+
+    if (isDateMentionedInQuery(combinedHistory)) {
+      state.visitDate = parseDateFromQuery(combinedHistory, ist);
+      state.visitSlot = parseSlotFromQuery(combinedHistory);
+    }
+
+    const histGuide = extractRequestedGuide(combinedHistory);
+    if (histGuide) {
+      state.guideId = histGuide.id;
+      state.guideName = histGuide.name;
+      state.guideRate = histGuide.rate;
+      state.isSelfGuided = histGuide.id === "none";
+    }
+
+    const lastAsstLower = lastAssistant.toLowerCase();
+    if (
+      lastAsstLower.includes("confirm and proceed") ||
+      lastAsstLower.includes("proceed with") ||
+      lastAsstLower.includes("proceed karna chahenge") ||
+      lastAsstLower.includes("आगे बढ़ना चाहेंगे")
+    ) {
+      state.step = "offered_best_guide";
+    } else if (
+      lastAsstLower.includes("alternative") ||
+      lastAsstLower.includes("vikalp") ||
+      lastAsstLower.includes("which guide would you like to choose") ||
+      lastAsstLower.includes("kiske sath proceed karna chahenge")
+    ) {
+      state.step = "awaiting_alternative_guide";
+    } else if (lastAsstLower.includes("date and time") || lastAsstLower.includes("tareekh")) {
+      state.step = "awaiting_datetime";
+    } else if (lastAsstLower.includes("how many visitors") || lastAsstLower.includes("kitne log")) {
+      state.step = "awaiting_party_size";
+    }
+
+    sessionStates.set(activeKey, state);
+  }
 
   // ─── 0. CHECK FOR SITES NOT PRESENT IN DATABASE ─────────────────────────
   const isBookingInitiation =
@@ -353,7 +543,6 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
   }
 
   // ─── 1. QUERY: WHAT ALL TOURIST PLACES TICKETS YOU PROVIDE ──────────────
-  // "Whenever the user asks what all tourist places tickets you provide... they should ask for which state/city are they looking for"
   const isAskingWhatTicketsProvided =
     /\b(what all|which|what)\b.*(?:tourist places?|places?|monuments?|sites?).*(?:tickets?|passes?|entry).*(?:provide|have|sell|offer|available)/i.test(q) ||
     /\b(what tickets|which tickets|tickets you provide|tickets provide karte ho|tickets available|kahan ke ticket|kaunse places ke ticket)\b/i.test(q) ||
@@ -382,6 +571,15 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       `We provide official entry tickets and certified ASI guides across **46 heritage destinations** in 19 states and 35 cities across India!\n\n` +
       `Which **state or city** are you looking to visit? (e.g., Delhi, Uttar Pradesh / Agra, Rajasthan / Jaipur, Karnataka, Maharashtra / Mumbai, West Bengal, Tamil Nadu, Kerala, Gujarat, Punjab...)`
     );
+  }
+
+  // Check if a guide was explicitly requested in the query (e.g. "under Rajesh Kumar as guide")
+  const explicitlyMentionedGuide = extractRequestedGuide(q);
+  if (explicitlyMentionedGuide) {
+    state.guideId = explicitlyMentionedGuide.id;
+    state.guideName = explicitlyMentionedGuide.name;
+    state.guideRate = explicitlyMentionedGuide.rate;
+    state.isSelfGuided = explicitlyMentionedGuide.id === "none";
   }
 
   // ─── 2. USER PROVIDES STATE / CITY OR SITES ARE FILTERED BY LOCATION ────
@@ -432,10 +630,8 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
   }
 
   // ─── 3. USER SPECIFIES MONUMENT NAME -> MUST ASK VISITOR COUNT ──────────
-  // Check if a monument is explicitly matched from the query
   const directMonumentMatch = matchSpecificMonument(q);
 
-  // Check if party size was explicitly mentioned in the query
   const partyMatch =
     q.match(/\b(\d+)\s*(?:member|members|visitor|visitors|ticket|tickets|people|person|persons|log|jana)\b/i) ||
     q.match(/\bfor\s+(\d+)\b/i);
@@ -449,6 +645,35 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
     // If visitor count was ALREADY given in this message (e.g. "book ticket for 3 members for Taj Mahal")
     if (explicitPartySize !== null) {
       state.partySize = explicitPartySize;
+
+      // Also check if date was given in the same message (e.g. "for 21st october")
+      if (isDateMentionedInQuery(q)) {
+        const parsedDate = parseDateFromQuery(q, ist);
+        const parsedSlot = parseSlotFromQuery(q);
+        state.visitDate = parsedDate;
+        state.visitSlot = parsedSlot;
+        state.step = "offered_best_guide";
+        sessionStates.set(activeKey, state);
+
+        const activeGuide = explicitlyMentionedGuide || (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) || VERIFIED_GUIDES[0];
+        state.guideId = activeGuide.id;
+        state.guideName = activeGuide.name;
+        state.guideRate = activeGuide.rate;
+        state.isSelfGuided = activeGuide.id === "none";
+
+        const matchedSite = sites.find((s) => s.slug === state.siteSlug) || sites[0];
+        const entryFeePerPerson = matchedSite.priceInr || 1100;
+        const siteEntryTotal = entryFeePerPerson * explicitPartySize;
+        const guideTotal = activeGuide.rate * 3;
+        const subtotal = siteEntryTotal + guideTotal;
+        const grandTotal = subtotal + Math.round(subtotal * 0.15);
+
+        return (
+          `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price for **${directMonumentMatch.name}** with ${explicitlyMentionedGuide ? `requested verified guide **${activeGuide.name}**` : `top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${explicitPartySize} members entry tickets and taxes.\n\n` +
+          `Would you like to confirm and proceed with ${activeGuide.name}?`
+        );
+      }
+
       state.step = "awaiting_datetime";
       sessionStates.set(activeKey, state);
 
@@ -461,7 +686,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       return `Sure! What date and time do you need tickets for **${directMonumentMatch.name}** (${explicitPartySize} ${explicitPartySize === 1 ? "visitor" : "members"})?`;
     }
 
-    // CRITICAL REQUIREMENT: "after receiving the monument name , they must ask for number of visitors (and not taking taj mahal with 2 members as default)"
+    // NEVER default to Taj Mahal or 2 members; ask party size explicitly
     state.step = "awaiting_party_size";
     sessionStates.set(activeKey, state);
 
@@ -495,72 +720,71 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
     }
   }
 
-  // ─── 5. USER PROVIDES DATE & TIME -> OFFER TOP-RATED GUIDE ESTIMATE ────
+  // ─── 5. USER PROVIDES DATE & TIME -> OFFER GUIDE ESTIMATE ────────────────
   const currentStep = state.step as string;
   const isAnsweringDateOrSlot =
     currentStep === "awaiting_datetime" ||
+    isDateMentionedInQuery(q) ||
     (/\b(tomorrow|kal|today|aaj|sunrise|morning|afternoon|sunset|subah|shaam|am|pm|\d{1,2}\s*(?:am|pm|baje))\b/i.test(q) &&
       currentStep === "awaiting_datetime");
 
   if (isAnsweringDateOrSlot && currentStep === "awaiting_datetime") {
-    // Parse Date
-    let parsedDate = ist.tomorrowStr;
-    if (q.includes("today") || q.includes("aaj")) parsedDate = ist.todayStr;
-    const explicitDate = q.match(/\b(202\d-\d{2}-\d{2})\b/);
-    if (explicitDate) parsedDate = explicitDate[1];
-
-    // Parse Slot
-    let parsedSlot = "09:00 AM (Morning Slot)";
-    if (q.includes("sunrise") || q.includes("6am") || q.includes("7am") || q.includes("06:00")) {
-      parsedSlot = "06:00 AM (Sunrise Slot)";
-    } else if (q.includes("afternoon") || q.includes("dopahar") || q.includes("12pm") || q.includes("1pm") || q.includes("2pm")) {
-      parsedSlot = "12:00 PM (Afternoon Slot)";
-    } else if (q.includes("sunset") || q.includes("shaam") || q.includes("evening") || q.includes("3pm") || q.includes("4pm") || q.includes("5pm")) {
-      parsedSlot = "03:00 PM (Sunset Slot)";
-    } else if (q.includes("morning") || q.includes("subah") || q.includes("9am") || q.includes("10am")) {
-      parsedSlot = "09:00 AM (Morning Slot)";
-    }
+    // Robust date parsing (e.g. "21st october" -> "2026-10-21")
+    const parsedDate = parseDateFromQuery(q, ist);
+    const parsedSlot = parseSlotFromQuery(q);
 
     state.visitDate = parsedDate;
     state.visitSlot = parsedSlot;
     state.step = "offered_best_guide";
     if (detectedLang !== "en") state.lang = detectedLang;
+
+    // Use requested guide if user explicitly named one (e.g. Rajesh Kumar), otherwise top-rated Vikram Singh
+    const activeGuide =
+      explicitlyMentionedGuide ||
+      (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) ||
+      VERIFIED_GUIDES[0];
+
+    state.guideId = activeGuide.id;
+    state.guideName = activeGuide.name;
+    state.guideRate = activeGuide.rate;
+    state.isSelfGuided = activeGuide.id === "none";
     sessionStates.set(activeKey, state);
 
     const stepLang = detectedLang !== "en" ? detectedLang : state.lang || "en";
 
-    // Best Rated Guide: Vikram Singh (Rating 5.0, Rate: ₹1,200/hr)
-    const bestGuide = VERIFIED_GUIDES[0]; // Vikram Singh
     const matchedSite = sites.find((s) => s.slug === state.siteSlug) || sites[0];
     const partySize = state.partySize || 1;
     const entryFeePerPerson = matchedSite.priceInr || 1100;
     const siteEntryTotal = entryFeePerPerson * partySize;
-    const guideTotal = bestGuide.rate * 3;
+    const guideTotal = activeGuide.rate * 3;
     const subtotal = siteEntryTotal + guideTotal;
     const grandTotal = subtotal + Math.round(subtotal * 0.15);
 
+    const isUserChosenGuide = Boolean(explicitlyMentionedGuide || (state.guideId && state.guideId !== "G-AGR-05"));
+
     if (stepLang === "hinglish") {
       return (
-        `Shandar! **${parsedDate}** ko **${parsedSlot}** ke liye, hamare top-rated guide **${bestGuide.name}** (⭐ ${bestGuide.rating} rating, ${bestGuide.tours}+ tours) ke sath estimated price **₹${bestGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur ${partySize} members ke entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
-        `Kya aap ${bestGuide.name} ke sath proceed karna chahenge?`
+        `Shandar! **${parsedDate}** ko **${parsedSlot}** ke liye, ${isUserChosenGuide ? `aapke chune gaye certified guide **${activeGuide.name}**` : `hamare top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) ke sath estimated price **₹${activeGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur ${partySize} members ke entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
+        `Kya aap ${activeGuide.name} ke sath proceed karna chahenge?`
       );
     }
     if (stepLang === "hi") {
       return (
-        `शानदार! **${parsedDate}** को **${parsedSlot}** के लिए, हमारे सर्वोच्च रेटेड गाइड **${bestGuide.name}** (⭐ ${bestGuide.rating} रेटिंग, ${bestGuide.tours}+ टूर) के साथ अनुमानित गाइड शुल्क **₹${bestGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और ${partySize} सदस्यों के प्रवेश टिकट मिलाकर कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
-        `क्या आप ${bestGuide.name} के साथ आगे बढ़ना चाहेंगे?`
+        `शानदार! **${parsedDate}** को **${parsedSlot}** के लिए, ${isUserChosenGuide ? `आपके चुने हुए प्रमाणित गाइड **${activeGuide.name}**` : `हमारे सर्वोच्च रेटेड गाइड **${activeGuide.name}**`} (⭐ ${activeGuide.rating} रेटिंग, ${activeGuide.tours}+ टूर) के साथ अनुमानित गाइड शुल्क **₹${activeGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और ${partySize} सदस्यों के प्रवेश टिकट मिलाकर कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
+        `क्या आप ${activeGuide.name} के साथ आगे बढ़ना चाहेंगे?`
       );
     }
     return (
-      `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price with our top-rated guide **${bestGuide.name}** (⭐ ${bestGuide.rating} rating, ${bestGuide.tours}+ tours) is **₹${bestGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} ${partySize === 1 ? "visitor" : "members"} entry tickets and taxes.\n\n` +
-      `Would you like to proceed with ${bestGuide.name}?`
+      `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price with ${isUserChosenGuide ? `your requested verified guide **${activeGuide.name}**` : `our top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} ${partySize === 1 ? "visitor" : "members"} entry tickets and taxes.\n\n` +
+      `Would you like to proceed with ${activeGuide.name}?`
     );
   }
 
-  // ─── 6. USER SAYS GUIDE IS TOO EXPENSIVE / ASKS FOR ALTERNATIVES ─────────
+  // ─── 6. USER SAYS GUIDE IS OUT OF BUDGET / TOO EXPENSIVE (OFFER ALTERNATIVES) ──
   const isExpensiveComplaint =
-    (state.step === "offered_best_guide" || state.step === "awaiting_alternative_guide") &&
-    /\b(expensive|mehenga|costly|cheaper|cheap|too much|high price|kam karo|budget|bada price|zyada hai|bahut zyada|lower price|other guide|alternative guide|vikalp)\b/i.test(q);
+    /\b(out of budget|out of my budget|over budget|beyond budget|not in my budget|can't afford|cannot afford|expensive|mehenga|mahnga|costly|cheaper|cheap|too much|high price|kam karo|budget|bada price|zyada hai|bahut zyada|lower price|other guide|alternative guide|economical|vikalp)\b/i.test(q) ||
+    q.includes("out of budget") ||
+    (currentStep === "offered_best_guide" && /\b(budget|mehenga|expensive|costly)\b/i.test(q));
 
   if (isExpensiveComplaint) {
     state.step = "awaiting_alternative_guide";
@@ -599,13 +823,11 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
   }
 
   // ─── 7. ALTERNATIVE OPTIONS (FOR SITES OR GUIDES) ───────────────────────
-  // "When the user asks for any other alternative options for any question(for tourist site/guide) , it must answer and answer and listen properly"
   const isAskingAlternatives =
     /\b(alternative|alternatives|other option|other options|aur option|aur vikalp|kuch aur|dusra|any other places?|other places?|dusri jagah)\b/i.test(q);
 
   if (isAskingAlternatives) {
-    // If asking about alternative guides
-    if (q.includes("guide") || state.step === "offered_best_guide" || state.step === "awaiting_alternative_guide") {
+    if (q.includes("guide") || currentStep === "offered_best_guide" || currentStep === "awaiting_alternative_guide") {
       state.step = "awaiting_alternative_guide";
       sessionStates.set(activeKey, state);
       return (
@@ -618,7 +840,6 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       );
     }
 
-    // If asking about alternative tourist places/monuments
     let altSites: CatalogSite[] = [];
     if (state.selectedRegion) {
       altSites = sites.filter((s) => s.region.toLowerCase().includes(state.selectedRegion!.toLowerCase()) && s.slug !== state.siteSlug);
@@ -640,21 +861,26 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
 
   // ─── 8. GUIDE CONFIRMATION & BOOKING SUMMARY (WITH LOGIN PROMPT) ────────
   const isAcceptingBestGuide =
-    state.step === "offered_best_guide" &&
-    (/\b(yes|proceed|sure|ok|okay|confirm|vikram|book|agree|chalo|haan|theek hai|kardo)\b/i.test(q) ||
+    currentStep === "offered_best_guide" &&
+    (/\b(yes|proceed|sure|ok|okay|confirm|agree|chalo|haan|theek hai|kardo)\b/i.test(q) ||
       q === "1" ||
       q === "option 1");
 
   const isAnsweringAlternativeGuide =
-    state.step === "awaiting_alternative_guide" ||
-    (state.step !== "idle" && /\b(rajesh|priya|meera|arun|self|no guide|bina guide)\b/i.test(q));
+    currentStep === "awaiting_alternative_guide" ||
+    (currentStep !== "idle" && (explicitlyMentionedGuide !== null || /\b(rajesh|priya|meera|arun|vikram|self|no guide|bina guide)\b/i.test(q)));
 
   if (isAcceptingBestGuide || isAnsweringAlternativeGuide) {
-    let selectedGuide = VERIFIED_GUIDES[1]; // Default Rajesh Kumar
+    let selectedGuide = VERIFIED_GUIDES[1]; // Rajesh Kumar
     let isSelfGuided = false;
 
-    if (isAcceptingBestGuide) {
-      selectedGuide = VERIFIED_GUIDES[0]; // Vikram Singh
+    if (explicitlyMentionedGuide) {
+      selectedGuide = explicitlyMentionedGuide;
+      isSelfGuided = explicitlyMentionedGuide.id === "none";
+    } else if (isAcceptingBestGuide) {
+      // Respect the guide that was offered in state! Do not unconditionally revert to Vikram Singh!
+      selectedGuide = (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) || VERIFIED_GUIDES[0];
+      isSelfGuided = selectedGuide.id === "none";
     } else if (q.includes("self") || q.includes("no guide") || q.includes("bina guide") || /\b(?:option\s*4|#4|fourth)\b/i.test(q)) {
       selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "none")!;
       isSelfGuided = true;
@@ -675,7 +901,8 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
     state.step = "completed";
     sessionStates.set(activeKey, state);
 
-    const visitDate = state.visitDate || ist.tomorrowStr;
+    // Accurate parsed date
+    const visitDate = state.visitDate || (isDateMentionedInQuery(q) ? parseDateFromQuery(q, ist) : ist.tomorrowStr);
     const visitSlot = state.visitSlot || "09:00 AM (Morning Slot)";
     const partySize = state.partySize || 1;
     const siteSlug = state.siteSlug || "taj-mahal";
@@ -803,7 +1030,7 @@ export function generateConciergeResponse(query: string, lang = "en", sessionId?
       if (detectedLang === "bn") {
         return (
           `**এখন ${matchedSite.name} বন্ধ রয়েছে। অনুগ্রহ করে আগামীকালের পরিদর্শনের জন্য অগ্রিম বুকিং করে নিন।**\n\n` +
-          `স্মৃতিসৌধটি সূর্যোদয় (সকাল ০৬:০০) থেকে সূর্যাস্ত (সন্ধ্যা ০৬:০০) পর্যন্ত খোলা থাকে এবং রাতে প্রবেশ বন্ধ থাকে।\n\n` +
+          `স্মৃতিসৌধটি सूर्योदय (সকাল ০৬:০০) থেকে সূর্যাস্ত (সন্ধ্যা ০৬:০০) পর্যন্ত খোলা থাকে এবং রাতে প্রবেশ বন্ধ থাকে।\n\n` +
           `আগামীকালের সকালের **সানরাইজ স্লট (সকাল ০৬:০০ – ০৯:০০)** পরিদর্শনের জন্য সেরা সময়, যখন ভিড় একেবারে থাকে না।\n\n` +
           `আপনি কি আগামীকালের জন্য টিকিট বা সার্টিফায়েড ASI গাইড বুক করতে চান?`
         );

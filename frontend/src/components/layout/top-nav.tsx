@@ -29,16 +29,33 @@ export function TopNav({ minimal = false }: { minimal?: boolean }) {
   const [unreadNotifs, setUnreadNotifs] = useState(0);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      api.me
-        .notifications()
-        .then((notifs) => {
-          if (Array.isArray(notifs)) {
-            setUnreadNotifs(notifs.filter((n) => !n.readAt).length);
-          }
-        })
-        .catch(() => {});
-    }
+    const fetchUnread = () => {
+      if (isLoggedIn) {
+        api.me
+          .notifications()
+          .then((notifs) => {
+            if (Array.isArray(notifs)) {
+              setUnreadNotifs(notifs.filter((n) => !n.readAt).length);
+            }
+          })
+          .catch(() => {});
+      }
+    };
+    fetchUnread();
+
+    const handleUpdate = (e: Event) => {
+      const custom = e as CustomEvent<{ unreadCount?: number }>;
+      if (typeof custom.detail?.unreadCount === "number") {
+        setUnreadNotifs(custom.detail.unreadCount);
+      } else {
+        fetchUnread();
+      }
+    };
+
+    window.addEventListener("heritage-notifications-updated", handleUpdate);
+    return () => {
+      window.removeEventListener("heritage-notifications-updated", handleUpdate);
+    };
   }, [isLoggedIn, pathname]);
 
   return (

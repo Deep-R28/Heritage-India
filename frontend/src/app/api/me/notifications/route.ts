@@ -39,15 +39,17 @@ export async function GET() {
     const raw = cookieStore.get("heritage_notifications")?.value;
     let notifications: StoredNotification[] = [];
 
-    if (raw) {
+    if (raw !== undefined) {
       try {
-        notifications = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"));
+        const parsed = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"));
+        if (Array.isArray(parsed)) {
+          notifications = parsed;
+        }
       } catch {
         notifications = [];
       }
-    }
-
-    if (!Array.isArray(notifications) || notifications.length === 0) {
+    } else {
+      // First visit: provide default welcome notifications
       notifications = DEFAULT_WELCOME_NOTIFICATIONS;
     }
 
@@ -67,25 +69,26 @@ export async function GET() {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { id, markAll } = body;
+    const { id, markAll, clearAll } = body;
     const cookieStore = cookies();
     const raw = cookieStore.get("heritage_notifications")?.value;
     let notifications: StoredNotification[] = [];
 
-    if (raw) {
+    if (raw !== undefined) {
       try {
-        notifications = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"));
+        const parsed = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"));
+        if (Array.isArray(parsed)) notifications = parsed;
       } catch {
         notifications = [];
       }
-    }
-
-    if (notifications.length === 0) {
+    } else {
       notifications = [...DEFAULT_WELCOME_NOTIFICATIONS];
     }
 
     const now = new Date().toISOString();
-    if (markAll) {
+    if (clearAll) {
+      notifications = [];
+    } else if (markAll) {
       notifications = notifications.map((n) => ({ ...n, readAt: now }));
     } else if (id) {
       notifications = notifications.map((n) => (n.id === id ? { ...n, readAt: now } : n));
@@ -102,11 +105,58 @@ export async function PATCH(req: Request) {
     );
 
     return NextResponse.json({
-      data: { success: true, notifications },
+      data: { success: true, count: notifications.length, notifications },
       error: null,
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Error updating notification";
+    return NextResponse.json(
+      { data: null, error: { message, code: "SERVER_ERROR" } },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+    const cookieStore = cookies();
+    const raw = cookieStore.get("heritage_notifications")?.value;
+    let notifications: StoredNotification[] = [];
+
+    if (raw !== undefined) {
+      try {
+        const parsed = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"));
+        if (Array.isArray(parsed)) notifications = parsed;
+      } catch {
+        notifications = [];
+      }
+    }
+
+    if (id) {
+      notifications = notifications.filter((n) => n.id !== id);
+    } else {
+      // Clear all
+      notifications = [];
+    }
+
+    cookieStore.set(
+      "heritage_notifications",
+      Buffer.from(JSON.stringify(notifications)).toString("base64"),
+      {
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60,
+        sameSite: "lax",
+      }
+    );
+
+    return NextResponse.json({
+      data: { success: true, count: notifications.length },
+      error: null,
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Error clearing notifications";
     return NextResponse.json(
       { data: null, error: { message, code: "SERVER_ERROR" } },
       { status: 500 }

@@ -424,9 +424,12 @@ export const api = {
     create: async (data: {
       siteId: string;
       guideId?: string | null;
+      guideName?: string | null;
       visitDate: string;
       partySize: number;
       userId?: string;
+      leadVisitor?: string;
+      amountPaid?: number;
     }) => {
       const res = await request<ApiBooking>("/api/bookings", { method: "POST", body: JSON.stringify(data) });
       if (typeof window !== "undefined" && res) {

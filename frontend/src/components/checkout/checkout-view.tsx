@@ -13,7 +13,7 @@ import { useAuth } from "@/hooks/use-auth";
 export function CheckoutView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
 
   const siteSlug = searchParams.get("site") || "taj-mahal";
   const guideId = searchParams.get("guide");
@@ -37,6 +37,7 @@ export function CheckoutView() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Form states
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8892");
@@ -92,7 +93,41 @@ export function CheckoutView() {
     e.preventDefault();
     if (!site) return;
     setError(null);
+
+    // If non-authenticated person tries to make payment, show auth modal first
+    if (!isLoggedIn || !user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setShowConfirmModal(true);
+  };
+
+  const handleSaveDraftAndRedirect = (targetPath: "/login" | "/signup") => {
+    if (!site) return;
+    const draft = {
+      siteId: site.id,
+      siteSlug: site.slug,
+      siteName: site.name,
+      guideId: guide?.id ?? null,
+      guideName: guide?.name ?? null,
+      visitDate,
+      visitSlot,
+      partySize,
+      totalINR: grandTotal,
+      leadVisitor: {
+        fullName: cardName,
+        email: user?.email || "visitor@heritageindia.org",
+        phone: "+91 9876543210",
+        idType: "aadhaar",
+        idNumber: "1234 5678 9012",
+      },
+    };
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("pending_booking_draft", JSON.stringify(draft));
+    }
+    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${guide?.id ?? "none"}`;
+    router.push(`${targetPath}?redirect=${encodeURIComponent(currentCheckoutUrl)}&from=checkout&siteName=${encodeURIComponent(site.name)}`);
   };
 
   const handleConfirmAndPay = async () => {
@@ -559,6 +594,84 @@ export function CheckoutView() {
           </Card>
         </div>
       </div>
+
+      {/* Authentication Required Modal (for non-authenticated visitors) */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-accent/40 bg-surface p-6 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setShowAuthModal(false)}
+              className="absolute right-4 top-4 rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+              aria-label="Close"
+            >
+              <Icon name="close" className="text-lg" />
+            </button>
+
+            {/* Header */}
+            <div className="text-center pb-4 border-b border-hairline">
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent shadow-inner">
+                <Icon name="lock" className="text-2xl" />
+              </div>
+              <span className="font-label text-xs uppercase tracking-widest text-accent font-semibold">
+                Sign In Required
+              </span>
+              <h3 className="mt-1 font-headline text-2xl text-foreground">
+                Log In to Confirm Booking
+              </h3>
+              <p className="mt-2 font-body text-xs text-foreground-muted">
+                To link your official passes, live crowd telemetry, and verified guide reservation to your personal Heritage dashboard, please log in or create an account.
+              </p>
+            </div>
+
+            {/* Quick Summary Card */}
+            <div className="my-4 rounded-xl border border-hairline bg-surface-elevated/60 p-3.5 text-xs space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-foreground-muted">Monument:</span>
+                <span className="font-semibold text-foreground">{site?.name}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground-muted">Party & Date:</span>
+                <span className="font-mono text-foreground">{partySize} Members &middot; {visitDate}</span>
+              </div>
+              <div className="flex items-center justify-between border-t border-hairline pt-1.5 font-mono">
+                <span className="text-foreground-muted">Total Payable:</span>
+                <span className="font-bold text-accent">₹{grandTotal.toLocaleString("en-IN")}</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => handleSaveDraftAndRedirect("/login")}
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-accent py-3 font-label text-xs font-bold uppercase tracking-wider text-background shadow transition-all hover:bg-accent/90 cursor-pointer"
+              >
+                <Icon name="login" className="text-base" />
+                Log In to Confirm
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSaveDraftAndRedirect("/signup")}
+                className="w-full flex items-center justify-center gap-2 rounded-xl border border-hairline bg-surface py-3 font-label text-xs font-semibold uppercase tracking-wider text-foreground transition-all hover:bg-surface-elevated cursor-pointer"
+              >
+                <Icon name="person_add" className="text-base" />
+                Create New Account (Sign Up)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAuthModal(false);
+                  setShowConfirmModal(true);
+                }}
+                className="w-full pt-1 text-center font-label text-[11px] uppercase tracking-wider text-foreground-muted hover:text-foreground cursor-pointer underline decoration-hairline underline-offset-4"
+              >
+                Or continue as guest for this session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Ticket & Payment Confirmation Screen (Yes/No Modal) */}
       {showConfirmModal && (
