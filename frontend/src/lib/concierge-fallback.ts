@@ -117,6 +117,7 @@ export interface BookingSessionState {
     | "awaiting_monument_choice"
     | "awaiting_party_size"
     | "awaiting_datetime"
+    | "awaiting_night_booking_confirmation"
     | "offered_best_guide"
     | "awaiting_alternative_guide"
     | "completed";
@@ -433,6 +434,29 @@ function matchSpecificMonument(query: string): CatalogSite | null {
 }
 
 /**
+ * Checks if the last message from the assistant was a night closure prompt offering
+ * to book tickets and a guide for tomorrow morning.
+ */
+function lastAssistantQueryWasNightClosure(
+  history?: Array<{ role: string; text?: string; content?: string }>
+): boolean {
+  if (!history || history.length === 0) return false;
+  const lastAssistant =
+    [...history].reverse().find((h) => h.role === "assistant")?.text ||
+    [...history].reverse().find((h) => h.role === "assistant")?.content ||
+    "";
+  const lower = lastAssistant.toLowerCase();
+  return (
+    lower.includes("book your tickets and an authorized asi guide for tomorrow morning") ||
+    lower.includes("tickets aur guide advance mein book kar doon") ||
+    lower.includes("अग्रिम टिकट और अधिकृत गाइड बुक करना चाहते हैं") ||
+    lower.includes("book for tomorrow's visit in advance") ||
+    lower.includes("closed for the night") ||
+    lower.includes("now it is closed")
+  );
+}
+
+/**
  * Main dialogue engine handling multi-turn state/city discovery, dynamic party size,
  * guide negotiation, non-database rejection, night-time closing, and login reminders.
  */
@@ -456,7 +480,10 @@ export function generateConciergeResponse(
   // Reconstruct state from history if present and session is idle or newly loaded
   if (state.step === "idle" && history && history.length > 0) {
     const combinedHistory = history.map((h) => h.text || h.content || "").join(" ");
-    const lastAssistant = [...history].reverse().find((h) => h.role === "assistant")?.text || "";
+    const lastAssistant =
+      [...history].reverse().find((h) => h.role === "assistant")?.text ||
+      [...history].reverse().find((h) => h.role === "assistant")?.content ||
+      "";
 
     const histMon = matchSpecificMonument(combinedHistory);
     if (histMon) {
@@ -499,6 +526,17 @@ export function generateConciergeResponse(
       lastAsstLower.includes("kiske sath proceed karna chahenge")
     ) {
       state.step = "awaiting_alternative_guide";
+    } else if (
+      lastAsstLower.includes("book your tickets and an authorized asi guide for tomorrow morning") ||
+      lastAsstLower.includes("tickets aur guide advance mein book kar doon") ||
+      lastAsstLower.includes("अग्रिम टिकट और अधिकृत गाइड बुक करना चाहते हैं") ||
+      lastAsstLower.includes("book for tomorrow's visit in advance") ||
+      lastAsstLower.includes("closed for the night") ||
+      lastAsstLower.includes("now it is closed")
+    ) {
+      state.step = "awaiting_night_booking_confirmation";
+      if (!state.visitDate) state.visitDate = ist.tomorrowStr;
+      if (!state.visitSlot) state.visitSlot = "06:00 AM (Sunrise Slot)";
     } else if (lastAsstLower.includes("date and time") || lastAsstLower.includes("tareekh")) {
       state.step = "awaiting_datetime";
     } else if (lastAsstLower.includes("how many visitors") || lastAsstLower.includes("kitne log")) {
@@ -633,16 +671,32 @@ export function generateConciergeResponse(
   const directMonumentMatch = matchSpecificMonument(q);
 
   const partyMatch =
-    q.match(/\b(\d+)\s*(?:member|members|visitor|visitors|ticket|tickets|people|person|persons|log|jana)\b/i) ||
+    q.match(/\b(\d+)\s*(?:member|members|visitor|visitors|ticket|tickets|people|person|persons|log|jana|vyakti|personas?)\b/i) ||
     q.match(/\bfor\s+(\d+)\b/i);
   const explicitPartySize = partyMatch ? Math.max(1, parseInt(partyMatch[1], 10)) : null;
 
-  if (directMonumentMatch && !isAskingBestTimeOrNow && (state.step === "idle" || state.step === "awaiting_monument_choice" || state.step === "awaiting_state_or_city")) {
+  const isDirectBookingOrMonumentMention =
+    directMonumentMatch !== null &&
+    !isAskingBestTimeOrNow &&
+    (
+      isBookingInitiation ||
+      explicitPartySize !== null ||
+      state.step === "idle" ||
+      state.step === "completed" ||
+      state.step === "awaiting_monument_choice" ||
+      state.step === "awaiting_state_or_city" ||
+      state.step === "awaiting_night_booking_confirmation" ||
+      state.step === "offered_best_guide" ||
+      state.step === "awaiting_datetime" ||
+      (state.siteSlug !== undefined && directMonumentMatch.slug !== state.siteSlug)
+    );
+
+  if (isDirectBookingOrMonumentMention && directMonumentMatch) {
     state.siteSlug = directMonumentMatch.slug;
     state.siteName = directMonumentMatch.name;
     state.lang = detectedLang;
 
-    // If visitor count was ALREADY given in this message (e.g. "book ticket for 3 members for Taj Mahal")
+    // If visitor count was ALREADY given in this message (e.g. "book ticket for 3 members for Statue of Unity")
     if (explicitPartySize !== null) {
       state.partySize = explicitPartySize;
 
@@ -655,7 +709,10 @@ export function generateConciergeResponse(
         state.step = "offered_best_guide";
         sessionStates.set(activeKey, state);
 
-        const activeGuide = explicitlyMentionedGuide || (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) || VERIFIED_GUIDES[0];
+        const activeGuide =
+          explicitlyMentionedGuide ||
+          (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) ||
+          VERIFIED_GUIDES[0];
         state.guideId = activeGuide.id;
         state.guideName = activeGuide.name;
         state.guideRate = activeGuide.rate;
@@ -677,13 +734,39 @@ export function generateConciergeResponse(
       state.step = "awaiting_datetime";
       sessionStates.set(activeKey, state);
 
+      const isTajFriday = directMonumentMatch.slug === "taj-mahal" && ist.dayOfWeek === 5;
+      const nightNoteEn = ist.isNight
+        ? `\n\n*(Note: Gates are currently closed for tonight as per IST timings. We recommend tomorrow morning's Sunrise Slot (06:00 AM – 09:00 AM) or your preferred date.)*`
+        : isTajFriday
+        ? `\n\n*(Note: The Taj Mahal is closed on Fridays for prayers. Please choose Saturday or another day.)*`
+        : "";
+
+      const nightNoteHinglish = ist.isNight
+        ? `\n\n*(Note: Abhi IST ke mutabiq raat ke waqt monument band hai. Hum kal subah ka Sunrise Slot (06:00 AM – 09:00 AM) ya aapki pasand ki tareekh recommend karte hain.)*`
+        : isTajFriday
+        ? `\n\n*(Note: Friday ko Taj Mahal band rehta hai. Kripya Saturday ya doosra din chunein.)*`
+        : "";
+
+      const nightNoteHi = ist.isNight
+        ? `\n\n*(नोट: भारतीय समयानुसार (IST) इस समय रात होने के कारण स्मारक बंद है। हम कल सुबह सनराइज स्लॉट (06:00 AM – 09:00 AM) या आपकी पसंद की किसी भी तारीख की सलाह देते हैं।)*`
+        : isTajFriday
+        ? `\n\n*(नोट: शुक्रवार को नमाज़ के कारण ताजमहल बंद रहता है। कृपया शनिवार या अन्य दिन चुनें।)*`
+        : "";
+
+      const nightNoteEs = ist.isNight
+        ? `\n\n*(Nota: Las puertas están cerradas por la noche según el horario IST. Recomendamos el turno del amanecer de mañana (06:00 – 09:00 hrs) o la fecha de su elección.)*`
+        : "";
+
       if (detectedLang === "hinglish") {
-        return `Zaroor! Aapko **${directMonumentMatch.name}** (${explicitPartySize} members) ke liye kis date aur time ke tickets chahiye?`;
+        return `Zaroor! Aapko **${directMonumentMatch.name}** (${explicitPartySize} members) ke liye kis date aur time ke tickets chahiye?${nightNoteHinglish}`;
       }
       if (detectedLang === "hi") {
-        return `ज़रूर! आपको **${directMonumentMatch.name}** (${explicitPartySize} सदस्यों) के लिए किस तारीख और समय के टिकट चाहिए?`;
+        return `ज़रूर! आपको **${directMonumentMatch.name}** (${explicitPartySize} सदस्यों) के लिए किस तारीख और समय के टिकट चाहिए?${nightNoteHi}`;
       }
-      return `Sure! What date and time do you need tickets for **${directMonumentMatch.name}** (${explicitPartySize} ${explicitPartySize === 1 ? "visitor" : "members"})?`;
+      if (detectedLang === "es") {
+        return `¡Claro! ¿Para qué fecha y hora necesita las entradas para **${directMonumentMatch.name}** (${explicitPartySize} ${explicitPartySize === 1 ? "persona" : "personas"})?${nightNoteEs}`;
+      }
+      return `Sure! What date and time do you need tickets for **${directMonumentMatch.name}** (${explicitPartySize} ${explicitPartySize === 1 ? "visitor" : "members"})?${nightNoteEn}`;
     }
 
     // NEVER default to Taj Mahal or 2 members; ask party size explicitly
@@ -695,6 +778,9 @@ export function generateConciergeResponse(
     }
     if (detectedLang === "hi") {
       return `आप **${directMonumentMatch.name}** के लिए कितने आगंतुकों (सदस्यों) के टिकट बुक करना चाहते हैं?`;
+    }
+    if (detectedLang === "es") {
+      return `¿Cuántos visitantes o miembros asistirán a **${directMonumentMatch.name}**?`;
     }
     return `How many visitors/members will be visiting **${directMonumentMatch.name}**?`;
   }
@@ -709,14 +795,33 @@ export function generateConciergeResponse(
       sessionStates.set(activeKey, state);
 
       const monumentName = state.siteName || "the monument";
+      const isTajFriday = (state.siteSlug || "").includes("taj") && ist.dayOfWeek === 5;
+
+      const nightNoteEn = ist.isNight
+        ? `\n\n*(Note: Gates are currently closed for tonight as per IST timings. We recommend tomorrow morning's Sunrise Slot (06:00 AM – 09:00 AM) or your preferred date.)*`
+        : isTajFriday
+        ? `\n\n*(Note: The Taj Mahal is closed on Fridays for prayers. Please choose Saturday or another day.)*`
+        : "";
+
+      const nightNoteHinglish = ist.isNight
+        ? `\n\n*(Note: Abhi IST ke mutabiq raat ke waqt monument band hai. Hum kal subah ka Sunrise Slot (06:00 AM – 09:00 AM) ya aapki pasand ki tareekh recommend karte hain.)*`
+        : isTajFriday
+        ? `\n\n*(Note: Friday ko Taj Mahal band rehta hai. Kripya Saturday ya doosra din chunein.)*`
+        : "";
+
+      const nightNoteHi = ist.isNight
+        ? `\n\n*(नोट: भारतीय समयानुसार (IST) इस समय रात होने के कारण स्मारक बंद है। हम कल सुबह सनराइज स्लॉट (06:00 AM – 09:00 AM) या आपकी पसंद की किसी भी तारीख की सलाह देते हैं।)*`
+        : isTajFriday
+        ? `\n\n*(नोट: शुक्रवार को नमाज़ के कारण ताजमहल बंद रहता है। कृपया शनिवार या अन्य दिन चुनें।)*`
+        : "";
 
       if (detectedLang === "hinglish") {
-        return `Shukriya! Aapko **${monumentName}** (${partySize} members) ke liye kis date aur time slot ke tickets chahiye?`;
+        return `Shukriya! Aapko **${monumentName}** (${partySize} members) ke liye kis date aur time slot ke tickets chahiye?${nightNoteHinglish}`;
       }
       if (detectedLang === "hi") {
-        return `धन्यवाद! आपको **${monumentName}** (${partySize} सदस्यों) के लिए किस तारीख और समय (स्लॉट) के टिकट चाहिए?`;
+        return `धन्यवाद! आपको **${monumentName}** (${partySize} सदस्यों) के लिए किस तारीख और समय (स्लॉट) के टिकट चाहिए?${nightNoteHi}`;
       }
-      return `Sure! What date and time do you need tickets for **${monumentName}** (${partySize} ${partySize === 1 ? "visitor" : "members"})?`;
+      return `Sure! What date and time do you need tickets for **${monumentName}** (${partySize} ${partySize === 1 ? "visitor" : "members"})?${nightNoteEn}`;
     }
   }
 
@@ -753,6 +858,7 @@ export function generateConciergeResponse(
     const stepLang = detectedLang !== "en" ? detectedLang : state.lang || "en";
 
     const matchedSite = sites.find((s) => s.slug === state.siteSlug) || sites[0];
+    const monumentName = state.siteName || matchedSite.name;
     const partySize = state.partySize || 1;
     const entryFeePerPerson = matchedSite.priceInr || 1100;
     const siteEntryTotal = entryFeePerPerson * partySize;
@@ -764,19 +870,141 @@ export function generateConciergeResponse(
 
     if (stepLang === "hinglish") {
       return (
-        `Shandar! **${parsedDate}** ko **${parsedSlot}** ke liye, ${isUserChosenGuide ? `aapke chune gaye certified guide **${activeGuide.name}**` : `hamare top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) ke sath estimated price **₹${activeGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur ${partySize} members ke entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
+        `Shandar! **${parsedDate}** ko **${parsedSlot}** ke liye **${monumentName}** (${partySize} members), ${isUserChosenGuide ? `aapke chune gaye certified guide **${activeGuide.name}**` : `hamare top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) ke sath estimated price **₹${activeGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
         `Kya aap ${activeGuide.name} ke sath proceed karna chahenge?`
       );
     }
     if (stepLang === "hi") {
       return (
-        `शानदार! **${parsedDate}** को **${parsedSlot}** के लिए, ${isUserChosenGuide ? `आपके चुने हुए प्रमाणित गाइड **${activeGuide.name}**` : `हमारे सर्वोच्च रेटेड गाइड **${activeGuide.name}**`} (⭐ ${activeGuide.rating} रेटिंग, ${activeGuide.tours}+ टूर) के साथ अनुमानित गाइड शुल्क **₹${activeGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और ${partySize} सदस्यों के प्रवेश टिकट मिलाकर कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
+        `शानदार! **${parsedDate}** को **${parsedSlot}** के लिए **${monumentName}** (${partySize} सदस्यों), ${isUserChosenGuide ? `आपके चुने हुए प्रमाणित गाइड **${activeGuide.name}**` : `हमारे सर्वोच्च रेटेड गाइड **${activeGuide.name}**`} (⭐ ${activeGuide.rating} रेटिंग, ${activeGuide.tours}+ टूर) के साथ अनुमानित गाइड शुल्क **₹${activeGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और प्रवेश टिकट मिलाकर कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
         `क्या आप ${activeGuide.name} के साथ आगे बढ़ना चाहेंगे?`
       );
     }
     return (
-      `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price with ${isUserChosenGuide ? `your requested verified guide **${activeGuide.name}**` : `our top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} ${partySize === 1 ? "visitor" : "members"} entry tickets and taxes.\n\n` +
+      `Great! For **${parsedDate}** at **${parsedSlot}**, the estimated price for **${monumentName}** with ${isUserChosenGuide ? `your requested verified guide **${activeGuide.name}**` : `our top-rated guide **${activeGuide.name}**`} (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} ${partySize === 1 ? "visitor" : "members"} entry tickets and taxes.\n\n` +
       `Would you like to proceed with ${activeGuide.name}?`
+    );
+  }
+
+  // ─── 5A. USER SAYS YES TO AWAITING_DATETIME PROMPT ──────────────────────
+  if (currentStep === "awaiting_datetime" && /\b(yes|sure|ok|okay|confirm|proceed|haan|theek hai|kardo|yep|yeah)\b/i.test(q)) {
+    state.visitDate = ist.tomorrowStr;
+    state.visitSlot = "06:00 AM (Sunrise Slot)";
+    state.step = "offered_best_guide";
+    if (detectedLang !== "en") state.lang = detectedLang;
+
+    const activeGuide =
+      explicitlyMentionedGuide ||
+      (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) ||
+      VERIFIED_GUIDES[0];
+
+    state.guideId = activeGuide.id;
+    state.guideName = activeGuide.name;
+    state.guideRate = activeGuide.rate;
+    state.isSelfGuided = activeGuide.id === "none";
+    sessionStates.set(activeKey, state);
+
+    const stepLang = detectedLang !== "en" ? detectedLang : state.lang || "en";
+    const matchedSite = sites.find((s) => s.slug === state.siteSlug) || sites[0];
+    const monumentName = state.siteName || matchedSite.name;
+    const partySize = state.partySize || 1;
+    const entryFeePerPerson = matchedSite.priceInr || 1100;
+    const siteEntryTotal = entryFeePerPerson * partySize;
+    const guideTotal = activeGuide.rate * 3;
+    const subtotal = siteEntryTotal + guideTotal;
+    const grandTotal = subtotal + Math.round(subtotal * 0.15);
+
+    if (stepLang === "hinglish") {
+      return (
+        `Shandar! Humne **${monumentName}** ke liye kal subah (${state.visitDate}) **06:00 AM (Sunrise Slot)** chun liya hai. Hamare top-rated guide **${activeGuide.name}** (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) ke sath estimated price **₹${activeGuide.rate}/hr** (3 ghante ke ₹${guideTotal}) hai, aur ${partySize} members ke entry tickets mila kar total estimate **₹${grandTotal.toLocaleString("en-IN")}** hai.\n\n` +
+        `Kya aap ${activeGuide.name} ke sath proceed karna chahenge?`
+      );
+    }
+    if (stepLang === "hi") {
+      return (
+        `शानदार! हमने **${monumentName}** के लिए कल सुबह (${state.visitDate}) **06:00 AM (सनराइज स्लॉट)** निर्धारित कर दिया है। हमारे सर्वोच्च रेटेड गाइड **${activeGuide.name}** (⭐ ${activeGuide.rating} रेटिंग, ${activeGuide.tours}+ टूर) के साथ अनुमानित शुल्क **₹${activeGuide.rate}/घंटे** (3 घंटे के ₹${guideTotal}) है, और कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है।\n\n` +
+        `क्या आप ${activeGuide.name} के साथ आगे बढ़ना चाहेंगे?`
+      );
+    }
+    if (stepLang === "es") {
+      return (
+        `¡Excelente! Hemos programado su visita para mañana por la mañana (${state.visitDate}) a las **06:00 AM (Turno Amanecer)** para **${monumentName}**. El precio estimado con el guía **${activeGuide.name}** (⭐ ${activeGuide.rating}, ${activeGuide.tours}+ recorridos) es de **₹${activeGuide.rate}/hr** (₹${guideTotal} por 3 horas), con un total estimado de **₹${grandTotal.toLocaleString("en-IN")}**.\n\n` +
+        `¿Desea continuar con ${activeGuide.name}?`
+      );
+    }
+
+    return (
+      `Great! We have scheduled your visit for tomorrow morning (${state.visitDate}) at **06:00 AM (Sunrise Slot)** for **${monumentName}**. The estimated price with our top-rated guide **${activeGuide.name}** (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} ${partySize === 1 ? "visitor" : "members"} entry tickets and taxes.\n\n` +
+      `Would you like to proceed with ${activeGuide.name}?`
+    );
+  }
+
+  // ─── 5B. USER CONFIRMS TOMORROW MORNING BOOKING AFTER NIGHT CLOSURE ──────
+  const isConfirmingNightBooking =
+    (currentStep === "awaiting_night_booking_confirmation" ||
+      ((state.siteSlug || state.siteName) &&
+        lastAssistantQueryWasNightClosure(history) &&
+        currentStep !== "offered_best_guide" &&
+        currentStep !== "awaiting_alternative_guide" &&
+        currentStep !== "completed")) &&
+    /\b(yes|sure|ok|okay|confirm|proceed|haan|theek hai|kardo|ha|yep|yeah|book|please book|chalo|done)\b/i.test(q);
+
+  if (isConfirmingNightBooking) {
+    state.step = "offered_best_guide";
+    if (!state.visitDate) state.visitDate = ist.tomorrowStr;
+    if (!state.visitSlot) state.visitSlot = "06:00 AM (Sunrise Slot)";
+    if (explicitPartySize !== null) state.partySize = explicitPartySize;
+    const partySize = state.partySize || 2;
+    state.partySize = partySize;
+
+    const activeGuide =
+      explicitlyMentionedGuide ||
+      (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) ||
+      VERIFIED_GUIDES[0];
+
+    state.guideId = activeGuide.id;
+    state.guideName = activeGuide.name;
+    state.guideRate = activeGuide.rate;
+    state.isSelfGuided = activeGuide.id === "none";
+    sessionStates.set(activeKey, state);
+
+    const siteSlug = state.siteSlug || "statue-of-unity";
+    const matchedSite = sites.find((s) => s.slug === siteSlug) || sites[0];
+    const siteName = state.siteName || matchedSite.name;
+    const entryFeePerPerson = matchedSite.priceInr || 350;
+    const siteEntryTotal = entryFeePerPerson * partySize;
+    const guideTotal = activeGuide.rate * 3;
+    const subtotal = siteEntryTotal + guideTotal;
+    const grandTotal = subtotal + Math.round(subtotal * 0.15);
+
+    const stepLang = detectedLang !== "en" ? detectedLang : state.lang || "en";
+
+    if (stepLang === "hinglish") {
+      return (
+        `Shandar! Kal subah (${state.visitDate}) **06:00 AM (Sunrise Slot)** ke liye **${siteName}** (${partySize} members) ka estimated price top-rated guide **${activeGuide.name}** (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) ke sath **₹${activeGuide.rate}/hr** (₹${guideTotal} 3-ghante ke tour ke liye) hai.\n\n` +
+        `Kul estimate **₹${grandTotal.toLocaleString("en-IN")}** hai jismein ${partySize} members ke entry tickets aur taxes shamil hain.\n\n` +
+        `Kya aap ${activeGuide.name} ke sath confirm aur proceed karna chahenge?`
+      );
+    }
+
+    if (stepLang === "hi") {
+      return (
+        `शानदार! कल सुबह (${state.visitDate}) **06:00 AM (सनराइज स्लॉट)** के लिए **${siteName}** (${partySize} सदस्यों) का अनुमानित विवरण शीर्ष रेटेड गाइड **${activeGuide.name}** (⭐ ${activeGuide.rating} रेटिंग, ${activeGuide.tours}+ टूर्स) के साथ **₹${activeGuide.rate}/घंटे** (3 घंटे के भ्रमण हेतु ₹${guideTotal}) है।\n\n` +
+        `कुल अनुमानित राशि **₹${grandTotal.toLocaleString("en-IN")}** है जिसमें ${partySize} सदस्यों के प्रवेश टिकट और कर शामिल हैं।\n\n` +
+        `क्या आप ${activeGuide.name} के साथ पुष्टि करके आगे बढ़ना चाहते हैं?`
+      );
+    }
+
+    if (stepLang === "es") {
+      return (
+        `¡Excelente! Para mañana por la mañana (${state.visitDate}) a las **06:00 AM (Turno Amanecer)** en **${siteName}** (${partySize} personas), el precio estimado con el guía mejor calificado **${activeGuide.name}** (⭐ ${activeGuide.rating}, ${activeGuide.tours}+ recorridos) es de **₹${activeGuide.rate}/hr** (₹${guideTotal} por un recorrido de 3 horas), con un total estimado de **₹${grandTotal.toLocaleString("en-IN")}** que incluye entradas e impuestos.\n\n` +
+        `¿Desea confirmar y continuar con ${activeGuide.name}?`
+      );
+    }
+
+    return (
+      `Great! For tomorrow morning (${state.visitDate}) at **06:00 AM (Sunrise Slot)**, the estimated price for **${siteName}** (${partySize} ${partySize === 1 ? "visitor" : "members"}) with top-rated guide **${activeGuide.name}** (⭐ ${activeGuide.rating} rating, ${activeGuide.tours}+ tours) is **₹${activeGuide.rate}/hr** (₹${guideTotal} for a 3-hour tour), with total estimate of **₹${grandTotal.toLocaleString("en-IN")}** including ${partySize} members entry tickets and taxes.\n\n` +
+      `Would you like to confirm and proceed with ${activeGuide.name}?`
     );
   }
 
@@ -1001,6 +1229,15 @@ export function generateConciergeResponse(
 
     // ─── 9A. USER ASKS AT NIGHT OR OUTSIDE OPEN HOURS ───────────────────
     if (ist.isNight || isTajFriday || (isAskingBestTimeOrNow && ist.isNight)) {
+      state.step = "awaiting_night_booking_confirmation";
+      state.siteSlug = matchedSite.slug;
+      state.siteName = matchedSite.name;
+      state.partySize = explicitPartySize || state.partySize || 2;
+      state.visitDate = ist.tomorrowStr;
+      state.visitSlot = "06:00 AM (Sunrise Slot)";
+      state.lang = detectedLang;
+      sessionStates.set(activeKey, state);
+
       if (detectedLang === "hinglish") {
         return (
           `**Abhi ${matchedSite.name} band hai (closing time: shaam 6:00 baje sunset ke baad). Kal ke visit ke liye advance mein book kar lijiye.**\n\n` +
