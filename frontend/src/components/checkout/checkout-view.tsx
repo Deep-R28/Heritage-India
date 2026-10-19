@@ -315,11 +315,13 @@ export function CheckoutView() {
       searchParams.get("count");
     if (p) {
       const parsed = parseInt(p, 10);
-      if (!isNaN(parsed) && parsed > 0) setPartySize(parsed);
+      if (!isNaN(parsed) && parsed > 0) setPartySize((prev) => (prev === parsed ? prev : parsed));
     } else if (cached?.partySize && cached.partySize > 0) {
-      setPartySize(cached.partySize);
+      const parsed = cached.partySize;
+      setPartySize((prev) => (prev === parsed ? prev : parsed));
     } else if (draft?.partySize && draft.partySize > 0) {
-      setPartySize(draft.partySize);
+      const parsed = draft.partySize;
+      setPartySize((prev) => (prev === parsed ? prev : parsed));
     }
 
     const d =
@@ -328,7 +330,10 @@ export function CheckoutView() {
       searchParams.get("day") ||
       cached?.visitDate ||
       draft?.visitDate;
-    if (d) setVisitDate(normalizeDateStr(d));
+    if (d) {
+      const nextDate = normalizeDateStr(d);
+      setVisitDate((prev) => (prev === nextDate ? prev : nextDate));
+    }
 
     const s =
       searchParams.get("slot") ||
@@ -337,7 +342,10 @@ export function CheckoutView() {
       searchParams.get("timeSlot") ||
       cached?.visitSlot ||
       draft?.visitSlot;
-    if (s) setVisitSlot(normalizeSlot(s));
+    if (s) {
+      const nextSlot = normalizeSlot(s);
+      setVisitSlot((prev) => (prev === nextSlot ? prev : nextSlot));
+    }
 
     // Re-resolve guide dynamically whenever searchParams or availableGuides change
     if (availableGuides.length > 0) {
@@ -352,9 +360,9 @@ export function CheckoutView() {
       ];
       const res = resolveGuideFromTargets(candidates, availableGuides);
       if (res.isSelf) {
-        setGuide(null);
+        setGuide((prev) => (prev === null ? prev : null));
       } else if (res.guide) {
-        setGuide(res.guide);
+        setGuide((prev) => (prev?.id === res.guide?.id ? prev : res.guide));
       }
     }
   }, [searchParams, availableGuides]);

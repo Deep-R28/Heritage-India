@@ -64,11 +64,9 @@ export function ChatClient() {
     // Sync any checkout booking parameters to localStorage immediately
     if (typeof window !== "undefined" && finalText) {
       try {
-        const linkMatch =
-          finalText.match(/\[[^\]]*\]\(((?:[^()]+|\([^()]*\))*\/checkout\?[^\s)]*)\)/i) ||
-          finalText.match(/(?:href=["']|\()([^"')\s]*\/checkout\?[^\s"'>)]+)/i);
-        if (linkMatch && linkMatch[1]) {
-          const rawUrl = linkMatch[1].replace(/&amp;/g, "&");
+        const linkMatch = finalText.match(/\/checkout\?[^\s)"'>]+/i);
+        if (linkMatch && linkMatch[0]) {
+          const rawUrl = linkMatch[0].replace(/&amp;/g, "&");
           const urlObj = new URL(rawUrl, window.location.origin);
           const site = urlObj.searchParams.get("site") || urlObj.searchParams.get("monument") || urlObj.searchParams.get("place") || urlObj.searchParams.get("siteSlug");
           const party = urlObj.searchParams.get("partySize") || urlObj.searchParams.get("members") || urlObj.searchParams.get("visitors") || urlObj.searchParams.get("tickets");

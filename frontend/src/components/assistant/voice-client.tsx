@@ -108,11 +108,9 @@ export function VoiceClient() {
 
         if (typeof window !== "undefined" && reply.text) {
           try {
-            const linkMatch =
-              reply.text.match(/\[[^\]]*\]\(((?:[^()]+|\([^()]*\))*\/checkout\?[^\s)]*)\)/i) ||
-              reply.text.match(/(?:href=["']|\()([^"')\s]*\/checkout\?[^\s"'>)]+)/i);
-            if (linkMatch && linkMatch[1]) {
-              const rawUrl = linkMatch[1].replace(/&amp;/g, "&");
+            const linkMatch = reply.text.match(/\/checkout\?[^\s)"'>]+/i);
+            if (linkMatch && linkMatch[0]) {
+              const rawUrl = linkMatch[0].replace(/&amp;/g, "&");
               const urlObj = new URL(rawUrl, window.location.origin);
               const site = urlObj.searchParams.get("site") || urlObj.searchParams.get("monument") || urlObj.searchParams.get("place") || urlObj.searchParams.get("siteSlug");
               const party = urlObj.searchParams.get("partySize") || urlObj.searchParams.get("members") || urlObj.searchParams.get("visitors") || urlObj.searchParams.get("tickets");

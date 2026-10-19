@@ -24,9 +24,8 @@ export function FormattedMessage({ text }: { text: string }) {
   };
 
   const renderFormattedInline = (str: string) => {
-    // Regex to split by markdown links [text](url) and **bold**
-    // Supports URLs with parentheses e.g. [text](/checkout?...&slot=04:30 PM (Sunset Slot)&guide=...)
-    const linkRegex = /\[([^\]]+)\]\(((?:[^()]+|\([^()]*\))*)\)/g;
+    // Linear non-backtracking regex to split by markdown links [text](url)
+    const linkRegex = /\[([^\]]+)\]\(([^)\s]+)\)/g;
     const parts: React.ReactNode[] = [];
     let lastIdx = 0;
     let match;
