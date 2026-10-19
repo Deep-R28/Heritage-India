@@ -5,6 +5,7 @@
  */
 import { getApiBase } from "@/lib/api";
 import { generateConciergeResponse } from "@/lib/concierge-fallback";
+import { extractBookingFromText, saveBookingDraft } from "@/lib/booking-sync";
 
 export interface AssistantMessage {
   id: string;
@@ -102,6 +103,9 @@ export async function sendMessageToAssistant(
           }
         }
 
+        const draft = extractBookingFromText(fullText);
+        if (draft) saveBookingDraft(draft);
+
         return {
           id: crypto.randomUUID(),
           role: "assistant",
@@ -115,10 +119,14 @@ export async function sendMessageToAssistant(
         localStorage.setItem("chat_session_id", json.data.sessionId);
       }
 
+      const text = json.data?.message || generateConciergeResponse(input, language, sessionId);
+      const draft = extractBookingFromText(text);
+      if (draft) saveBookingDraft(draft);
+
       return {
         id: crypto.randomUUID(),
         role: "assistant",
-        text: json.data?.message || generateConciergeResponse(input, language, sessionId),
+        text,
         language: json.data?.language,
       };
     } catch (parseErr) {
@@ -128,6 +136,9 @@ export async function sendMessageToAssistant(
 
   // Graceful local concierge answer (never display stub responses)
   const intelligentReply = generateConciergeResponse(input, language, sessionId);
+  const draft = extractBookingFromText(intelligentReply);
+  if (draft) saveBookingDraft(draft);
+
   if (onToken) {
     // If streaming was requested, simulate a quick token stream
     const words = intelligentReply.split(/(\s+)/);

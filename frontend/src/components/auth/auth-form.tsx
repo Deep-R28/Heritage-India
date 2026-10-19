@@ -46,21 +46,27 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
 
       // Check if there is a pending booking draft to auto-finalize
       if (typeof window !== "undefined") {
-        const rawDraft = sessionStorage.getItem("pending_booking_draft");
-        if (rawDraft) {
+        const rawDraft =
+          sessionStorage.getItem("pending_booking_draft") ||
+          localStorage.getItem("pending_booking_draft") ||
+          localStorage.getItem("heritage_last_chat_booking");
+        if (rawDraft && fromCheckout) {
           try {
             const draft = JSON.parse(rawDraft);
-            const booking = await api.bookings.create({
-              siteId: draft.siteId,
-              guideId: draft.guideId,
-              visitDate: draft.visitDate,
-              partySize: draft.partySize,
-              leadVisitor: draft.leadVisitor,
-              amountPaid: draft.totalINR,
-            });
-            sessionStorage.removeItem("pending_booking_draft");
-            router.push(`/checkout/success?ref=${booking.reference}&fromAuth=true`);
-            return;
+            if (draft.siteId && draft.leadVisitor) {
+              const booking = await api.bookings.create({
+                siteId: draft.siteId,
+                guideId: draft.guideId,
+                visitDate: draft.visitDate,
+                partySize: draft.partySize,
+                leadVisitor: draft.leadVisitor,
+                amountPaid: draft.totalINR,
+              });
+              sessionStorage.removeItem("pending_booking_draft");
+              localStorage.removeItem("pending_booking_draft");
+              router.push(`/checkout/success?ref=${booking.reference}&fromAuth=true`);
+              return;
+            }
           } catch (autoErr) {
             console.warn("Auto-booking after auth failed:", autoErr);
           }
