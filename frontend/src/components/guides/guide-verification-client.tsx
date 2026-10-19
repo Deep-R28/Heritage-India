@@ -4,13 +4,13 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import type { Guide } from "@/lib/data";
+import type { Guide, Site } from "@/lib/data";
 import type { PricingData } from "@/components/pricing/pricing-types";
 import { Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { VerifiedSeal } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
-import { localizeGuide, localizePricing } from "@/lib/localize";
+import { localizeGuide, localizePricing, localizeSite } from "@/lib/localize";
 import nearbySitesRaw from "@/data/nearby-sites.json";
 
 export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing }: { guides: Guide[]; pricing: PricingData }) {
@@ -180,7 +180,9 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
 
             <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {nearbySitesRaw.map((site) => (
+                {nearbySitesRaw.map((rawSite) => {
+                  const site = localizeSite(rawSite as unknown as Site, i18n.language);
+                  return (
                   <Link
                     key={site.slug}
                     href={`/checkout?guide=${selectedGuideForBooking.id}&site=${site.slug}`}
@@ -210,7 +212,8 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
                       className="text-base text-foreground-muted transition-transform group-hover:translate-x-1 group-hover:text-accent"
                     />
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

@@ -7,13 +7,17 @@ import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 import { api, type ApiSite, type ApiGuide } from "@/lib/api";
 import { useAuth } from "@/hooks/use-auth";
+import { SITE_TRANSLATIONS } from "@/lib/site-translations";
+import type { LanguageCode } from "@/i18n/config";
 
 export function CheckoutView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, isLoggedIn } = useAuth();
+  const { i18n } = useTranslation();
 
   const siteSlug = searchParams.get("site") || "taj-mahal";
   const guideId = searchParams.get("guide");
@@ -215,6 +219,11 @@ export function CheckoutView() {
     "Marathi",
   ];
 
+  const activeLangCode = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
+  const siteTr = site ? (SITE_TRANSLATIONS[site.slug]?.[activeLangCode] ?? null) : null;
+  const displayName = siteTr?.name || site?.name || "";
+  const displayRegion = siteTr?.region || (site ? `${site.city}, ${site.state}` : "");
+
   if (loading) {
     return (
       <div className="mx-auto max-w-content px-6 py-16 text-center">
@@ -291,8 +300,8 @@ export function CheckoutView() {
                   )}
                 </div>
                 <div>
-                  <h3 className="font-headline text-lg text-foreground">{site.name}</h3>
-                  <p className="font-body text-xs text-foreground-muted">{site.city}, {site.state}</p>
+                  <h3 className="font-headline text-lg text-foreground">{displayName}</h3>
+                  <p className="font-body text-xs text-foreground-muted">{displayRegion}</p>
                   <div className="mt-2 flex items-center gap-2">
                     <span className="font-mono text-xs text-accent">₹{entryFeePerPerson}/person</span>
                     <Badge tone="verified">Official Ticket</Badge>
@@ -722,7 +731,7 @@ export function CheckoutView() {
               <div className="rounded-xl border border-hairline bg-surface-elevated/50 p-4 space-y-2.5 text-xs">
                 <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
                   <span className="font-label uppercase text-foreground-muted">Heritage Monument</span>
-                  <span className="font-headline font-semibold text-foreground text-right">{site?.name}</span>
+                  <span className="font-headline font-semibold text-foreground text-right">{displayName}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
                   <span className="font-label uppercase text-foreground-muted">Date & Time Slot</span>

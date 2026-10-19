@@ -88,7 +88,7 @@ export function VoiceClient() {
       stop();
 
       try {
-        const reply = await sendMessageToAssistant(query);
+        const reply = await sendMessageToAssistant(query, undefined, undefined, currentLanguage);
         setAssistantReply(reply.text);
         setTranscript("");
 

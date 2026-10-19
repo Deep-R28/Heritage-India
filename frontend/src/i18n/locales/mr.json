@@ -36,7 +36,21 @@
     "ancientCity": "प्राचीन शहर",
     "stepwell": "बारव / बावडी",
     "architecture": "वास्तुकला",
-    "naturalHeritage": "नैसर्गिक वारसा"
+    "naturalHeritage": "नैसर्गिक वारसा",
+    "temple": "मंदिर",
+    "caves": "लेणी / गुहा",
+    "gurudwara": "गुरुद्वारा",
+    "memorial": "स्मारक",
+    "religiousSite": "धार्मिक स्थळ",
+    "templeRuins": "मंदिर आणि अवशेष",
+    "museum": "संग्रहालय",
+    "bridge": "पूल",
+    "nationalPark": "राष्ट्रीय उद्यान",
+    "beach": "समुद्रकिनारा",
+    "naturalLandscape": "नैसर्गिक परिसर",
+    "ruins": "अवशेष",
+    "monastery": "बौद्ध मठ",
+    "naturalWonder": "नैसर्गिक आश्चर्य"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "किल्ले, शहरे किंवा मंदिरे शोधा..."
+    "searchPlaceholder": "ठिकाणे, शहरे, मंदिरे शोधा...",
+    "search": "शोधा",
+    "resultsFor": "निकाल:",
+    "resetSearch": "रीसेट करा",
+    "selectedSiteOnMap": "नकाशावर निवडलेले स्थळ",
+    "viewDetails": "तपशील पहा",
+    "freeEntry": "मोफत प्रवेश",
+    "savedToDashboard": "डॅशबोर्डमध्ये जतन केले",
+    "saveToMySites": "माझ्या स्थळांमध्ये जतन करा"
   },
   "siteDetail": {
     "crowd": {

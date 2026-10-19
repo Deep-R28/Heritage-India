@@ -36,7 +36,21 @@
     "ancientCity": "ಪ್ರಾಚೀನ ನಗರ",
     "stepwell": "ಕಲ್ಯಾಣಿ / ಬಾವಿ",
     "architecture": "ವಾಸ್ತುಶಿಲ್ಪ",
-    "naturalHeritage": "ನೈಸರ್ಗಿಕ ಪರಂಪರೆ"
+    "naturalHeritage": "ನೈಸರ್ಗಿಕ ಪರಂಪರೆ",
+    "temple": "ದೇವಾಲಯ",
+    "caves": "ಗುಹೆಗಳು",
+    "gurudwara": "ಗುರುದ್ವಾರ",
+    "memorial": "ಸ್ಮಾರಕ",
+    "religiousSite": "ಧಾರ್ಮಿಕ ಸ್ಥಳ",
+    "templeRuins": "ದೇವಾಲಯ ಮತ್ತು ಅವಶೇಷಗಳು",
+    "museum": "ವಸ್ತುಸಂಗ್ರಹಾಲಯ",
+    "bridge": "ಸೇತುವೆ",
+    "nationalPark": "ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನವನ",
+    "beach": "ಕಡಲತೀರ",
+    "naturalLandscape": "ನೈಸರ್ಗಿಕ ತಾಣ",
+    "ruins": "ಅವಶೇಷಗಳು",
+    "monastery": "ಬೌದ್ಧ ಮಠ",
+    "naturalWonder": "ನೈಸರ್ಗಿಕ ಅದ್ಭುತ"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "ಸ್ಥಳಗಳು, ನಗರಗಳು ಅಥವಾ ದೇವಾಲಯಗಳನ್ನು ಹುಡುಕಿ..."
+    "searchPlaceholder": "ಸ್ಥಳಗಳು, ನಗರಗಳು, ದೇವಾಲಯಗಳನ್ನು ಹುಡುಕಿ...",
+    "search": "ಹುಡುಕಿ",
+    "resultsFor": "ಫಲಿತಾಂಶಗಳು:",
+    "resetSearch": "ಮರುಹೊಂದಿಸಿ",
+    "selectedSiteOnMap": "ನಕ್ಷೆಯಲ್ಲಿ ಆಯ್ಕೆಮಾಡಿದ ತಾಣ",
+    "viewDetails": "ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "freeEntry": "ಉಚಿತ ಪ್ರವೇಶ",
+    "savedToDashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ",
+    "saveToMySites": "ನನ್ನ ತಾಣಗಳಿಗೆ ಉಳಿಸಿ"
   },
   "siteDetail": {
     "crowd": {

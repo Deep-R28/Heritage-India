@@ -1,27 +1,46 @@
-/**
- * Localizes mock content-data fields (site descriptions, guide specialties,
- * pricing copy) client-side by active i18n language. Proper nouns — site
- * names, guide names, regions, spoken-language lists — stay in their
- * canonical English form on purpose; only descriptive prose is translated.
- *
- * Pages fetch this data server-side (before the client's language preference
- * is known), so every translation variant ships to the client and the right
- * one is picked here at render time instead of on the server.
- */
 import type { Site, Guide } from "@/lib/data";
 import type { PricingData } from "@/components/pricing/pricing-types";
 import type { LanguageCode } from "@/i18n/config";
+import { SITE_TRANSLATIONS } from "./site-translations";
 
 function langCode(lang: string): LanguageCode {
   return (lang?.slice(0, 2) as LanguageCode) ?? "en";
 }
 
+export function localizeSiteName(slugOrName: string, lang: string): string {
+  const code = langCode(lang);
+  if (!slugOrName || code === "en") return slugOrName;
+
+  // 1. Exact match by slug
+  if (SITE_TRANSLATIONS[slugOrName]?.[code]?.name) {
+    return SITE_TRANSLATIONS[slugOrName][code]!.name;
+  }
+
+  // 2. Lookup slug by matching canonical English name or slugified string
+  const lowerTarget = slugOrName.trim().toLowerCase();
+  for (const [slug, transMap] of Object.entries(SITE_TRANSLATIONS)) {
+    if (slug === lowerTarget) {
+      if (transMap[code]?.name) return transMap[code]!.name;
+    }
+  }
+
+  return slugOrName;
+}
+
 export function localizeSite(site: Site, lang: string): Site {
   const code = langCode(lang);
   if (code === "en") return site;
+
+  const siteTr = SITE_TRANSLATIONS[site.slug]?.[code];
   const t = (site.translations as Record<string, { summary?: string; history?: string } | undefined>)?.[code];
-  if (!t) return site;
-  return { ...site, summary: t.summary ?? site.summary, history: t.history ?? site.history };
+
+  return {
+    ...site,
+    name: siteTr?.name ?? site.name,
+    region: siteTr?.region ?? site.region,
+    summary: siteTr?.summary ?? t?.summary ?? site.summary,
+    history: siteTr?.history ?? t?.history ?? site.history,
+  };
 }
 
 export function localizeGuide(guide: Guide, lang: string): Guide {
@@ -45,3 +64,4 @@ export function localizePricing(pricing: PricingData, lang: string): PricingData
       : pricing.guideRates,
   };
 }
+

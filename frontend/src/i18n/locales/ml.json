@@ -36,7 +36,21 @@
     "ancientCity": "പുരാതന നഗരം",
     "stepwell": "കിണർ",
     "architecture": "ശില്പകല",
-    "naturalHeritage": "പ്രകൃതിദത്ത പൈതൃകം"
+    "naturalHeritage": "പ്രകൃതിദത്ത പൈതൃകം",
+    "temple": "ക്ഷേത്രം",
+    "caves": "ഗുഹകൾ",
+    "gurudwara": "ഗുരുദ്വാര",
+    "memorial": "സ്മാരകം",
+    "religiousSite": "തീർത്ഥാടന കേന്ദ്രം",
+    "templeRuins": "ക്ഷേത്രവും അവശിഷ്ടങ്ങളും",
+    "museum": "മ്യൂസിയം",
+    "bridge": "പാലം",
+    "nationalPark": "ദേശീയോദ്യാനം",
+    "beach": "ബീച്ച്",
+    "naturalLandscape": "പ്രകൃതിഭംഗി",
+    "ruins": "അവശിഷ്ടങ്ങൾ",
+    "monastery": "ആശ്രമം",
+    "naturalWonder": "പ്രകൃതിവിസ്മയം"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "സ്ഥലങ്ങൾ, നഗരങ്ങൾ, ക്ഷേത്രങ്ങൾ തിരയുക..."
+    "searchPlaceholder": "സ്ഥലങ്ങൾ, നഗരങ്ങൾ, ക്ഷേത്രങ്ങൾ തിരയുക...",
+    "search": "തിരയുക",
+    "resultsFor": "ഫലങ്ങൾ:",
+    "resetSearch": "റീസെറ്റ്",
+    "selectedSiteOnMap": "മാപ്പിൽ തിരഞ്ഞെടുത്ത സ്ഥലം",
+    "viewDetails": "വിശദാംശങ്ങൾ കാണുക",
+    "freeEntry": "സൗജന്യ പ്രവേശനം",
+    "savedToDashboard": "ഡാഷ്‌ബോർഡിൽ സംരക്ഷിച്ചു",
+    "saveToMySites": "എന്റെ സൈറ്റുകളിലേക്ക് സംരക്ഷിക്കുക"
   },
   "siteDetail": {
     "crowd": {

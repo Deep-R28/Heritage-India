@@ -20,7 +20,8 @@ export type AssistantMode = "chat" | "voice";
 export async function sendMessageToAssistant(
   input: string,
   fallbackText?: (input: string) => string,
-  onToken?: (token: string) => void
+  onToken?: (token: string) => void,
+  language?: string
 ): Promise<AssistantMessage> {
   const sessionId = typeof window !== "undefined" ? localStorage.getItem("chat_session_id") || undefined : undefined;
   const base = getApiBase();
@@ -37,6 +38,7 @@ export async function sendMessageToAssistant(
         message: input,
         sessionId,
         stream: Boolean(onToken),
+        language,
       }),
     });
   } catch {
@@ -51,6 +53,7 @@ export async function sendMessageToAssistant(
             message: input,
             sessionId,
             stream: Boolean(onToken),
+            language,
           }),
         });
       } catch {
@@ -115,7 +118,7 @@ export async function sendMessageToAssistant(
       return {
         id: crypto.randomUUID(),
         role: "assistant",
-        text: json.data?.message || generateConciergeResponse(input, undefined, sessionId),
+        text: json.data?.message || generateConciergeResponse(input, language, sessionId),
         language: json.data?.language,
       };
     } catch (parseErr) {
@@ -124,7 +127,7 @@ export async function sendMessageToAssistant(
   }
 
   // Graceful local concierge answer (never display stub responses)
-  const intelligentReply = generateConciergeResponse(input, undefined, sessionId);
+  const intelligentReply = generateConciergeResponse(input, language, sessionId);
   if (onToken) {
     // If streaming was requested, simulate a quick token stream
     const words = intelligentReply.split(/(\s+)/);

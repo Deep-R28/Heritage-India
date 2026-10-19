@@ -36,7 +36,21 @@
     "ancientCity": "பண்டைய நகரம்",
     "stepwell": "படிக்கிணறு",
     "architecture": "கட்டிடக்கலை",
-    "naturalHeritage": "இயற்கை பாரம்பரியம்"
+    "naturalHeritage": "இயற்கை பாரம்பரியம்",
+    "temple": "கோயில்",
+    "caves": "குகைகள்",
+    "gurudwara": "குருத்வாரா",
+    "memorial": "நினைவுச்சின்னம்",
+    "religiousSite": "புனித தலம்",
+    "templeRuins": "கோயில் மற்றும் இடிபாடுகள்",
+    "museum": "அருங்காட்சியகம்",
+    "bridge": "பாலம்",
+    "nationalPark": "தேசியப் பூங்கா",
+    "beach": "கடற்கரை",
+    "naturalLandscape": "இயற்கை நிலப்பரப்பு",
+    "ruins": "இடிபாடுகள்",
+    "monastery": "மடாலயம்",
+    "naturalWonder": "இயற்கை அதிசயம்"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "இடங்கள், நகரங்கள், கோவில்களைத் தேடுங்கள்..."
+    "searchPlaceholder": "இடங்கள், நகரங்கள், கோயில்களைத் தேடுங்கள்...",
+    "search": "தேடு",
+    "resultsFor": "முடிவுகள்:",
+    "resetSearch": "மீட்டமை",
+    "selectedSiteOnMap": "வரைபடத்தில் தேர்ந்தெடுக்கப்பட்ட தளம்",
+    "viewDetails": "விவரங்களைக் காண்க",
+    "freeEntry": "இலவச அனுமதி",
+    "savedToDashboard": "டாஷ்போர்டில் சேமிக்கப்பட்டது",
+    "saveToMySites": "சேமிக்கவும்"
   },
   "siteDetail": {
     "crowd": {

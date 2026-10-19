@@ -36,7 +36,21 @@
     "ancientCity": "قدیم شہر",
     "stepwell": "باؤلی",
     "architecture": "طرزِ تعمیر",
-    "naturalHeritage": "قدرتی ورثہ"
+    "naturalHeritage": "قدرتی ورثہ",
+    "temple": "مندر",
+    "caves": "غاریں",
+    "gurudwara": "گردوارہ",
+    "memorial": "یادگار",
+    "religiousSite": "مذہبی مقام",
+    "templeRuins": "مندر اور کھنڈرات",
+    "museum": "عجائب گھر",
+    "bridge": "پل",
+    "nationalPark": "قومی پارک",
+    "beach": "ساحل",
+    "naturalLandscape": "قدرتی منظر",
+    "ruins": "کھنڈرات",
+    "monastery": "خانقاہ",
+    "naturalWonder": "قدرتی عجوبہ"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "مقامات، شہر یا قلعے تلاش کریں..."
+    "searchPlaceholder": "مقامات، شہر، مندر تلاش کریں...",
+    "search": "تلاش کریں",
+    "resultsFor": "نتائج برائے:",
+    "resetSearch": "دوبارہ ترتیب دیں",
+    "selectedSiteOnMap": "نقشے پر منتخب مقام",
+    "viewDetails": "تفصیلات دیکھیں",
+    "freeEntry": "مفت داخلہ",
+    "savedToDashboard": "ڈیش بورڈ میں محفوظ",
+    "saveToMySites": "میرے مقامات میں محفوظ کریں"
   },
   "siteDetail": {
     "crowd": {

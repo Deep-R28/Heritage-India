@@ -36,7 +36,21 @@
     "ancientCity": "प्राचीन नगर",
     "stepwell": "बावड़ी",
     "architecture": "स्थापत्य कला",
-    "naturalHeritage": "प्राकृतिक धरोहर"
+    "naturalHeritage": "प्राकृतिक धरोहर",
+    "temple": "मंदिर",
+    "caves": "गुफाएं",
+    "gurudwara": "गुरुद्वारा",
+    "memorial": "स्मारक",
+    "religiousSite": "धार्मिक स्थल",
+    "templeRuins": "मंदिर एवं खंडहर",
+    "museum": "संग्रहालय",
+    "bridge": "पुल",
+    "nationalPark": "राष्ट्रीय उद्यान",
+    "beach": "समुद्र तट",
+    "naturalLandscape": "प्राकृतिक परिदृश्य",
+    "ruins": "खंडहर",
+    "monastery": "बौद्ध मठ",
+    "naturalWonder": "प्राकृतिक आश्चर्य"
   },
   "accessibility": {
     "menuLabel": "सुगम्यता",
@@ -248,7 +262,16 @@
   },
   "explore": {
     "noResults": "इस फ़िल्टर से कोई स्थल मेल नहीं खाता।",
-    "openFullMap": "पूर्ण-स्क्रीन मानचित्र खोलें"
+    "openFullMap": "पूर्ण-स्क्रीन मानचित्र खोलें",
+    "searchPlaceholder": "स्थान, शहर, राज्य, मंदिर खोजें...",
+    "search": "खोजें",
+    "resultsFor": "खोज परिणाम:",
+    "resetSearch": "खोज रीसेट करें",
+    "selectedSiteOnMap": "मानचित्र पर चयनित स्थल",
+    "viewDetails": "विवरण देखें",
+    "freeEntry": "निःशुल्क प्रवेश",
+    "savedToDashboard": "डैशबोर्ड में सहेजा गया",
+    "saveToMySites": "मेरे स्थलों में सहेजें"
   },
   "siteDetail": {
     "crowd": {

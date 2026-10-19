@@ -1,7 +1,7 @@
 "use client";
 
 import i18next from "i18next";
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useEffect, type ReactNode } from "react";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { defaultLanguage, LANGUAGE_STORAGE_KEY, languages, type LanguageCode } from "./config";
@@ -54,5 +54,21 @@ export function I18nProvider({
   initialLanguage?: LanguageCode;
 }) {
   const instance = useMemo(() => i18next.cloneInstance({ lng: initialLanguage }), [initialLanguage]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY) as LanguageCode | null;
+        if (stored && stored in languages && stored !== initialLanguage) {
+          document.cookie = `${LANGUAGE_STORAGE_KEY}=${stored}; path=/; max-age=31536000; SameSite=Lax`;
+          document.documentElement.lang = stored;
+          instance.changeLanguage(stored);
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }, [initialLanguage, instance]);
+
   return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
 }

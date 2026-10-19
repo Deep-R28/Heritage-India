@@ -36,7 +36,21 @@
     "ancientCity": "ਪੁਰਾਤਨ ਸ਼ਹਿਰ",
     "stepwell": "ਬਾਉਲੀ",
     "architecture": "ਇਮਾਰਤਸਾਜ਼ੀ",
-    "naturalHeritage": "ਕੁਦਰਤੀ ਵਿਰਾਸਤ"
+    "naturalHeritage": "ਕੁਦਰਤੀ ਵਿਰਾਸਤ",
+    "temple": "ਮੰਦਰ",
+    "caves": "ਗੁਫਾਵਾਂ",
+    "gurudwara": "ਗੁਰਦੁਆਰਾ",
+    "memorial": "ਯਾਦਗਾਰ",
+    "religiousSite": "ਧਾਰਮਿਕ ਅਸਥਾਨ",
+    "templeRuins": "ਮੰਦਰ ਅਤੇ ਖੰਡਰ",
+    "museum": "ਅਜਾਇਬ ਘਰ",
+    "bridge": "ਪੁਲ",
+    "nationalPark": "ਨੈਸ਼ਨਲ ਪਾਰਕ",
+    "beach": "ਸਮੁੰਦਰੀ ਕੰਢਾ",
+    "naturalLandscape": "ਕੁਦਰਤੀ ਨਜ਼ਾਰਾ",
+    "ruins": "ਖੰਡਰ",
+    "monastery": "ਬੋਧੀ ਮੱਠ",
+    "naturalWonder": "ਕੁਦਰਤੀ ਅਜੂਬਾ"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "ਅਸਥਾਨ, ਸ਼ਹਿਰ ਜਾਂ ਕਿਲ੍ਹੇ ਖੋਜੋ..."
+    "searchPlaceholder": "ਸਥਾਨ, ਸ਼ਹਿਰ, ਮੰਦਰ ਖੋਜੋ...",
+    "search": "ਖੋਜੋ",
+    "resultsFor": "ਨਤੀਜੇ:",
+    "resetSearch": "ਰੀਸੈਟ",
+    "selectedSiteOnMap": "ਨਕਸ਼ੇ ਤੇ ਚੁਣਿਆ ਗਿਆ ਸਥਾਨ",
+    "viewDetails": "ਵੇਰਵੇ ਦੇਖੋ",
+    "freeEntry": "ਮੁਫਤ ਦਾਖਲਾ",
+    "savedToDashboard": "ਡੈਸ਼ਬੋਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ",
+    "saveToMySites": "ਮੇਰੇ ਸਥਾਨਾਂ ਵਿੱਚ ਸੰਭਾਲੋ"
   },
   "siteDetail": {
     "crowd": {

@@ -36,7 +36,21 @@
     "ancientCity": "প্রাচীন শহর",
     "stepwell": "কুয়ো / বাওলি",
     "architecture": "স্থাপত্য",
-    "naturalHeritage": "প্রাকৃতিক ঐতিহ্য"
+    "naturalHeritage": "প্রাকৃতিক ঐতিহ্য",
+    "temple": "মন্দির",
+    "caves": "গুহা",
+    "gurudwara": "গুরুদুয়ারা",
+    "memorial": "স্মৃতিসৌধ",
+    "religiousSite": "ধর্মীয় স্থান",
+    "templeRuins": "মন্দির ও ধ্বংসাবশেষ",
+    "museum": "জাদুঘর",
+    "bridge": "সেতু",
+    "nationalPark": "জাতীয় উদ্যান",
+    "beach": "সৈকত",
+    "naturalLandscape": "প্রাকৃতিক দৃশ্য",
+    "ruins": "ধ্বংসাবশেষ",
+    "monastery": "বৌদ্ধ মঠ",
+    "naturalWonder": "প্রাকৃতিক বিস্ময়"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "স্মারক, শহর বা রাজ্য খুঁজুন..."
+    "searchPlaceholder": "স্থান, শহর, রাজ্য, মন্দির খুঁজুন...",
+    "search": "অনুসন্ধান",
+    "resultsFor": "ফলাফল:",
+    "resetSearch": "অনুসন্ধান রিসেট",
+    "selectedSiteOnMap": "মানচিত্রে নির্বাচিত স্থান",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "freeEntry": "বিনামূল্যে প্রবেশ",
+    "savedToDashboard": "ড্যাশবোর্ডে সংরক্ষিত",
+    "saveToMySites": "আমার স্থানে সংরক্ষণ করুন"
   },
   "siteDetail": {
     "crowd": {

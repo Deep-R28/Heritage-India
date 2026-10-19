@@ -41,7 +41,11 @@ export function LanguageToggle({ className }: { className?: string }) {
                     document.documentElement.lang = code;
                   }
                   setOpen(false);
-                  router.refresh();
+                  if (typeof window !== "undefined") {
+                    window.location.reload();
+                  } else {
+                    router.refresh();
+                  }
                 }}
                 className={cn(
                   "flex w-full items-center justify-between px-4 py-2 text-left font-label text-xs uppercase tracking-widest hover:bg-surface-hover",

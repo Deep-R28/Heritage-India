@@ -36,7 +36,21 @@
     "ancientCity": "Ancient City",
     "stepwell": "Stepwell",
     "architecture": "Architecture",
-    "naturalHeritage": "Natural Heritage"
+    "naturalHeritage": "Natural Heritage",
+    "temple": "Temple",
+    "caves": "Caves",
+    "gurudwara": "Gurudwara",
+    "memorial": "Memorial",
+    "religiousSite": "Religious Site",
+    "templeRuins": "Temple / Ruins",
+    "museum": "Museum",
+    "bridge": "Bridge",
+    "nationalPark": "National Park",
+    "beach": "Beach",
+    "naturalLandscape": "Natural Landscape",
+    "ruins": "Ruins",
+    "monastery": "Monastery",
+    "naturalWonder": "Natural Wonder"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -88,25 +102,64 @@
       "eyebrow": "The Journey",
       "heading": "How It Works",
       "steps": {
-        "location": { "title": "Set Your Location", "body": "Share your position for a live map of heritage sites nearby." },
-        "language": { "title": "Choose Your Language", "body": "Select from English, Hindi, Spanish and more, instantly." },
-        "crowd": { "title": "See Live Crowd Levels", "body": "Every site shows a real-time crowd gauge before you commit." },
-        "assistant": { "title": "Ask the AI Concierge", "body": "Chat or talk through history, logistics, and etiquette." },
-        "guide": { "title": "Book a Verified Guide", "body": "ASI-licensed guides only — no street-side impersonators." },
-        "pay": { "title": "Pay Securely", "body": "Transparent, itemized checkout with no hidden fees." },
-        "explore": { "title": "Explore, Worry-Free", "body": "Your itinerary, saved sites, and receipts — always at hand." }
+        "location": {
+          "title": "Set Your Location",
+          "body": "Share your position for a live map of heritage sites nearby."
+        },
+        "language": {
+          "title": "Choose Your Language",
+          "body": "Select from English, Hindi, Spanish and more, instantly."
+        },
+        "crowd": {
+          "title": "See Live Crowd Levels",
+          "body": "Every site shows a real-time crowd gauge before you commit."
+        },
+        "assistant": {
+          "title": "Ask the AI Concierge",
+          "body": "Chat or talk through history, logistics, and etiquette."
+        },
+        "guide": {
+          "title": "Book a Verified Guide",
+          "body": "ASI-licensed guides only — no street-side impersonators."
+        },
+        "pay": {
+          "title": "Pay Securely",
+          "body": "Transparent, itemized checkout with no hidden fees."
+        },
+        "explore": {
+          "title": "Explore, Worry-Free",
+          "body": "Your itinerary, saved sites, and receipts — always at hand."
+        }
       }
     },
     "features": {
       "eyebrow": "The Toolkit",
       "heading": "Everything, Curated",
       "items": {
-        "discovery": { "title": "Nearby Discovery", "body": "A living map of monuments, forts, and stepwells around you." },
-        "crowd": { "title": "Crowd Intelligence", "body": "Glanceable gauges, not raw numbers — know before you go." },
-        "concierge": { "title": "AI Concierge", "body": "Chat or voice, in your language, on every page." },
-        "guides": { "title": "Verified Guides", "body": "ASI-licensed only, with transparent fair-rate pricing." },
-        "alternatives": { "title": "Smart Alternatives", "body": "Busy site? We surface a quieter one nearby, instantly." },
-        "accessibility": { "title": "Built for Everyone", "body": "Color-vision modes and full theme control, site-wide." }
+        "discovery": {
+          "title": "Nearby Discovery",
+          "body": "A living map of monuments, forts, and stepwells around you."
+        },
+        "crowd": {
+          "title": "Crowd Intelligence",
+          "body": "Glanceable gauges, not raw numbers — know before you go."
+        },
+        "concierge": {
+          "title": "AI Concierge",
+          "body": "Chat or voice, in your language, on every page."
+        },
+        "guides": {
+          "title": "Verified Guides",
+          "body": "ASI-licensed only, with transparent fair-rate pricing."
+        },
+        "alternatives": {
+          "title": "Smart Alternatives",
+          "body": "Busy site? We surface a quieter one nearby, instantly."
+        },
+        "accessibility": {
+          "title": "Built for Everyone",
+          "body": "Color-vision modes and full theme control, site-wide."
+        }
       }
     },
     "stats": {
@@ -132,9 +185,21 @@
     },
     "pillars": {
       "heading": "Our Core Pillars",
-      "curation": { "label": "Curation", "title": "Impeccable Selection", "body": "We bypass the overcrowded landmarks to reveal hidden architectural masterpieces, applying editorial rigor to every site we include in our archive." },
-      "context": { "label": "Context", "title": "Historical Integrity", "body": "Providing profound, academically sound narratives rather than superficial anecdotes." },
-      "conservation": { "label": "Conservation", "title": "Sustainable Impact", "body": "Directing resources back into the physical maintenance of the structures we venerate." }
+      "curation": {
+        "label": "Curation",
+        "title": "Impeccable Selection",
+        "body": "We bypass the overcrowded landmarks to reveal hidden architectural masterpieces, applying editorial rigor to every site we include in our archive."
+      },
+      "context": {
+        "label": "Context",
+        "title": "Historical Integrity",
+        "body": "Providing profound, academically sound narratives rather than superficial anecdotes."
+      },
+      "conservation": {
+        "label": "Conservation",
+        "title": "Sustainable Impact",
+        "body": "Directing resources back into the physical maintenance of the structures we venerate."
+      }
     },
     "team": {
       "heading": "The Curators",
@@ -169,23 +234,44 @@
       "scholar": {
         "title": "Heritage Scholar",
         "description": "In-depth historical and architectural insights led by post-graduate scholars.",
-        "features": ["Government approved", "Multilingual options", "Skip-the-line ticketing assistance"]
+        "features": [
+          "Government approved",
+          "Multilingual options",
+          "Skip-the-line ticketing assistance"
+        ]
       },
       "curated": {
         "title": "Curated Experience",
         "description": "A fully paced day with a private concierge guide and priority access.",
-        "features": ["Everything in Heritage Scholar", "Private vehicle coordination", "Priority booking windows"]
+        "features": [
+          "Everything in Heritage Scholar",
+          "Private vehicle coordination",
+          "Priority booking windows"
+        ]
       },
       "odyssey": {
         "title": "Multi-Day Odyssey",
         "description": "A dedicated guide across multiple sites and days, tailored to your itinerary.",
-        "features": ["Everything in Curated Experience", "Cross-region continuity", "24/7 concierge line"]
+        "features": [
+          "Everything in Curated Experience",
+          "Cross-region continuity",
+          "24/7 concierge line"
+        ]
       }
     }
   },
   "explore": {
     "noResults": "No sites match this filter yet.",
-    "openFullMap": "Open Full-Screen Map"
+    "openFullMap": "Open Full-Screen Map",
+    "searchPlaceholder": "Search places, cities, states, temples...",
+    "search": "Search",
+    "resultsFor": "Results for",
+    "resetSearch": "Reset search",
+    "selectedSiteOnMap": "Selected Site on Map",
+    "viewDetails": "View Details",
+    "freeEntry": "Free Entry",
+    "savedToDashboard": "Saved to Dashboard",
+    "saveToMySites": "Save to My Sites"
   },
   "siteDetail": {
     "crowd": {
@@ -196,8 +282,14 @@
     },
     "viewOnMap": "View on Map",
     "findGuide": "Find a Guide",
-    "alternatives": { "heading": "Smart Alternatives", "seeAll": "See All", "further": "{{km}} km further" },
-    "history": { "heading": "History & Significance" },
+    "alternatives": {
+      "heading": "Smart Alternatives",
+      "seeAll": "See All",
+      "further": "{{km}} km further"
+    },
+    "history": {
+      "heading": "History & Significance"
+    },
     "entryFee": "Entry Fee",
     "openHours": "Open Hours"
   },
@@ -219,16 +311,30 @@
     "rating": "Rating",
     "unverifiedWarning": "This guide has no ASI license on file. We recommend booking only ASI-licensed guides — verified seals protect you from overcharging and misinformation.",
     "noResults": "No guides match \"{{query}}\".",
-    "rateTable": { "heading": "Standard Fair-Rate Table", "tier": "Tier", "price": "Price" },
+    "rateTable": {
+      "heading": "Standard Fair-Rate Table",
+      "tier": "Tier",
+      "price": "Price"
+    },
     "verifiedSeal": "ASI Licensed"
   },
   "assistant": {
-    "fab": { "label": "Ask Concierge" },
+    "fab": {
+      "label": "Ask Concierge"
+    },
     "hub": {
       "heading": "How would you like to interact?",
       "subtitle": "Select your preferred mode of communication with the concierge intelligence. You can change this later.",
-      "chat": { "title": "Text Interface", "body": "Engage in a quiet, text-based conversation. Ideal for detailed inquiries, archiving responses, or environments requiring silence.", "cta": "Start Chat" },
-      "voice": { "title": "Voice Interaction", "body": "Speak naturally with the concierge. Best for hands-free navigation, fluid conversations, and an immersive sensory experience.", "cta": "Activate Mic" },
+      "chat": {
+        "title": "Text Interface",
+        "body": "Engage in a quiet, text-based conversation. Ideal for detailed inquiries, archiving responses, or environments requiring silence.",
+        "cta": "Start Chat"
+      },
+      "voice": {
+        "title": "Voice Interaction",
+        "body": "Speak naturally with the concierge. Best for hands-free navigation, fluid conversations, and an immersive sensory experience.",
+        "cta": "Activate Mic"
+      },
       "alwaysAsk": "Always ask me",
       "rememberChoice": "Remember my choice"
     },
@@ -241,7 +347,11 @@
       "inputPlaceholder": "Describe your request…",
       "changeMode": "Change Mode",
       "languageLabel": "Language: {{language}}",
-      "suggestions": ["Book a historian", "Show quiet sites nearby", "What is the dress code?"],
+      "suggestions": [
+        "Book a historian",
+        "Show quiet sites nearby",
+        "What is the dress code?"
+      ],
       "seed": "Namaste. I am your Heritage India concierge. How may I elevate your journey today? Are you seeking historic exploration or refined relaxation?",
       "stubResponse": "I would be delighted to assist you with \"{{input}}\". You can explore historical monuments, check live crowd gauges, and verify certified ASI guides across India."
     },
@@ -302,10 +412,22 @@
     "markAllRead": "Mark All as Read",
     "empty": "No notifications yet.",
     "types": {
-      "bookingConfirmed": { "title": "Booking Confirmed", "message": "Your guide {{guide}} is confirmed for {{site}} on {{date}}." },
-      "bookingCancelled": { "title": "Booking Cancelled", "message": "Your booking for {{site}} on {{date}} was cancelled and refunded." },
-      "crowdAlert": { "title": "Crowd Alert — {{site}}", "message": "{{site}} is at {{percent}}% capacity right now. A quieter alternative is available." },
-      "guideVerification": { "title": "Guide Verification Update", "message": "{{guide}}'s ASI license was renewed and re-verified." }
+      "bookingConfirmed": {
+        "title": "Booking Confirmed",
+        "message": "Your guide {{guide}} is confirmed for {{site}} on {{date}}."
+      },
+      "bookingCancelled": {
+        "title": "Booking Cancelled",
+        "message": "Your booking for {{site}} on {{date}} was cancelled and refunded."
+      },
+      "crowdAlert": {
+        "title": "Crowd Alert — {{site}}",
+        "message": "{{site}} is at {{percent}}% capacity right now. A quieter alternative is available."
+      },
+      "guideVerification": {
+        "title": "Guide Verification Update",
+        "message": "{{guide}}'s ASI license was renewed and re-verified."
+      }
     }
   },
   "map": {
@@ -313,7 +435,12 @@
     "filters": "Filters",
     "category": "Category",
     "crowdLevel": "Crowd Level",
-    "crowdFilters": { "any": "Any", "quiet": "Quiet", "moderate": "Moderate", "busy": "Busy" },
+    "crowdFilters": {
+      "any": "Any",
+      "quiet": "Quiet",
+      "moderate": "Moderate",
+      "busy": "Busy"
+    },
     "currentCrowdAt": "Current crowd level at {{site}}",
     "backToList": "Back to List View",
     "distanceAway": "{{km}} km away"
@@ -334,11 +461,25 @@
       "savedSites": "Saved Sites",
       "notifications": "Notifications"
     },
-    "profile": { "comingSoon": "Profile management is coming soon." },
-    "payment": { "comingSoon": "Payment methods are coming soon." },
-    "savedSites": { "comingSoon": "Your saved sites will appear here." },
-    "notifications": { "comingSoon": "Manage notification preferences here soon." },
-    "language": { "heading": "Language", "body": "Choose the language used across Heritage India." },
-    "theme": { "heading": "Theme & Accessibility", "body": "Pick a theme and color-vision mode. Every swatch below updates live across the site." }
+    "profile": {
+      "comingSoon": "Profile management is coming soon."
+    },
+    "payment": {
+      "comingSoon": "Payment methods are coming soon."
+    },
+    "savedSites": {
+      "comingSoon": "Your saved sites will appear here."
+    },
+    "notifications": {
+      "comingSoon": "Manage notification preferences here soon."
+    },
+    "language": {
+      "heading": "Language",
+      "body": "Choose the language used across Heritage India."
+    },
+    "theme": {
+      "heading": "Theme & Accessibility",
+      "body": "Pick a theme and color-vision mode. Every swatch below updates live across the site."
+    }
   }
 }

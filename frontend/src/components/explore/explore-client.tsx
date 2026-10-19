@@ -58,8 +58,9 @@ export function ExploreClient({
       if (category !== "All" && s.category !== category) return false;
       if (query) {
         const q = query.toLowerCase();
-        const matchesName = s.name.toLowerCase().includes(q);
-        const matchesRegion = s.region.toLowerCase().includes(q);
+        const rawSite = sites.find((r) => r.id === s.id);
+        const matchesName = s.name.toLowerCase().includes(q) || (rawSite ? rawSite.name.toLowerCase().includes(q) : false);
+        const matchesRegion = s.region.toLowerCase().includes(q) || (rawSite ? rawSite.region.toLowerCase().includes(q) : false);
         const matchesCategory = s.category.toLowerCase().includes(q);
         const matchesZone = s.zone ? s.zone.toLowerCase().includes(q) : false;
         const matchesType = s.type ? s.type.toLowerCase().includes(q) : false;
@@ -69,7 +70,7 @@ export function ExploreClient({
       }
       return true;
     });
-  }, [localizedSites, category, query]);
+  }, [localizedSites, category, query, sites]);
 
   return (
     <div className="flex h-[calc(100vh-80px)] flex-col md:flex-row">
@@ -99,7 +100,7 @@ export function ExploreClient({
               href={`/sites/${selected.slug}`}
               className="shrink-0 rounded-lg bg-accent px-3 py-1.5 font-label text-xs font-semibold text-obsidian shadow hover:bg-accent/90"
             >
-              View Details
+              {t("explore.viewDetails") || "View Details"}
             </Link>
           </div>
         )}
@@ -149,12 +150,12 @@ export function ExploreClient({
               className="flex shrink-0 items-center gap-1.5 rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow-sm transition-all hover:bg-accent/90"
             >
               <Icon name="travel_explore" className="text-sm" />
-              Search
+              {t("explore.search") || "Search"}
             </button>
           </form>
           {query && (
             <div className="mt-2 flex items-center justify-between text-xs text-foreground-muted">
-              <span>Results for &ldquo;{query}&rdquo; ({filtered.length} found)</span>
+              <span>{t("explore.resultsFor") || "Results for"} &ldquo;{query}&rdquo; ({filtered.length} found)</span>
               <button
                 type="button"
                 onClick={() => {
@@ -163,7 +164,7 @@ export function ExploreClient({
                 }}
                 className="text-accent hover:underline text-[11px]"
               >
-                Reset search
+                {t("explore.resetSearch") || "Reset search"}
               </button>
             </div>
           )}
@@ -193,7 +194,7 @@ export function ExploreClient({
             <div className="mb-2 flex items-center justify-between">
               <span className="flex items-center gap-1 font-label text-[10px] uppercase tracking-widest text-accent">
                 <Icon name="place" className="text-xs" />
-                Selected Site on Map
+                {t("explore.selectedSiteOnMap") || "Selected Site on Map"}
               </span>
               <button
                 type="button"
@@ -212,7 +213,7 @@ export function ExploreClient({
                 <h4 className="truncate font-headline text-base font-bold text-foreground">{selected.name}</h4>
                 <p className="flex items-center gap-1 text-xs text-foreground-muted">
                   <Icon name="location_on" className="text-xs" />
-                  {selected.region} · {selected.priceInr === 0 ? "Free Entry" : `₹${selected.priceInr}`}
+                  {selected.region} · {selected.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${selected.priceInr}`}
                   {selected.googleRating ? ` · ★${selected.googleRating}` : ""}
                 </p>
                 <div className="mt-1">
@@ -223,7 +224,7 @@ export function ExploreClient({
                 href={`/sites/${selected.slug}`}
                 className="flex shrink-0 items-center gap-1 rounded-lg bg-accent px-3.5 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow hover:bg-accent/90"
               >
-                View Details
+                {t("explore.viewDetails") || "View Details"}
                 <Icon name="arrow_forward" className="text-sm" />
               </Link>
             </div>
@@ -275,7 +276,11 @@ export function ExploreClient({
                         ? "text-accent"
                         : "text-foreground-muted hover:text-accent"
                     }`}
-                    title={savedIds.has(site.id) || savedIds.has(site.slug) ? "Saved to Dashboard" : "Save to My Sites"}
+                    title={
+                      savedIds.has(site.id) || savedIds.has(site.slug)
+                        ? (t("explore.savedToDashboard") || "Saved to Dashboard")
+                        : (t("explore.saveToMySites") || "Save to My Sites")
+                    }
                   >
                     <Icon
                       name={savedIds.has(site.id) || savedIds.has(site.slug) ? "bookmark" : "bookmark_border"}

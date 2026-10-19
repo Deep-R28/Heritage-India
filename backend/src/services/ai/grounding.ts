@@ -1,21 +1,47 @@
 import prisma from "../../lib/prisma.js";
 import { getLiveCrowd } from "../crowd.js";
 
+const LANGUAGE_REGISTRY: Record<string, { code: string; name: string }> = {
+  en: { code: "en", name: "English" },
+  hi: { code: "hi", name: "Hindi" },
+  es: { code: "es", name: "Spanish" },
+  bn: { code: "bn", name: "Bengali" },
+  ta: { code: "ta", name: "Tamil" },
+  te: { code: "te", name: "Telugu" },
+  mr: { code: "mr", name: "Marathi" },
+  gu: { code: "gu", name: "Gujarati" },
+  kn: { code: "kn", name: "Kannada" },
+  ml: { code: "ml", name: "Malayalam" },
+  pa: { code: "pa", name: "Punjabi" },
+  ur: { code: "ur", name: "Urdu" },
+};
+
 export function detectLanguage(text: string, defaultLang = "en"): { code: string; name: string } {
-  // Check Devanagari script for Hindi
+  // Script checks
+  if (/[\u0980-\u09FF]/.test(text)) return LANGUAGE_REGISTRY.bn;
+  if (/[\u0B80-\u0BFF]/.test(text)) return LANGUAGE_REGISTRY.ta;
+  if (/[\u0C00-\u0C7F]/.test(text)) return LANGUAGE_REGISTRY.te;
+  if (/[\u0A80-\u0AFF]/.test(text)) return LANGUAGE_REGISTRY.gu;
+  if (/[\u0C80-\u0CFF]/.test(text)) return LANGUAGE_REGISTRY.kn;
+  if (/[\u0D00-\u0D7F]/.test(text)) return LANGUAGE_REGISTRY.ml;
+  if (/[\u0A00-\u0A7F]/.test(text)) return LANGUAGE_REGISTRY.pa;
+  if (/[\u0600-\u06FF]/.test(text)) return LANGUAGE_REGISTRY.ur;
   if (/[\u0900-\u097F]/.test(text)) {
-    return { code: "hi", name: "Hindi" };
+    return defaultLang === "mr" ? LANGUAGE_REGISTRY.mr : LANGUAGE_REGISTRY.hi;
   }
-  // Check common Spanish words or accents
+  // Common Spanish words or accents
   if (
     /[áéíóúüñ¿¡]/i.test(text) ||
     /\b(hola|por favor|cuanto|cuesta|guia|donde|gracias|buenos|tardes|noches)\b/i.test(text)
   ) {
-    return { code: "es", name: "Spanish" };
+    return LANGUAGE_REGISTRY.es;
   }
-  if (defaultLang === "hi") return { code: "hi", name: "Hindi" };
-  if (defaultLang === "es") return { code: "es", name: "Spanish" };
-  return { code: "en", name: "English" };
+  // If defaultLang was provided and valid
+  const cleanLang = defaultLang?.slice(0, 2).toLowerCase();
+  if (cleanLang && LANGUAGE_REGISTRY[cleanLang]) {
+    return LANGUAGE_REGISTRY[cleanLang];
+  }
+  return LANGUAGE_REGISTRY.en;
 }
 
 export async function buildGroundingContext(userPrompt: string): Promise<string> {

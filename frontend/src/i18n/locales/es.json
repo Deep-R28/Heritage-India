@@ -36,7 +36,21 @@
     "ancientCity": "Ciudad Antigua",
     "stepwell": "Pozo Escalonado",
     "architecture": "Arquitectura",
-    "naturalHeritage": "Patrimonio Natural"
+    "naturalHeritage": "Patrimonio Natural",
+    "temple": "Templo",
+    "caves": "Cuevas",
+    "gurudwara": "Gurudwara",
+    "memorial": "Monumento",
+    "religiousSite": "Sitio Religioso",
+    "templeRuins": "Templo y Ruinas",
+    "museum": "Museo",
+    "bridge": "Puente",
+    "nationalPark": "Parque Nacional",
+    "beach": "Playa",
+    "naturalLandscape": "Paisaje Natural",
+    "ruins": "Ruinas",
+    "monastery": "Monasterio",
+    "naturalWonder": "Maravilla Natural"
   },
   "accessibility": {
     "menuLabel": "Accesibilidad",
@@ -248,7 +262,16 @@
   },
   "explore": {
     "noResults": "Ningún sitio coincide con este filtro todavía.",
-    "openFullMap": "Abrir Mapa a Pantalla Completa"
+    "openFullMap": "Abrir Mapa a Pantalla Completa",
+    "searchPlaceholder": "Buscar lugares, ciudades, templos...",
+    "search": "Buscar",
+    "resultsFor": "Resultados para",
+    "resetSearch": "Restablecer búsqueda",
+    "selectedSiteOnMap": "Sitio Seleccionado en el Mapa",
+    "viewDetails": "Ver Detalles",
+    "freeEntry": "Entrada Gratis",
+    "savedToDashboard": "Guardado en el Panel",
+    "saveToMySites": "Guardar en Mis Sitios"
   },
   "siteDetail": {
     "crowd": {

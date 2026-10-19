@@ -36,7 +36,21 @@
     "ancientCity": "పురాతన నగరం",
     "stepwell": "బావి",
     "architecture": "శిల్పకళ",
-    "naturalHeritage": "సహజ వారసత్వం"
+    "naturalHeritage": "సహజ వారసత్వం",
+    "temple": "దేవాలయం",
+    "caves": "గుహలు",
+    "gurudwara": "గురుద్వారా",
+    "memorial": "స్మారకం",
+    "religiousSite": "ధార్మిక ప్రదేశం",
+    "templeRuins": "దేవాలయం & శిథిలాలు",
+    "museum": "మ్యూజియం",
+    "bridge": "వంతెన",
+    "nationalPark": "జాతీయ ఉద్యానవనం",
+    "beach": "బీచ్",
+    "naturalLandscape": "సహజ దృశ్యం",
+    "ruins": "శిథిలాలు",
+    "monastery": "మఠం",
+    "naturalWonder": "ప్రకృతి అద్భుతం"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "ప్రదేశాలు, నగరాలు లేదా దేవాలయాలను వెతకండి..."
+    "searchPlaceholder": "ప్రదేశాలు, నగరాలు, దేవాలయాలు వెతకండి...",
+    "search": "వెతకండి",
+    "resultsFor": "ఫలితాలు:",
+    "resetSearch": "రీసెట్",
+    "selectedSiteOnMap": "మ్యాప్‌లో ఎంచుకున్న ప్రదేశం",
+    "viewDetails": "వివరాలు చూడండి",
+    "freeEntry": "ఉచిత ప్రవేశం",
+    "savedToDashboard": "డాష్‌బోర్డ్‌లో సేవ్ చేయబడింది",
+    "saveToMySites": "నా ప్రదేశాల్లో సేవ్ చేయండి"
   },
   "siteDetail": {
     "crowd": {

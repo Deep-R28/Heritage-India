@@ -6,11 +6,16 @@ import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 import { api, type ApiBooking } from "@/lib/api";
+import { SITE_TRANSLATIONS } from "@/lib/site-translations";
+import type { LanguageCode } from "@/i18n/config";
 
 type StatusFilter = "ALL" | "UPCOMING" | "COMPLETED" | "CANCELLED";
 
 export function TripsView() {
+  const { i18n } = useTranslation();
+  const langCode = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
   const [bookings, setBookings] = useState<ApiBooking[]>([]);
   const [filter, setFilter] = useState<StatusFilter>("ALL");
   const [search, setSearch] = useState("");
@@ -35,14 +40,17 @@ export function TripsView() {
     return bookings.filter((b) => {
       const matchesFilter = filter === "ALL" || b.status === filter;
       const q = search.trim().toLowerCase();
+      const siteTr = SITE_TRANSLATIONS[b.site.slug]?.[langCode];
+      const siteName = siteTr?.name || b.site.name;
       const matchesSearch =
         !q ||
         b.reference.toLowerCase().includes(q) ||
         b.site.name.toLowerCase().includes(q) ||
+        siteName.toLowerCase().includes(q) ||
         (b.guide?.name && b.guide.name.toLowerCase().includes(q));
       return matchesFilter && matchesSearch;
     });
-  }, [bookings, filter, search]);
+  }, [bookings, filter, search, langCode]);
 
   const handleCancel = async (id: string) => {
     if (!confirm("Are you sure you want to cancel this booking?")) return;
@@ -142,13 +150,17 @@ export function TripsView() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {filteredBookings.map((b) => (
+          {filteredBookings.map((b) => {
+            const siteTr = SITE_TRANSLATIONS[b.site.slug]?.[langCode];
+            const siteName = siteTr?.name || b.site.name;
+            const siteCity = siteTr?.region || b.site.city;
+            return (
             <Card key={b.id} className="overflow-hidden p-6 transition-all hover:border-accent/40">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-start gap-4">
                   <div className="relative hidden h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-surface-container sm:block">
                     {b.site.images[0] && (
-                      <Image src={b.site.images[0]} alt={b.site.name} fill sizes="64px" className="object-cover" />
+                      <Image src={b.site.images[0]} alt={siteName} fill sizes="64px" className="object-cover" />
                     )}
                   </div>
                   <div>
@@ -166,9 +178,9 @@ export function TripsView() {
                         {b.status}
                       </Badge>
                     </div>
-                    <h3 className="mt-1 font-headline text-xl text-foreground">{b.site.name}</h3>
+                    <h3 className="mt-1 font-headline text-xl text-foreground">{siteName}</h3>
                     <p className="font-body text-xs text-foreground-muted">
-                      {b.site.city} • Visit Date: {new Date(b.visitDate).toLocaleDateString("en-IN", { dateStyle: "full" })}
+                      {siteCity} • Visit Date: {new Date(b.visitDate).toLocaleDateString("en-IN", { dateStyle: "full" })}
                       {b.visitSlot && ` • Slot: ${b.visitSlot}`}
                     </p>
                     {b.guide && (
@@ -206,7 +218,8 @@ export function TripsView() {
                 </div>
               </div>
             </Card>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

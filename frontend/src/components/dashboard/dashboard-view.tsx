@@ -8,8 +8,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/ui/stat-card";
 import { CrowdGauge } from "@/components/ui/crowd-gauge";
+import { useTranslation } from "react-i18next";
 import { api, type ApiSite } from "@/lib/api";
 import { useAuth } from "@/hooks/use-auth";
+import { SITE_TRANSLATIONS } from "@/lib/site-translations";
+import type { LanguageCode } from "@/i18n/config";
 
 interface DashboardData {
   stats: {
@@ -32,6 +35,8 @@ interface DashboardData {
 
 export function DashboardView() {
   const { user } = useAuth();
+  const { i18n } = useTranslation();
+  const langCode = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
   const [data, setData] = useState<DashboardData | null>(null);
   const [savedSites, setSavedSites] = useState<ApiSite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -165,13 +170,15 @@ export function DashboardView() {
           </Card>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
-            {data?.upcomingBookings.map((b) => (
+            {data?.upcomingBookings.map((b) => {
+              const bSiteTr = SITE_TRANSLATIONS[b.site.slug]?.[langCode];
+              return (
               <Card key={b.id} className="relative overflow-hidden p-6 transition-all hover:border-accent/40">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <span className="font-mono text-xs text-accent">{b.reference}</span>
-                    <h3 className="mt-1 font-headline text-xl text-foreground">{b.site.name}</h3>
-                    <p className="font-body text-xs text-foreground-muted">{b.site.city}</p>
+                    <h3 className="mt-1 font-headline text-xl text-foreground">{bSiteTr?.name || b.site.name}</h3>
+                    <p className="font-body text-xs text-foreground-muted">{bSiteTr?.region || b.site.city}</p>
                   </div>
                   <Badge tone="verified">Confirmed</Badge>
                 </div>
@@ -191,7 +198,8 @@ export function DashboardView() {
                   </div>
                 </div>
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
@@ -216,13 +224,17 @@ export function DashboardView() {
           </Card>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {savedSites.map((site) => (
+            {savedSites.map((site) => {
+              const sSiteTr = SITE_TRANSLATIONS[site.slug]?.[langCode];
+              const siteName = sSiteTr?.name || site.name;
+              const siteRegion = sSiteTr?.region || `${site.city}, ${site.state}`;
+              return (
               <Card key={site.id} className="group overflow-hidden transition-all hover:border-accent/40">
                 <div className="relative h-44 w-full overflow-hidden bg-surface-container">
                   {site.images[0] && (
                     <Image
                       src={site.images[0]}
-                      alt={site.name}
+                      alt={siteName}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -246,8 +258,8 @@ export function DashboardView() {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-headline text-lg text-foreground group-hover:text-accent">{site.name}</h3>
-                      <p className="font-body text-xs text-foreground-muted">{site.city}, {site.state}</p>
+                      <h3 className="font-headline text-lg text-foreground group-hover:text-accent">{siteName}</h3>
+                      <p className="font-body text-xs text-foreground-muted">{siteRegion}</p>
                     </div>
                     <span className="font-mono text-xs text-accent">₹{site.entryFeeINR}</span>
                   </div>
@@ -268,7 +280,8 @@ export function DashboardView() {
                   </div>
                 </div>
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>

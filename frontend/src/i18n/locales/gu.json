@@ -36,7 +36,21 @@
     "ancientCity": "પ્રાચીન નગર",
     "stepwell": "વાવ",
     "architecture": "સ્થાપત્ય",
-    "naturalHeritage": "કુદરતી વારસો"
+    "naturalHeritage": "કુદરતી વારસો",
+    "temple": "મંદિર",
+    "caves": "ગુફાઓ",
+    "gurudwara": "ગુરુદ્વારા",
+    "memorial": "સ્મારક",
+    "religiousSite": "ધાર્મિક સ્થળ",
+    "templeRuins": "મંદિર અને અવશેષો",
+    "museum": "સંગ્રહાલય",
+    "bridge": "પુલ",
+    "nationalPark": "રાષ્ટ્રીય ઉદ્યાન",
+    "beach": "દરિયાકિનારો",
+    "naturalLandscape": "કુદરતી લેન્ડસ્કેપ",
+    "ruins": "ખંડેર",
+    "monastery": "બૌદ્ધ મઠ",
+    "naturalWonder": "કુદરતી અજાયબી"
   },
   "accessibility": {
     "menuLabel": "Accessibility",
@@ -249,7 +263,15 @@
   "explore": {
     "noResults": "No sites match this filter yet.",
     "openFullMap": "Open Full-Screen Map",
-    "searchPlaceholder": "સ્થળો, શહેરો કે મંદિરો શોધો..."
+    "searchPlaceholder": "સ્થળો, શહેરો, મંદિરો શોધો...",
+    "search": "શોધો",
+    "resultsFor": "પરિણામો:",
+    "resetSearch": "રીસેટ કરો",
+    "selectedSiteOnMap": "નકશા પર પસંદ કરેલ સ્થળ",
+    "viewDetails": "વિગતો જુઓ",
+    "freeEntry": "મફત પ્રવેશ",
+    "savedToDashboard": "ડેશબોર્ડમાં સાચવ્યું",
+    "saveToMySites": "મારા સ્થળોમાં સાચવો"
   },
   "siteDetail": {
     "crowd": {

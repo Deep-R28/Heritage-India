@@ -51,7 +51,8 @@ export function ChatClient() {
         setMessages((m) =>
           m.map((msg) => (msg.id === assistantMsgId ? { ...msg, text: streamed } : msg))
         );
-      }
+      },
+      i18n.language
     );
 
     // Finalize message with complete text and detected language
