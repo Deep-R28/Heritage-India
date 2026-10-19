@@ -10,6 +10,7 @@ const createBookingSchema = z.object({
   siteId: z.string().min(1),
   guideId: z.string().optional().nullable(),
   guideName: z.string().optional().nullable(),
+  guideLicense: z.string().optional().nullable(),
   visitDate: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}/)),
   visitSlot: z.string().optional(),
   time: z.string().optional(),
@@ -26,7 +27,7 @@ function generateReference(siteSlug: string): string {
 
 router.post("/", optionalAuth, async (req, res, next) => {
   try {
-    const { siteId, guideId, guideName, visitDate, visitSlot, time, partySize, userId: bodyUserId } = createBookingSchema.parse(req.body);
+    const { siteId, guideId, guideName, guideLicense, visitDate, visitSlot, time, partySize, userId: bodyUserId } = createBookingSchema.parse(req.body);
 
     const effectiveUserId = req.user?.id || bodyUserId;
     if (!effectiveUserId) {
@@ -44,23 +45,29 @@ router.post("/", optionalAuth, async (req, res, next) => {
       guideId.toLowerCase().includes("none") ||
       guideId.toLowerCase().includes("self");
 
-    if (!isSelf && guideId) {
-      guide = await prisma.guide.findFirst({
-        where: {
-          OR: [
-            { id: guideId },
-            { licenseId: guideId },
-            { name: { contains: guideId } },
-            ...(guideName ? [{ name: { contains: guideName } }] : []),
-          ],
-        },
-      });
-    } else if (guideName && !guideName.toLowerCase().includes("self") && !guideName.toLowerCase().includes("none")) {
-      guide = await prisma.guide.findFirst({
-        where: {
-          name: { contains: guideName },
-        },
-      });
+    if (!isSelf) {
+      const candidates: Array<{ id?: string; licenseId?: string; name?: { contains: string } }> = [];
+      if (guideId) {
+        candidates.push({ id: guideId });
+        candidates.push({ licenseId: guideId });
+        candidates.push({ name: { contains: guideId } });
+      }
+      if (guideLicense) {
+        candidates.push({ licenseId: guideLicense });
+      }
+      if (guideName && !guideName.toLowerCase().includes("self") && !guideName.toLowerCase().includes("none")) {
+        candidates.push({ name: { contains: guideName } });
+        const firstName = guideName.trim().split(/\s+/)[0];
+        if (firstName && firstName.length >= 3) {
+          candidates.push({ name: { contains: firstName } });
+        }
+      }
+
+      if (candidates.length > 0) {
+        guide = await prisma.guide.findFirst({
+          where: { OR: candidates },
+        });
+      }
     }
 
     const siteEntryFee = site.entryFeeINR * partySize;

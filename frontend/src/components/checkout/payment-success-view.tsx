@@ -20,7 +20,15 @@ export function PaymentSuccessView() {
         const data = await api.bookings.byReference(ref);
         setBooking(data);
       } catch {
-        // fallback
+        if (typeof window !== "undefined") {
+          try {
+            const list: ApiBooking[] = JSON.parse(localStorage.getItem("heritage_bookings") || "[]");
+            const found = list.find((b) => b.reference === ref);
+            if (found) {
+              setBooking(found);
+            }
+          } catch {}
+        }
       } finally {
         setLoading(false);
       }

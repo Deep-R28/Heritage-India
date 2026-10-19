@@ -53,6 +53,20 @@ export const VERIFIED_GUIDES: VerifiedGuideInfo[] = [
   { id: "none", name: "Self-Guided (No Guide)", license: "N/A", rate: 0, languages: "Self-Paced Exploration", rating: 5.0, tours: 0 },
 ];
 
+export function buildSafeCheckoutUrl(params: {
+  siteSlug: string;
+  guideName?: string;
+  guideId?: string;
+  partySize: number;
+  visitDate: string;
+  visitSlot: string;
+}): string {
+  const safeSlot = encodeURIComponent(params.visitSlot).replace(/\(/g, "%28").replace(/\)/g, "%29");
+  const safeGuide = encodeURIComponent(params.guideName || "self").replace(/\(/g, "%28").replace(/\)/g, "%29");
+  const safeGuideId = encodeURIComponent(params.guideId || "none");
+  return `/checkout?site=${params.siteSlug}&guide=${safeGuide}&guideId=${safeGuideId}&partySize=${params.partySize}&date=${params.visitDate}&slot=${safeSlot}`;
+}
+
 const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
   "taj-mahal": [
     "ताजमहल", "ताज महल", "তাজমহল", "தாஜ்மஹால்", "తాజ్ మహల్",
@@ -1078,9 +1092,14 @@ export function generateConciergeResponse(
     // If already in completed step (user correcting time after summary)
     if (currentStep === "completed") {
       state.step = "completed";
-      sessionStates.set(activeKey, state);
-
-      const checkoutUrl = `/checkout?site=${state.siteSlug}&partySize=${partySize}&date=${parsedDate}&slot=${encodeURIComponent(parsedSlot)}&guide=${encodeURIComponent(activeGuide.name)}&guideId=${activeGuide.id}`;
+      const checkoutUrl = buildSafeCheckoutUrl({
+        siteSlug: state.siteSlug || "taj-mahal",
+        guideName: activeGuide.name,
+        guideId: activeGuide.id,
+        partySize,
+        visitDate: parsedDate,
+        visitSlot: parsedSlot,
+      });
 
       if (typeof window !== "undefined") {
         try {
@@ -1420,7 +1439,14 @@ export function generateConciergeResponse(
     const taxes = Math.round(subtotal * 0.05);
     const grandTotal = subtotal + conciergeFee + taxes;
 
-    const checkoutUrl = `/checkout?site=${siteSlug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${encodeURIComponent(selectedGuide.name)}&guideId=${selectedGuide.id}`;
+    const checkoutUrl = buildSafeCheckoutUrl({
+      siteSlug,
+      guideName: selectedGuide.name,
+      guideId: selectedGuide.id,
+      partySize,
+      visitDate,
+      visitSlot,
+    });
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem(

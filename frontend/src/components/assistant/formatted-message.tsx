@@ -25,7 +25,8 @@ export function FormattedMessage({ text }: { text: string }) {
 
   const renderFormattedInline = (str: string) => {
     // Regex to split by markdown links [text](url) and **bold**
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    // Supports URLs with parentheses e.g. [text](/checkout?...&slot=04:30 PM (Sunset Slot)&guide=...)
+    const linkRegex = /\[([^\]]+)\]\(((?:[^()]+|\([^()]*\))*)\)/g;
     const parts: React.ReactNode[] = [];
     let lastIdx = 0;
     let match;
@@ -44,7 +45,8 @@ export function FormattedMessage({ text }: { text: string }) {
         let partyParam: string | null = null;
         let dateParam: string | null = null;
         let slotParam: string | null = null;
-        let guideParam: string | null = null;
+        let guideNameParam: string | null = null;
+        let guideIdParam: string | null = null;
 
         try {
           const url = new URL(rawHref, typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
@@ -53,7 +55,8 @@ export function FormattedMessage({ text }: { text: string }) {
           partyParam = url.searchParams.get("partySize") || url.searchParams.get("members") || url.searchParams.get("visitors") || url.searchParams.get("tickets");
           dateParam = url.searchParams.get("date") || url.searchParams.get("visitDate");
           slotParam = url.searchParams.get("slot") || url.searchParams.get("time") || url.searchParams.get("visitSlot");
-          guideParam = url.searchParams.get("guide") || url.searchParams.get("guideId") || url.searchParams.get("guideName");
+          guideNameParam = url.searchParams.get("guide") || url.searchParams.get("guideName");
+          guideIdParam = url.searchParams.get("guideId");
         } catch {}
 
         parts.push(
@@ -70,8 +73,8 @@ export function FormattedMessage({ text }: { text: string }) {
                         partySize: partyParam ? parseInt(partyParam, 10) : undefined,
                         visitDate: dateParam,
                         visitSlot: slotParam,
-                        guideName: guideParam,
-                        guideId: guideParam,
+                        guideName: guideNameParam || guideIdParam,
+                        guideId: guideIdParam || guideNameParam,
                       })
                     );
                   } catch {}

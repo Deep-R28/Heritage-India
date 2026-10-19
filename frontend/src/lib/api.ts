@@ -427,6 +427,7 @@ export const api = {
       siteId: string;
       guideId?: string | null;
       guideName?: string | null;
+      guideLicense?: string | null;
       visitDate: string;
       visitSlot?: string;
       time?: string;

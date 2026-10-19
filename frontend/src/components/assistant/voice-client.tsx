@@ -108,15 +108,18 @@ export function VoiceClient() {
 
         if (typeof window !== "undefined" && reply.text) {
           try {
-            const linkMatch = reply.text.match(/(?:href=["']|\()([^"')\s]*\/checkout\?[^"')\s]+)/i);
+            const linkMatch =
+              reply.text.match(/\[[^\]]*\]\(((?:[^()]+|\([^()]*\))*\/checkout\?[^\s)]*)\)/i) ||
+              reply.text.match(/(?:href=["']|\()([^"')\s]*\/checkout\?[^\s"'>)]+)/i);
             if (linkMatch && linkMatch[1]) {
-              const rawUrl = linkMatch[1];
+              const rawUrl = linkMatch[1].replace(/&amp;/g, "&");
               const urlObj = new URL(rawUrl, window.location.origin);
               const site = urlObj.searchParams.get("site") || urlObj.searchParams.get("monument") || urlObj.searchParams.get("place") || urlObj.searchParams.get("siteSlug");
               const party = urlObj.searchParams.get("partySize") || urlObj.searchParams.get("members") || urlObj.searchParams.get("visitors") || urlObj.searchParams.get("tickets");
               const date = urlObj.searchParams.get("date") || urlObj.searchParams.get("visitDate");
               const slot = urlObj.searchParams.get("slot") || urlObj.searchParams.get("time") || urlObj.searchParams.get("visitSlot");
-              const guide = urlObj.searchParams.get("guide") || urlObj.searchParams.get("guideId") || urlObj.searchParams.get("guideName");
+              const guideName = urlObj.searchParams.get("guide") || urlObj.searchParams.get("guideName");
+              const guideId = urlObj.searchParams.get("guideId");
 
               if (site) {
                 localStorage.setItem(
@@ -126,8 +129,8 @@ export function VoiceClient() {
                     partySize: party ? parseInt(party, 10) : undefined,
                     visitDate: date,
                     visitSlot: slot,
-                    guideName: guide,
-                    guideId: guide,
+                    guideName: guideName || guideId || undefined,
+                    guideId: guideId || guideName || undefined,
                   })
                 );
               }

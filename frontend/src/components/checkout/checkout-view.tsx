@@ -95,13 +95,95 @@ function normalizeDateStr(raw?: string | null): string {
   return new Date(Date.now() + 86400000).toISOString().split("T")[0];
 }
 
+function resolveGuideFromTargets(
+  candidates: (string | null | undefined)[],
+  guidesList: ApiGuide[]
+): { isSelf: boolean; guide: ApiGuide | null } {
+  const valid = candidates.filter((c): c is string => Boolean(c && typeof c === "string" && c.trim().length > 0));
+
+  const isSelf = valid.some((c) => {
+    const cl = c.toLowerCase().trim();
+    return (
+      cl === "none" ||
+      cl === "self" ||
+      cl.includes("no guide") ||
+      cl.includes("self-guided") ||
+      cl.includes("self guided") ||
+      cl.includes("without guide") ||
+      cl.includes("bina guide")
+    );
+  });
+
+  if (isSelf) {
+    return { isSelf: true, guide: null };
+  }
+
+  for (const candidate of valid) {
+    const rawCand = candidate.trim();
+    const candLower = rawCand.toLowerCase();
+    const candClean = candLower.replace(/[-_+]+/g, " ").trim();
+    const tokens = candClean.split(/\s+/).filter((t) => t.length > 1);
+    const firstToken = tokens[0] || "";
+
+    // 1. Exact ID or License ID
+    const matchById = guidesList.find((g) => {
+      const gId = g.id.toLowerCase();
+      const gLic = (g.licenseId || "").toLowerCase();
+      return (
+        gId === candLower ||
+        gLic === candLower ||
+        gLic.replace(/[-_]+/g, "") === candLower.replace(/[-_]+/g, "") ||
+        gLic.includes(candLower) ||
+        candLower.includes(gLic)
+      );
+    });
+    if (matchById) return { isSelf: false, guide: matchById };
+
+    // 2. Exact Name Match (handles spaces, dashes, pluses)
+    const matchByName = guidesList.find((g) => {
+      const gNameClean = g.name.toLowerCase().replace(/[-_+]+/g, " ").trim();
+      return gNameClean === candClean;
+    });
+    if (matchByName) return { isSelf: false, guide: matchByName };
+
+    // 3. Substring Name Match
+    const matchBySub = guidesList.find((g) => {
+      const gNameClean = g.name.toLowerCase().replace(/[-_+]+/g, " ").trim();
+      return gNameClean.includes(candClean) || candClean.includes(gNameClean);
+    });
+    if (matchBySub) return { isSelf: false, guide: matchBySub };
+
+    // 4. First name match (e.g. "vikram", "rajesh", "priya", "meera", "arun")
+    if (firstToken.length >= 3) {
+      const matchByFirst = guidesList.find((g) => {
+        const gFirst = g.name.toLowerCase().split(/\s+/)[0];
+        return gFirst === firstToken;
+      });
+      if (matchByFirst) return { isSelf: false, guide: matchByFirst };
+    }
+
+    // 5. Distinctive token match (avoid generic surname collisions)
+    const genericTokens = new Set(["singh", "kumar", "devi", "sharma", "ji", "guide", "mr", "mrs", "the", "asi", "certified", "verified"]);
+    const distinctiveTokens = tokens.filter((t) => !genericTokens.has(t) && t.length >= 3);
+    if (distinctiveTokens.length > 0) {
+      const matchByTokens = guidesList.find((g) => {
+        const gTokens = g.name.toLowerCase().split(/\s+/);
+        return distinctiveTokens.some((dt) => gTokens.includes(dt) || g.name.toLowerCase().includes(dt));
+      });
+      if (matchByTokens) return { isSelf: false, guide: matchByTokens };
+    }
+  }
+
+  return { isSelf: false, guide: guidesList[0] || null };
+}
+
 export function CheckoutView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, isLoggedIn } = useAuth();
   const { i18n } = useTranslation();
 
-  // Read any chat booking cached in localStorage
+  // Read any chat booking or pending draft cached in storage
   let lastChatBooking: {
     siteSlug?: string;
     siteName?: string;
@@ -111,9 +193,22 @@ export function CheckoutView() {
     guideName?: string;
     guideId?: string;
   } | null = null;
+  let pendingDraft: {
+    siteId?: string;
+    siteSlug?: string;
+    siteName?: string;
+    guideId?: string | null;
+    guideName?: string | null;
+    guideLicense?: string | null;
+    visitDate?: string;
+    visitSlot?: string;
+    partySize?: number;
+    totalINR?: number;
+  } | null = null;
   if (typeof window !== "undefined") {
     try {
       lastChatBooking = JSON.parse(localStorage.getItem("heritage_last_chat_booking") || "null");
+      pendingDraft = JSON.parse(sessionStorage.getItem("pending_booking_draft") || "null");
     } catch {}
   }
 
@@ -124,6 +219,7 @@ export function CheckoutView() {
     searchParams.get("siteSlug") ||
     searchParams.get("slug") ||
     lastChatBooking?.siteSlug ||
+    pendingDraft?.siteSlug ||
     "taj-mahal";
   const siteSlug = rawSiteParam.trim().toLowerCase().replace(/[\s_]+/g, "-");
 
@@ -132,13 +228,16 @@ export function CheckoutView() {
     searchParams.get("guideId") ||
     searchParams.get("guideName") ||
     lastChatBooking?.guideName ||
-    lastChatBooking?.guideId;
+    lastChatBooking?.guideId ||
+    pendingDraft?.guideName ||
+    pendingDraft?.guideId;
 
   const rawDate =
     searchParams.get("date") ||
     searchParams.get("visitDate") ||
     searchParams.get("day") ||
-    lastChatBooking?.visitDate;
+    lastChatBooking?.visitDate ||
+    pendingDraft?.visitDate;
   const initialDate = normalizeDateStr(rawDate);
 
   const paramParty =
@@ -152,6 +251,8 @@ export function CheckoutView() {
     ? Math.max(1, parseInt(paramParty, 10))
     : lastChatBooking?.partySize && lastChatBooking.partySize > 0
     ? lastChatBooking.partySize
+    : pendingDraft?.partySize && pendingDraft.partySize > 0
+    ? pendingDraft.partySize
     : 2;
 
   const rawSlot =
@@ -159,7 +260,8 @@ export function CheckoutView() {
     searchParams.get("time") ||
     searchParams.get("visitSlot") ||
     searchParams.get("timeSlot") ||
-    lastChatBooking?.visitSlot;
+    lastChatBooking?.visitSlot ||
+    pendingDraft?.visitSlot;
   const initialSlot = normalizeSlot(rawSlot);
 
   const [site, setSite] = useState<ApiSite | null>(null);
@@ -179,9 +281,17 @@ export function CheckoutView() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  // Sync state if searchParams or last chat booking update dynamically
+  // Sync state if searchParams or last chat booking or pending draft update dynamically
   useEffect(() => {
     let cached: {
+      siteSlug?: string;
+      partySize?: number;
+      visitDate?: string;
+      visitSlot?: string;
+      guideName?: string;
+      guideId?: string;
+    } | null = null;
+    let draft: {
       siteSlug?: string;
       partySize?: number;
       visitDate?: string;
@@ -192,6 +302,7 @@ export function CheckoutView() {
     if (typeof window !== "undefined") {
       try {
         cached = JSON.parse(localStorage.getItem("heritage_last_chat_booking") || "null");
+        draft = JSON.parse(sessionStorage.getItem("pending_booking_draft") || "null");
       } catch {}
     }
 
@@ -207,14 +318,46 @@ export function CheckoutView() {
       if (!isNaN(parsed) && parsed > 0) setPartySize(parsed);
     } else if (cached?.partySize && cached.partySize > 0) {
       setPartySize(cached.partySize);
+    } else if (draft?.partySize && draft.partySize > 0) {
+      setPartySize(draft.partySize);
     }
 
-    const d = searchParams.get("date") || searchParams.get("visitDate") || searchParams.get("day") || cached?.visitDate;
+    const d =
+      searchParams.get("date") ||
+      searchParams.get("visitDate") ||
+      searchParams.get("day") ||
+      cached?.visitDate ||
+      draft?.visitDate;
     if (d) setVisitDate(normalizeDateStr(d));
 
-    const s = searchParams.get("slot") || searchParams.get("time") || searchParams.get("visitSlot") || searchParams.get("timeSlot") || cached?.visitSlot;
+    const s =
+      searchParams.get("slot") ||
+      searchParams.get("time") ||
+      searchParams.get("visitSlot") ||
+      searchParams.get("timeSlot") ||
+      cached?.visitSlot ||
+      draft?.visitSlot;
     if (s) setVisitSlot(normalizeSlot(s));
-  }, [searchParams]);
+
+    // Re-resolve guide dynamically whenever searchParams or availableGuides change
+    if (availableGuides.length > 0) {
+      const candidates = [
+        searchParams.get("guide"),
+        searchParams.get("guideId"),
+        searchParams.get("guideName"),
+        cached?.guideName,
+        cached?.guideId,
+        draft?.guideName,
+        draft?.guideId,
+      ];
+      const res = resolveGuideFromTargets(candidates, availableGuides);
+      if (res.isSelf) {
+        setGuide(null);
+      } else if (res.guide) {
+        setGuide(res.guide);
+      }
+    }
+  }, [searchParams, availableGuides]);
 
   // Form states
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8892");
@@ -318,78 +461,22 @@ export function CheckoutView() {
 
         setAvailableGuides(guidesList);
 
-        const effectiveGuideTarget =
-          searchParams.get("guide") ||
-          searchParams.get("guideId") ||
-          searchParams.get("guideName") ||
-          lastChatBooking?.guideName ||
-          lastChatBooking?.guideId;
-
-        const isSelf =
-          effectiveGuideTarget === "none" ||
-          effectiveGuideTarget === "self" ||
-          (effectiveGuideTarget && (
-            effectiveGuideTarget.toLowerCase().includes("none") ||
-            effectiveGuideTarget.toLowerCase().includes("self") ||
-            effectiveGuideTarget.toLowerCase().includes("no guide") ||
-            effectiveGuideTarget.toLowerCase().includes("self-guided")
-          ));
-
-        if (isSelf) {
+        const candidateTargets = [
+          searchParams.get("guide"),
+          searchParams.get("guideId"),
+          searchParams.get("guideName"),
+          lastChatBooking?.guideName,
+          lastChatBooking?.guideId,
+          pendingDraft?.guideName,
+          pendingDraft?.guideId,
+        ];
+        const resolved = resolveGuideFromTargets(candidateTargets, guidesList);
+        if (resolved.isSelf) {
           setGuide(null);
-        } else if (effectiveGuideTarget) {
-          const target = String(effectiveGuideTarget).toLowerCase().trim();
-          const targetClean = target.replace(/[-_]+/g, " ");
-          const targetTokens = targetClean.split(/\s+/).filter((t) => t.length > 1);
-          const targetFirst = targetTokens[0] || "";
-
-          // 1. Exact ID or License ID match
-          let matched = guidesList.find((g) => {
-            const gId = g.id.toLowerCase();
-            const gLic = (g.licenseId || "").toLowerCase();
-            return gId === target || gLic === target || gLic.includes(target);
-          });
-
-          // 2. Exact Name match
-          if (!matched) {
-            matched = guidesList.find((g) => g.name.toLowerCase() === targetClean);
-          }
-
-          // 3. Full name substring match
-          if (!matched) {
-            matched = guidesList.find((g) => {
-              const gName = g.name.toLowerCase();
-              return gName.includes(targetClean) || targetClean.includes(gName);
-            });
-          }
-
-          // 4. First name match (e.g. "vikram", "rajesh", "priya", "meera", "arun")
-          if (!matched && targetFirst.length > 2) {
-            matched = guidesList.find((g) => {
-              const gFirst = g.name.toLowerCase().split(/\s+/)[0];
-              return gFirst === targetFirst;
-            });
-          }
-
-          // 5. Distinctive token match (avoid generic surname collisions like "singh" matching Arjun Singh instead of Vikram Singh)
-          if (!matched) {
-            const genericTokens = new Set(["singh", "kumar", "devi", "sharma", "ji", "guide", "mr", "mrs", "the"]);
-            const distinctiveTokens = targetTokens.filter((t) => !genericTokens.has(t) && t.length > 2);
-            if (distinctiveTokens.length > 0) {
-              matched = guidesList.find((g) => {
-                const gTokens = g.name.toLowerCase().split(/\s+/);
-                return distinctiveTokens.some((dt) => gTokens.includes(dt) || g.name.toLowerCase().includes(dt));
-              });
-            }
-          }
-
-          if (matched) {
-            setGuide(matched);
-          } else {
-            setGuide(guidesList[0]);
-          }
+        } else if (resolved.guide) {
+          setGuide(resolved.guide);
         } else {
-          setGuide(guidesList[0]);
+          setGuide(guidesList[0] || null);
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : "Failed to load checkout details";
@@ -433,6 +520,7 @@ export function CheckoutView() {
       siteName: site.name,
       guideId: guide?.id ?? null,
       guideName: guide?.name ?? null,
+      guideLicense: guide?.licenseId ?? null,
       visitDate,
       visitSlot,
       partySize,
@@ -448,7 +536,10 @@ export function CheckoutView() {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("pending_booking_draft", JSON.stringify(draft));
     }
-    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${guide ? encodeURIComponent(guide.name) : "self"}`;
+    const safeSlot = encodeURIComponent(visitSlot).replace(/\(/g, "%28").replace(/\)/g, "%29");
+    const safeGuide = encodeURIComponent(guide ? guide.name : "self").replace(/\(/g, "%28").replace(/\)/g, "%29");
+    const safeGuideId = encodeURIComponent(guide?.id || "none");
+    const currentCheckoutUrl = `/checkout?site=${site.slug}&guide=${safeGuide}&guideId=${safeGuideId}&partySize=${partySize}&date=${visitDate}&slot=${safeSlot}`;
     router.push(`${targetPath}?redirect=${encodeURIComponent(currentCheckoutUrl)}&from=checkout&siteName=${encodeURIComponent(site.name)}`);
   };
 
@@ -465,6 +556,7 @@ export function CheckoutView() {
         siteId: site.id,
         guideId: guide?.id ?? null,
         guideName: guide?.name ?? null,
+        guideLicense: guide?.licenseId ?? null,
         visitDate,
         visitSlot,
         time: visitSlot,
@@ -572,13 +664,13 @@ export function CheckoutView() {
           </div>
           <div className="flex items-center gap-2.5">
             <Link
-              href={`/login?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
+              href={`/login?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guide ? encodeURIComponent(guide.name) : encodeURIComponent(guideId || "")}&guideId=${encodeURIComponent(guide?.id || "")}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot).replace(/\(/g, "%28").replace(/\)/g, "%29")}`)}`}
               className="rounded-lg border border-accent/60 bg-surface px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:bg-accent/10"
             >
               Log In
             </Link>
             <Link
-              href={`/signup?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
+              href={`/signup?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guide ? encodeURIComponent(guide.name) : encodeURIComponent(guideId || "")}&guideId=${encodeURIComponent(guide?.id || "")}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot).replace(/\(/g, "%28").replace(/\)/g, "%29")}`)}`}
               className="rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian transition-colors hover:bg-accent/90 shadow"
             >
               Sign Up
@@ -977,6 +1069,10 @@ export function CheckoutView() {
               <div className="flex items-center justify-between">
                 <span className="text-foreground-muted">Monument:</span>
                 <span className="font-semibold text-foreground">{site?.name}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground-muted">Guide:</span>
+                <span className="font-semibold text-accent">{guide ? `${guide.name} (ASI Certified)` : "Self-Guided (No Guide)"}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-foreground-muted">Party & Date:</span>
