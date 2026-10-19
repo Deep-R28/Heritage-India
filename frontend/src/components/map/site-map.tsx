@@ -3,9 +3,11 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import type { Site } from "@/lib/data";
 import { brand } from "@/lib/tokens";
 import { cn } from "@/lib/cn";
+import { categoryLabelKey } from "@/lib/categories";
 
 function goldPinIcon(highlighted = false) {
   return L.divIcon({
@@ -56,6 +58,8 @@ export function SiteMap({
   className?: string;
   tileTheme?: "dark" | "light";
 }) {
+  const { t } = useTranslation();
+
   return (
     <MapContainer
       center={[22.5, 79]}
@@ -92,7 +96,7 @@ export function SiteMap({
                   </div>
                 )}
                 <span className="absolute left-2 top-2 rounded-full bg-black/80 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
-                  {site.category}
+                  {t(categoryLabelKey(site.category))}
                 </span>
                 {site.googleRating && (
                   <span className="absolute right-2 top-2 flex items-center gap-0.5 rounded-full bg-black/80 px-2 py-0.5 text-[10px] font-semibold text-amber-300 backdrop-blur-sm">
@@ -110,13 +114,13 @@ export function SiteMap({
 
               <div className="mb-3 flex items-center justify-between border-t border-b border-white/10 py-1.5 text-xs">
                 <div>
-                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">Entry Fee</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">{t("siteDetail.entryFee") || "Entry Fee"}</span>
                   <span className="font-semibold text-amber-400">
-                    {site.priceInr === 0 ? "Free Entry" : `₹${site.priceInr}`}
+                    {site.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${site.priceInr}`}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">Crowd</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">{t("siteDetail.crowd.heading") || "Crowd"}</span>
                   <span
                     className={cn(
                       "text-[11px] font-semibold",
@@ -127,7 +131,7 @@ export function SiteMap({
                         : "text-rose-400",
                     )}
                   >
-                    {site.crowdPercent < 40 ? "Quiet" : site.crowdPercent < 75 ? "Moderate" : "Busy"} ({site.crowdPercent}%)
+                    {site.crowdPercent < 40 ? (t("map.crowdFilters.quiet") || "Quiet") : site.crowdPercent < 75 ? (t("map.crowdFilters.moderate") || "Moderate") : (t("map.crowdFilters.busy") || "Busy")} ({site.crowdPercent}%)
                   </span>
                 </div>
               </div>
@@ -136,7 +140,7 @@ export function SiteMap({
                 href={`/sites/${site.slug}`}
                 className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-center text-xs font-semibold text-black transition-colors hover:bg-amber-400"
               >
-                View Site Details
+                {t("explore.viewDetails") || "View Site Details"}
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
               </a>
             </div>

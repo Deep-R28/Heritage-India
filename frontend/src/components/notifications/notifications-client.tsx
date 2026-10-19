@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
 import type { NotificationItem } from "@/lib/data";
 import { formatLocaleDate } from "@/lib/locale-date";
+import { localizeSiteName } from "@/lib/localize";
 
 const typeIcon: Record<NotificationItem["type"], string> = {
   booking: "event_available",
@@ -29,6 +30,8 @@ function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record
     };
   }
   const eventDate = item.eventDate ? formatLocaleDate(item.eventDate, lang) : undefined;
+  const siteName = item.site ? localizeSiteName(item.site, lang) : undefined;
+
   if (item.type === "booking") {
     // If the notification item carries its own dynamic title/message from real-time booking:
     if (item.site && item.site.includes("Booking")) {
@@ -40,13 +43,13 @@ function notificationCopy(item: NotificationItem, t: (key: string, opts?: Record
     const key = item.variant === "cancelled" ? "bookingCancelled" : "bookingConfirmed";
     return {
       title: t(`notifications.types.${key}.title`),
-      message: t(`notifications.types.${key}.message`, { guide: item.guide, site: item.site, date: eventDate }),
+      message: t(`notifications.types.${key}.message`, { guide: item.guide, site: siteName || item.site, date: eventDate }),
     };
   }
   if (item.type === "crowd-alert") {
     return {
-      title: t("notifications.types.crowdAlert.title", { site: item.site }),
-      message: t("notifications.types.crowdAlert.message", { site: item.site, percent: item.percent }),
+      title: t("notifications.types.crowdAlert.title", { site: siteName || item.site }),
+      message: t("notifications.types.crowdAlert.message", { site: siteName || item.site, percent: item.percent }),
     };
   }
   return {

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/cn";
-import { localizePricing, localizeSite } from "@/lib/localize";
+import { localizePricing, localizeSite, localizeSiteName } from "@/lib/localize";
 
 const tierMeta = [
   { key: "scholar", featured: false },
@@ -23,6 +23,7 @@ export function PricingView({ pricing: rawPricing, sites }: { pricing: PricingDa
   const pricing = localizePricing(rawPricing, i18n.language);
   const localizedSites = sites.map((s) => localizeSite(s, i18n.language));
   const siteById = new Map(localizedSites.map((s) => [s.id, s]));
+  const siteBySlug = new Map(localizedSites.map((s) => [s.slug, s]));
   const siteByName = new Map(localizedSites.map((s) => [s.name, s]));
   const tierCopy = tierMeta.map((m) => ({
     ...m,
@@ -52,7 +53,8 @@ export function PricingView({ pricing: rawPricing, sites }: { pricing: PricingDa
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {pricing.entryFees.map((fee, i) => {
-            const site = siteById.get(fee.siteId) ?? siteByName.get(fee.siteName);
+            const site = siteById.get(fee.siteId) ?? siteBySlug.get(fee.siteId) ?? siteByName.get(fee.siteName);
+            const siteDisplayName = site ? site.name : localizeSiteName(fee.siteName, i18n.language);
             return (
               <Reveal key={fee.siteId} delay={i * 0.08}>
                 <Card className="flex h-full flex-col overflow-hidden">
@@ -60,7 +62,7 @@ export function PricingView({ pricing: rawPricing, sites }: { pricing: PricingDa
                     {site && (
                       <Image
                         src={site.image}
-                        alt={site.name}
+                        alt={siteDisplayName}
                         fill
                         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -68,7 +70,7 @@ export function PricingView({ pricing: rawPricing, sites }: { pricing: PricingDa
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent" />
                     <div className="absolute bottom-4 left-6">
-                      <h3 className="font-headline text-2xl text-foreground">{site ? site.name : fee.siteName}</h3>
+                      <h3 className="font-headline text-2xl text-foreground">{siteDisplayName}</h3>
                       {site && (
                         <p className="mt-1 font-label text-xs uppercase tracking-widest text-accent">
                           {site.region}

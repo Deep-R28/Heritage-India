@@ -32,7 +32,21 @@ export function VoiceClient() {
   const currentLanguage = (i18n.language?.slice(0, 2) as LanguageCode) ?? "en";
   const router = useRouter();
 
-  const langCode = currentLanguage === "hi" ? "hi-IN" : currentLanguage === "es" ? "es-ES" : "en-IN";
+  const bcp47Map: Record<string, string> = {
+    hi: "hi-IN",
+    bn: "bn-IN",
+    ta: "ta-IN",
+    te: "te-IN",
+    mr: "mr-IN",
+    gu: "gu-IN",
+    kn: "kn-IN",
+    ml: "ml-IN",
+    pa: "pa-IN",
+    ur: "ur-IN",
+    es: "es-ES",
+    en: "en-IN",
+  };
+  const langCode = bcp47Map[currentLanguage] || "en-IN";
   const { isListening, transcript, micLevel, error, start, stop, setTranscript } = useSpeechToText(langCode);
   const { isSpeaking, speak, stop: stopSpeaking } = useTextToSpeech(langCode);
 

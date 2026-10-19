@@ -238,7 +238,7 @@ export function CheckoutView() {
       {/* Breadcrumb */}
       <div className="mb-8">
         <Link href={`/sites/${siteSlug}`} className="font-label text-xs uppercase tracking-widest text-accent hover:underline">
-          ← Return to {site?.name || "Monument"}
+          ← Return to {displayName || "Monument"}
         </Link>
         <h1 className="mt-2 font-headline text-3xl text-foreground md:text-4xl">Secure Concierge Checkout</h1>
         <p className="mt-1 font-body text-sm text-foreground-muted">

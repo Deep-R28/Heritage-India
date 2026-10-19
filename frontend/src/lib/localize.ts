@@ -16,10 +16,17 @@ export function localizeSiteName(slugOrName: string, lang: string): string {
     return SITE_TRANSLATIONS[slugOrName][code]!.name;
   }
 
-  // 2. Lookup slug by matching canonical English name or slugified string
-  const lowerTarget = slugOrName.trim().toLowerCase();
+  // 2. Slugified match (lowercase, spaces to hyphens)
+  const normalizedSlug = slugOrName.trim().toLowerCase().replace(/\s+/g, "-");
+  if (SITE_TRANSLATIONS[normalizedSlug]?.[code]?.name) {
+    return SITE_TRANSLATIONS[normalizedSlug][code]!.name;
+  }
+
+  // 3. Normalized alphanumeric match
+  const cleanTarget = slugOrName.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
   for (const [slug, transMap] of Object.entries(SITE_TRANSLATIONS)) {
-    if (slug === lowerTarget) {
+    const cleanSlug = slug.replace(/[^a-z0-9]/g, "");
+    if (cleanSlug === cleanTarget) {
       if (transMap[code]?.name) return transMap[code]!.name;
     }
   }
@@ -31,7 +38,9 @@ export function localizeSite(site: Site, lang: string): Site {
   const code = langCode(lang);
   if (code === "en") return site;
 
-  const siteTr = SITE_TRANSLATIONS[site.slug]?.[code];
+  const siteTr =
+    SITE_TRANSLATIONS[site.slug]?.[code] ||
+    SITE_TRANSLATIONS[site.name?.toLowerCase().replace(/\s+/g, "-")]?.[code];
   const t = (site.translations as Record<string, { summary?: string; history?: string } | undefined>)?.[code];
 
   return {

@@ -204,7 +204,7 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
                       </h4>
                       <p className="truncate text-xs text-foreground-muted">{site.region}</p>
                       <p className="mt-0.5 font-mono text-xs font-medium text-accent">
-                        ₹{site.priceInr} entry fee
+                        {site.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${site.priceInr} ${t("siteDetail.entryFee") || "entry fee"}`}
                       </p>
                     </div>
                     <Icon

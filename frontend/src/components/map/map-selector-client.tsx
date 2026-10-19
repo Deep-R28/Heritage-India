@@ -82,7 +82,7 @@ export function MapSelectorClient({
             title="Return to site detail page"
           >
             <Icon name="arrow_back" className="text-sm" />
-            Back to {selected?.name || "Site"} Details
+            {t("common.back")} {selected?.name || ""}
           </Link>
         )}
         <form
@@ -218,7 +218,7 @@ export function MapSelectorClient({
                     }}
                     className="font-label text-[10px] uppercase tracking-wider text-accent hover:underline cursor-pointer"
                   >
-                    Reset Filters
+                    {t("explore.resetSearch") || "Reset Filters"}
                   </button>
                 </div>
               )}
@@ -242,7 +242,7 @@ export function MapSelectorClient({
                 className="flex items-center gap-1.5 font-label text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:text-accent/80"
               >
                 <Icon name="arrow_back" className="text-sm" />
-                Back to Site Details
+                {t("common.back")}
               </Link>
               <button
                 onClick={() => setSelected(undefined)}
@@ -256,7 +256,7 @@ export function MapSelectorClient({
               <Image src={selected.image} alt={selected.name} fill sizes="384px" className="object-cover" />
               <div className="absolute left-2 top-2 flex flex-wrap gap-1.5">
                 <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent backdrop-blur-sm">
-                  {selected.category}
+                  {t(categoryLabelKey(selected.category))}
                 </span>
                 {selected.zone && (
                   <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-300 backdrop-blur-sm">
@@ -279,14 +279,14 @@ export function MapSelectorClient({
 
             <div className="mb-4 flex items-center justify-between rounded-lg border border-hairline bg-surface/50 p-3 text-xs">
               <div>
-                <span className="block text-[10px] uppercase tracking-wider text-stone-400">Entry Fee</span>
+                <span className="block text-[10px] uppercase tracking-wider text-stone-400">{t("siteDetail.entryFee") || "Entry Fee"}</span>
                 <span className="font-semibold text-accent">
-                  {selected.priceInr === 0 ? "Free Entry" : `₹${selected.priceInr}`}
+                  {selected.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${selected.priceInr}`}
                 </span>
               </div>
               {selected.timeNeeded && (
                 <div className="text-right">
-                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">Time Needed</span>
+                  <span className="block text-[10px] uppercase tracking-wider text-stone-400">{t("pricing.timeNeeded") || "Time Needed"}</span>
                   <span className="font-semibold text-foreground">~{selected.timeNeeded} hrs</span>
                 </div>
               )}
@@ -309,7 +309,7 @@ export function MapSelectorClient({
               <Link href={`/checkout?site=${selected.slug}`}>
                 <Button variant="secondary" className="w-full">
                   <Icon name="confirmation_number" className="text-sm" />
-                  Book Visit & Guide
+                  {t("pricing.guidesSection.bookCta") || "Book Visit & Guide"}
                 </Button>
               </Link>
             </div>
@@ -325,7 +325,7 @@ export function MapSelectorClient({
             className="flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian shadow transition-all hover:bg-accent/90"
           >
             <Icon name="arrow_back" className="text-sm" />
-            Back to {selected?.name || "Site"} Details
+            {t("common.back")} {selected?.name || ""}
           </Link>
         )}
         <Link
