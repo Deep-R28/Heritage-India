@@ -6,23 +6,13 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const raw = (params.slug || "").toLowerCase().trim();
-    const slugHyphen = raw.replace(/[\s_]+/g, "-");
-    const slugSpace = raw.replace(/[-_]+/g, " ");
+    const slug = (params.slug || "").toLowerCase().trim();
     const sites = getAllApiSites();
-    const site = sites.find(
-      (s) =>
-        s.slug.toLowerCase() === raw ||
-        s.slug.toLowerCase() === slugHyphen ||
-        s.id.toLowerCase() === raw ||
-        s.id.toLowerCase() === slugHyphen ||
-        s.name.toLowerCase() === raw ||
-        s.name.toLowerCase() === slugSpace
-    );
+    const site = sites.find((s) => s.slug.toLowerCase() === slug || s.id.toLowerCase() === slug);
 
     if (!site) {
       return NextResponse.json(
-        { data: null, error: { message: `Site '${raw}' not found`, code: "NOT_FOUND" } },
+        { data: null, error: { message: `Site '${slug}' not found`, code: "NOT_FOUND" } },
         { status: 404 }
       );
     }

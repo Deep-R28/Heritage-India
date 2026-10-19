@@ -10,7 +10,6 @@ import { useSpeechToText, useTextToSpeech } from "@/hooks/use-speech";
 import { languages, type LanguageCode } from "@/i18n/config";
 import { sendMessageToAssistant } from "@/lib/assistant";
 import { FormattedMessage } from "@/components/assistant/formatted-message";
-import { extractBookingFromText, saveBookingDraft, formatCheckoutUrl } from "@/lib/booking-sync";
 
 function cleanTextForSpeech(text: string): string {
   return text
@@ -82,14 +81,11 @@ export function VoiceClient() {
       assistantReply &&
       assistantReply.includes("/checkout")
     ) {
-      const draft = extractBookingFromText(assistantReply);
-      if (draft) saveBookingDraft(draft);
-
       const match = assistantReply.match(/\/checkout\S+/);
       if (match) {
         stop();
         stopSpeaking();
-        const cleanUrl = draft ? formatCheckoutUrl(draft) : match[0].replace(/[)\]]+$/, "");
+        const cleanUrl = match[0].replace(/[)\]]+$/, "");
         router.push(cleanUrl);
         return;
       }

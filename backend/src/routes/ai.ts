@@ -55,11 +55,7 @@ router.post("/chat", optionalAuth, async (req, res, next) => {
     });
 
     // Build Grounding DB facts and System Prompt
-    const sessionHistoryText = [
-      ...activeSession.messages.slice(-6).map((m) => m.content),
-      message,
-    ].join(" ");
-    const groundingContext = await buildGroundingContext(sessionHistoryText);
+    const groundingContext = await buildGroundingContext(message);
     const systemPrompt = buildSystemPrompt(groundingContext, detectedLang);
 
     // Prepare message history

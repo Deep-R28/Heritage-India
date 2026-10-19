@@ -15,14 +15,6 @@ import type { LanguageCode } from "@/i18n/config";
 import nearbySitesRaw from "@/data/nearby-sites.json";
 import guideRegistryRaw from "@/data/guide-registry.json";
 import type { Site } from "@/lib/data";
-import {
-  getSavedBookingDraft,
-  saveBookingDraft,
-  normalizeDate,
-  normalizeSlot,
-  normalizeSlug,
-  type BookingDraft,
-} from "@/lib/booking-sync";
 
 export function CheckoutView() {
   const router = useRouter();
@@ -30,8 +22,21 @@ export function CheckoutView() {
   const { user, isLoggedIn } = useAuth();
   const { i18n } = useTranslation();
 
-  // Read any chat booking cached in localStorage or sessionStorage
-  const savedDraft = typeof window !== "undefined" ? getSavedBookingDraft() : null;
+  // Read any chat booking cached in localStorage
+  let lastChatBooking: {
+    siteSlug?: string;
+    siteName?: string;
+    partySize?: number;
+    visitDate?: string;
+    visitSlot?: string;
+    guideName?: string;
+    guideId?: string;
+  } | null = null;
+  if (typeof window !== "undefined") {
+    try {
+      lastChatBooking = JSON.parse(localStorage.getItem("heritage_last_chat_booking") || "null");
+    } catch {}
+  }
 
   const rawSiteParam =
     searchParams.get("site") ||
@@ -39,23 +44,23 @@ export function CheckoutView() {
     searchParams.get("place") ||
     searchParams.get("siteSlug") ||
     searchParams.get("slug") ||
-    savedDraft?.siteSlug ||
+    lastChatBooking?.siteSlug ||
     "taj-mahal";
-  const initialSiteSlug = normalizeSlug(rawSiteParam);
+  const siteSlug = rawSiteParam.trim().toLowerCase().replace(/[\s_]+/g, "-");
 
-  const initialGuide =
+  const guideId =
     searchParams.get("guide") ||
     searchParams.get("guideId") ||
     searchParams.get("guideName") ||
-    savedDraft?.guideName ||
-    savedDraft?.guideId;
+    lastChatBooking?.guideName ||
+    lastChatBooking?.guideId;
 
-  const initialDate = normalizeDate(
+  const initialDate =
     searchParams.get("date") ||
     searchParams.get("visitDate") ||
     searchParams.get("day") ||
-    savedDraft?.visitDate
-  );
+    lastChatBooking?.visitDate ||
+    new Date(Date.now() + 86400000).toISOString().split("T")[0];
 
   const paramParty =
     searchParams.get("partySize") ||
@@ -66,20 +71,18 @@ export function CheckoutView() {
     searchParams.get("count");
   const initialParty = paramParty
     ? Math.max(1, parseInt(paramParty, 10))
-    : savedDraft?.partySize && savedDraft.partySize > 0
-    ? savedDraft.partySize
+    : lastChatBooking?.partySize && lastChatBooking.partySize > 0
+    ? lastChatBooking.partySize
     : 2;
 
-  const initialSlot = normalizeSlot(
+  const initialSlot =
     searchParams.get("slot") ||
     searchParams.get("time") ||
     searchParams.get("visitSlot") ||
     searchParams.get("timeSlot") ||
-    savedDraft?.visitSlot
-  );
+    lastChatBooking?.visitSlot ||
+    "09:00 AM (Morning Slot)";
 
-  const [siteSlug, setSiteSlug] = useState(initialSiteSlug);
-  const [guideParam, setGuideParam] = useState(initialGuide);
   const [site, setSite] = useState<ApiSite | null>(null);
   const [guide, setGuide] = useState<ApiGuide | null>(null);
   const [availableGuides, setAvailableGuides] = useState<ApiGuide[]>([]);
@@ -97,57 +100,20 @@ export function CheckoutView() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  // Sync state if searchParams or saved booking draft update dynamically
+  // Sync state if searchParams or last chat booking update dynamically
   useEffect(() => {
-    const draft = getSavedBookingDraft();
-
-    const paramSite =
-      searchParams.get("site") ||
-      searchParams.get("monument") ||
-      searchParams.get("place") ||
-      searchParams.get("siteSlug") ||
-      searchParams.get("slug");
-    if (paramSite) {
-      setSiteSlug(normalizeSlug(paramSite));
-    } else if (draft?.siteSlug) {
-      setSiteSlug(draft.siteSlug);
-    }
-
     if (paramParty) {
       const p = parseInt(paramParty, 10);
       if (!isNaN(p) && p > 0) setPartySize(p);
-    } else if (draft?.partySize) {
-      setPartySize(draft.partySize);
+    } else if (lastChatBooking?.partySize) {
+      setPartySize(lastChatBooking.partySize);
     }
 
-    const d = searchParams.get("date") || searchParams.get("visitDate") || draft?.visitDate;
-    if (d) setVisitDate(normalizeDate(d));
+    const d = searchParams.get("date") || searchParams.get("visitDate") || lastChatBooking?.visitDate;
+    if (d) setVisitDate(d);
 
-    const s = searchParams.get("slot") || searchParams.get("time") || draft?.visitSlot;
-    if (s) setVisitSlot(normalizeSlot(s));
-
-    const g =
-      searchParams.get("guide") ||
-      searchParams.get("guideId") ||
-      searchParams.get("guideName") ||
-      draft?.guideName ||
-      draft?.guideId;
-    if (g) setGuideParam(g);
-
-    // Cross-tab / cross-component live listener
-    const handleUpdate = (e: Event) => {
-      const custom = e as CustomEvent<BookingDraft>;
-      const liveDraft = custom.detail || getSavedBookingDraft();
-      if (liveDraft) {
-        if (liveDraft.siteSlug) setSiteSlug(liveDraft.siteSlug);
-        if (liveDraft.partySize) setPartySize(liveDraft.partySize);
-        if (liveDraft.visitDate) setVisitDate(normalizeDate(liveDraft.visitDate));
-        if (liveDraft.visitSlot) setVisitSlot(normalizeSlot(liveDraft.visitSlot));
-        if (liveDraft.guideName) setGuideParam(liveDraft.guideName);
-      }
-    };
-    window.addEventListener("heritage-chat-booking-updated", handleUpdate);
-    return () => window.removeEventListener("heritage-chat-booking-updated", handleUpdate);
+    const s = searchParams.get("slot") || searchParams.get("time") || lastChatBooking?.visitSlot;
+    if (s) setVisitSlot(s);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -167,10 +133,10 @@ export function CheckoutView() {
         } catch {
           const fallback = (nearbySitesRaw as unknown as Site[]).find(
             (s) =>
-              s.slug.toLowerCase() === siteSlug.toLowerCase() ||
-              s.id.toLowerCase() === siteSlug.toLowerCase() ||
-              s.name.toLowerCase() === siteSlug.replace(/-/g, " ") ||
-              s.slug.replace(/-/g, " ") === siteSlug.replace(/-/g, " ")
+              s.slug === siteSlug ||
+              s.id === siteSlug ||
+              s.name.toLowerCase() === rawSiteParam.toLowerCase() ||
+              s.slug.replace(/-/g, " ") === rawSiteParam.toLowerCase()
           );
           if (fallback) {
             siteData = {
@@ -239,14 +205,14 @@ export function CheckoutView() {
         setAvailableGuides(guidesList);
 
         if (
-          guideParam === "none" ||
-          guideParam === "self" ||
-          String(guideParam).toLowerCase().includes("none") ||
-          String(guideParam).toLowerCase().includes("self")
+          guideId === "none" ||
+          guideId === "self" ||
+          String(guideId).toLowerCase().includes("none") ||
+          String(guideId).toLowerCase().includes("self")
         ) {
           setGuide(null);
-        } else if (guideParam) {
-          const target = String(guideParam).toLowerCase().trim();
+        } else if (guideId) {
+          const target = String(guideId).toLowerCase().trim();
           const matched = guidesList.find(
             (g) =>
               g.id.toLowerCase() === target ||
@@ -260,11 +226,6 @@ export function CheckoutView() {
               (target.includes("meera") && g.name.toLowerCase().includes("meera")) ||
               (target.includes("arun") && g.name.toLowerCase().includes("arun")) ||
               (target.includes("sanjay") && g.name.toLowerCase().includes("sanjay")) ||
-              (target.includes("farooq") && g.name.toLowerCase().includes("farooq")) ||
-              (target.includes("deepak") && g.name.toLowerCase().includes("deepak")) ||
-              (target.includes("lakshmi") && g.name.toLowerCase().includes("lakshmi")) ||
-              (target.includes("anita") && g.name.toLowerCase().includes("anita")) ||
-              (target.includes("sunita") && g.name.toLowerCase().includes("sunita")) ||
               (target.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
               (target.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
               (target.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
@@ -284,7 +245,7 @@ export function CheckoutView() {
     }
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [siteSlug, guideParam]);
+  }, [siteSlug, guideId]);
 
   // Pricing calculations
   const entryFeePerPerson = site?.entryFeeINR ?? 1100;
@@ -311,11 +272,12 @@ export function CheckoutView() {
 
   const handleSaveDraftAndRedirect = (targetPath: "/login" | "/signup") => {
     if (!site) return;
-    const draft: BookingDraft = {
+    const draft = {
+      siteId: site.id,
       siteSlug: site.slug,
       siteName: site.name,
-      guideId: guide?.id ?? undefined,
-      guideName: guide?.name ?? undefined,
+      guideId: guide?.id ?? null,
+      guideName: guide?.name ?? null,
       visitDate,
       visitSlot,
       partySize,
@@ -328,8 +290,10 @@ export function CheckoutView() {
         idNumber: "1234 5678 9012",
       },
     };
-    saveBookingDraft(draft);
-    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${encodeURIComponent(guide?.name || guideParam || "none")}`;
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("pending_booking_draft", JSON.stringify(draft));
+    }
+    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${guide?.id ?? "none"}`;
     router.push(`${targetPath}?redirect=${encodeURIComponent(currentCheckoutUrl)}&from=checkout&siteName=${encodeURIComponent(site.name)}`);
   };
 
@@ -453,35 +417,13 @@ export function CheckoutView() {
           </div>
           <div className="flex items-center gap-2.5">
             <Link
-              href={`/login?redirect=${encodeURIComponent(`/checkout?site=${site?.slug || siteSlug}&guide=${encodeURIComponent(guide?.name || guideParam || "")}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
-              onClick={() => {
-                saveBookingDraft({
-                  siteSlug: site?.slug || siteSlug,
-                  siteName: site?.name || siteSlug,
-                  partySize,
-                  visitDate,
-                  visitSlot,
-                  guideName: guide?.name || guideParam,
-                  guideId: guide?.id,
-                });
-              }}
+              href={`/login?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
               className="rounded-lg border border-accent/60 bg-surface px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-accent transition-colors hover:bg-accent/10"
             >
               Log In
             </Link>
             <Link
-              href={`/signup?redirect=${encodeURIComponent(`/checkout?site=${site?.slug || siteSlug}&guide=${encodeURIComponent(guide?.name || guideParam || "")}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
-              onClick={() => {
-                saveBookingDraft({
-                  siteSlug: site?.slug || siteSlug,
-                  siteName: site?.name || siteSlug,
-                  partySize,
-                  visitDate,
-                  visitSlot,
-                  guideName: guide?.name || guideParam,
-                  guideId: guide?.id,
-                });
-              }}
+              href={`/signup?redirect=${encodeURIComponent(`/checkout?site=${siteSlug}&guide=${guideId || ""}&date=${visitDate}&partySize=${partySize}&slot=${encodeURIComponent(visitSlot)}`)}`}
               className="rounded-lg bg-accent px-4 py-2 font-label text-xs font-semibold uppercase tracking-wider text-obsidian transition-colors hover:bg-accent/90 shadow"
             >
               Sign Up
@@ -633,14 +575,6 @@ export function CheckoutView() {
                   <option value="09:00 AM - 12:00 PM (Morning Slot)">☀️ 09:00 AM – 12:00 PM (Morning Slot)</option>
                   <option value="12:00 PM - 03:00 PM (Afternoon Slot)">🌤️ 12:00 PM – 03:00 PM (Afternoon Slot)</option>
                   <option value="03:00 PM - 06:00 PM (Sunset Slot)">🌇 03:00 PM – 06:00 PM (Sunset Slot — Golden Hour)</option>
-                  {![
-                    "06:00 AM - 09:00 AM (Sunrise Slot)",
-                    "09:00 AM - 12:00 PM (Morning Slot)",
-                    "12:00 PM - 03:00 PM (Afternoon Slot)",
-                    "03:00 PM - 06:00 PM (Sunset Slot)",
-                  ].includes(visitSlot) && (
-                    <option value={visitSlot}>🕒 {visitSlot}</option>
-                  )}
                 </select>
               </div>
             </div>

@@ -79,14 +79,7 @@ export async function buildGroundingContext(userPrompt: string): Promise<string>
     })
   );
 
-  // Match guides mentioned by full name or first name in prompt
-  const matchedGuides = allGuides.filter((g) => {
-    const firstName = g.name.split(" ")[0].toLowerCase();
-    return promptLower.includes(g.name.toLowerCase()) || promptLower.includes(firstName);
-  });
-  const finalGuides = Array.from(new Set([...matchedGuides, ...allGuides])).slice(0, 12);
-
-  const guideContexts = finalGuides.map((g) => {
+  const guideContexts = allGuides.slice(0, 6).map((g) => {
     const langs = JSON.parse(g.languages || "[]").join(", ");
     return `- ${g.name} (License: ${g.licenseId}, VERIFIED ASI Guide) | Experience: ${g.experienceYears} yrs | Languages: ${langs} | Rate: ₹${g.ratePerHourINR}/hr`;
   });
@@ -162,27 +155,12 @@ CONVERSATIONAL TICKET & GUIDE BOOKING WORKFLOW:
    When the user asks for alternative places or options (e.g. "any other places nearby?", "alternatives to Taj Mahal", "kuch aur jagah batao"), listen carefully and present relevant alternative heritage monuments in that region or category with ratings and ticket prices.
 
 7. SUMMARY, PAYMENT & LOGIN REMINDER:
-   Once the guide is selected or user requests to book, present the itemized booking summary:
-   - **Monument:** [Monument Name]
-   - **Date:** [YYYY-MM-DD or readable date]
-   - **Time Slot:** [Slot time, e.g. 09:00 AM]
-   - **Visitors:** [count] members
-   - **Selected Guide:** [Guide Name] ([Rate])
-   - **Estimated Total:** ₹[Total]
-
-   Provide the checkout payment link:
+   Once the guide is selected, present the itemized booking summary and provide the checkout payment link:
    [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=<lowercase_slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot_time>&guide=<guide_name>)
    Example: [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=statue-of-unity&partySize=3&date=2026-10-21&slot=09:00%20AM&guide=Rajesh%20Kumar)
    Ensure the parameters in the link match the EXACT monument slug, visitor count, date, time slot, and guide name from your summary conversation.
    Always include a helpful account note:
    "📌 If you haven't logged in yet, please [Log In](/login) or [Sign Up](/signup) so your e-tickets, live crowd updates, and real-time confirmation notifications are permanently linked to your Heritage dashboard!"
-
-8. PROCEED / YES / TAKE ME TO PAYMENT:
-   If the user replies with "yes", "proceed", "proceed to payment", "pay", "book it", "take me to payment page", or confirms the booking:
-   Re-confirm the booking with enthusiasm and provide the direct payment link:
-   "Great! Your booking details for [Monument Name] are confirmed. Please click below to proceed to payment:"
-   [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=<lowercase_slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot_time>&guide=<guide_name>)
-   NEVER say "Sorry we don't provide tickets" for a monument that was already being booked or discussed in the conversation!
 
 CRITICAL INTEGRITY RULES:
 1. Answer ONLY using the provided DATABASE CONTEXT for all facts about entry fees, opening hours, current crowd levels, and guide verification status.
