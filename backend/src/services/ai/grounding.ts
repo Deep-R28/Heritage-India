@@ -88,7 +88,7 @@ export async function buildGroundingContext(userPrompt: string, recentHistoryTex
         (s as any).bestTime ? `Best Time: ${(s as any).bestTime}` : null,
         (s as any).weeklyOff && (s as any).weeklyOff !== "Open All Days" ? `Weekly Off: ${(s as any).weeklyOff}` : null,
       ].filter(Boolean).join(" | ");
-      return `- ${s.name} (${s.city}, ${s.state}, ${(s as any).zone ?? ""}) | Category: ${s.category} | ${meta}`;
+      return `- ${s.name} (Slug: ${s.slug}) | City: ${s.city}, ${s.state}, ${(s as any).zone ?? ""} | Category: ${s.category} | ${meta}`;
     })
   );
 

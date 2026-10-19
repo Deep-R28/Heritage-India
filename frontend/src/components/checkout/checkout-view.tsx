@@ -304,23 +304,54 @@ export function CheckoutView() {
         } else if (effectiveGuideTarget) {
           const target = String(effectiveGuideTarget).toLowerCase().trim();
           const targetClean = target.replace(/[-_]+/g, " ");
-          const targetTokens = targetClean.split(/\s+/).filter(Boolean);
+          const targetTokens = targetClean.split(/\s+/).filter((t) => t.length > 1);
+          const targetFirst = targetTokens[0] || "";
 
-          const matched = guidesList.find((g) => {
-            const gName = g.name.toLowerCase();
+          // 1. Exact ID or License ID match
+          let matched = guidesList.find((g) => {
             const gId = g.id.toLowerCase();
             const gLic = (g.licenseId || "").toLowerCase();
-            return (
-              gId === target ||
-              gLic === target ||
-              gName === targetClean ||
-              gName.includes(targetClean) ||
-              targetClean.includes(gName) ||
-              targetTokens.some((tok) => tok.length > 2 && gName.includes(tok))
-            );
+            return gId === target || gLic === target || gLic.includes(target);
           });
-          if (matched) setGuide(matched);
-          else setGuide(guidesList[0]);
+
+          // 2. Exact Name match
+          if (!matched) {
+            matched = guidesList.find((g) => g.name.toLowerCase() === targetClean);
+          }
+
+          // 3. Full name substring match
+          if (!matched) {
+            matched = guidesList.find((g) => {
+              const gName = g.name.toLowerCase();
+              return gName.includes(targetClean) || targetClean.includes(gName);
+            });
+          }
+
+          // 4. First name match (e.g. "vikram", "rajesh", "priya", "meera", "arun")
+          if (!matched && targetFirst.length > 2) {
+            matched = guidesList.find((g) => {
+              const gFirst = g.name.toLowerCase().split(/\s+/)[0];
+              return gFirst === targetFirst;
+            });
+          }
+
+          // 5. Distinctive token match (avoid generic surname collisions like "singh" matching Arjun Singh instead of Vikram Singh)
+          if (!matched) {
+            const genericTokens = new Set(["singh", "kumar", "devi", "sharma", "ji", "guide", "mr", "mrs", "the"]);
+            const distinctiveTokens = targetTokens.filter((t) => !genericTokens.has(t) && t.length > 2);
+            if (distinctiveTokens.length > 0) {
+              matched = guidesList.find((g) => {
+                const gTokens = g.name.toLowerCase().split(/\s+/);
+                return distinctiveTokens.some((dt) => gTokens.includes(dt) || g.name.toLowerCase().includes(dt));
+              });
+            }
+          }
+
+          if (matched) {
+            setGuide(matched);
+          } else {
+            setGuide(guidesList[0]);
+          }
         } else {
           setGuide(guidesList[0]);
         }

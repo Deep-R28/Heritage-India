@@ -45,42 +45,149 @@ export interface VerifiedGuideInfo {
 }
 
 export const VERIFIED_GUIDES: VerifiedGuideInfo[] = [
-  { id: "G-AGR-05", name: "Vikram Singh", license: "ASI-AGR-005", rate: 1200, languages: "English, Hindi, French, Spanish", rating: 5.0, tours: 210 },
-  { id: "G-AGR-01", name: "Rajesh Kumar", license: "ASI-AGR-001", rate: 800, languages: "English, Hindi, Urdu", rating: 4.9, tours: 180 },
-  { id: "G-AGR-02", name: "Priya Sharma", license: "ASI-AGR-002", rate: 700, languages: "English, Hindi, Sanskrit", rating: 4.8, tours: 145 },
-  { id: "G-AGR-03", name: "Arun Nair", license: "ASI-AGR-003", rate: 1000, languages: "English, Hindi, Tamil, Malayalam", rating: 4.9, tours: 160 },
-  { id: "G-DEL-04", name: "Meera Devi", license: "ASI-DEL-004", rate: 600, languages: "English, Hindi, Rajasthani, Gujarati", rating: 4.7, tours: 130 },
+  { id: "ASI-VIK-005", name: "Vikram Singh", license: "ASI-VIK-005", rate: 1200, languages: "English, Hindi, French, Spanish", rating: 5.0, tours: 210 },
+  { id: "ASI-RAJ-001", name: "Rajesh Kumar", license: "ASI-RAJ-001", rate: 800, languages: "English, Hindi, Urdu", rating: 4.9, tours: 180 },
+  { id: "ASI-PRI-002", name: "Priya Sharma", license: "ASI-PRI-002", rate: 700, languages: "English, Hindi, Sanskrit", rating: 4.8, tours: 145 },
+  { id: "ASI-ARN-003", name: "Arun Nair", license: "ASI-ARN-003", rate: 1000, languages: "English, Hindi, Tamil, Malayalam", rating: 4.9, tours: 160 },
+  { id: "ASI-MEE-004", name: "Meera Devi", license: "ASI-MEE-004", rate: 600, languages: "English, Hindi, Rajasthani, Gujarati", rating: 4.7, tours: 130 },
   { id: "none", name: "Self-Guided (No Guide)", license: "N/A", rate: 0, languages: "Self-Paced Exploration", rating: 5.0, tours: 0 },
 ];
 
 const SITE_SCRIPT_ALIASES: Record<string, string[]> = {
   "taj-mahal": [
     "ताजमहल", "ताज महल", "তাজমহল", "தாஜ்மஹால்", "తాజ్ మహల్",
-    "ತಾಜ್ ಮಹಲ್", "તાજ મહેલ", "ਤਾਜ ਮਹਿਲ", "تاج محل", "താജ് മഹൽ"
+    "ತಾಜ್ ಮಹಲ್", "તાજ મહેલ", "ਤਾਜ ਮਹਿਲ", "تاج محل", "താജ് മഹൽ", "the taj mahal"
   ],
   "hampi": [
-    "हम्पी", "হাম্পি", "ஹம்பி", "హంపి", "ಹಂಪಿ", "હમ્પી", "ਹੰਪੀ", "ہمپی"
-  ],
-  "amber-fort": [
-    "आमेर किला", "আমেৰ দুৰ্গ", "ஆம்பர் கோட்டை", "అంబర్ కోట", "ಆಂಬರ್ ಕೋಟೆ", "આમેર કિલ્લો"
-  ],
-  "qutub-minar": [
-    "कुतुब मीनार", "কুতুব মিনার", "குதுப் மினார்", "కుతుబ్ మినార్", "ಕುತುಬ್ ಮಿನಾರ್"
-  ],
-  "red-fort": [
-    "लाल किला", "लाल केल्ला", "செங்கோட்டை", "ఎర్ర కోట", "ಕೆಂಪು ಕೋಟೆ", "લાલ કિલ્લો", "ਲਾਲ ਕਿਲਾ", "لال قلعہ"
-  ],
-  "hawa-mahal": [
-    "हवा महल", "হাওয়া মহল", "ஹவா மஹால்", "హవా మహల్", "ಹವಾ ಮಹಲ್", "હવા મહેલ", "ਹਵਾ ਮਹਿਲ", "ہوا محل"
+    "हम्पी", "হাম্পি", "ஹம்பி", "హంపి", "ಹಂಪಿ", "હમ્પી", "ਹੰਪੀ", "ہمپی",
+    "outer temples of hampi", "ruins of hampi", "outer temples", "hampi ruins", "hampi temples"
   ],
   "mysore-palace": [
-    "मैसूर पैलेस", "মহীশূর প্রাসাদ", "மைசூர் அரண்மனை", "మైసూర్ ప్యాలెస్", "ಮೈಸೂರು ಅರಮನೆ", "મૈસૂર મહેલ"
+    "मैसूर पैलेस", "মহীশূর প্রাসাদ", "மைசூர் அரண்மனை", "మైసూర్ ప్యాలెస్", "ಮೈಸೂರು ಅರಮನೆ", "મૈસૂર મહેલ",
+    "mysuru palace", "mysore palace", "ambavilas palace", "mysuru"
+  ],
+  "bangalore-palace": [
+    "बेंगलुरु पैलेस", "bangalore palace", "bengaluru palace", "bangalore"
+  ],
+  "statue-of-unity": [
+    "statue of unity", "स्टैच्यू ऑफ यूनिटी", "sardar patel statue", "kevadiya statue", "unity statue"
+  ],
+  "sanchi-stupa": [
+    "sanchi stupa", "sanchi", "सांची स्तूप", "सांची", "great stupa of sanchi"
+  ],
+  "mandu": [
+    "mandu", "mandu ruins", "rupmati pavilion", "mandu fort", "मांडू", "मांडू के खंडहर"
+  ],
+  "living-root-bridges": [
+    "living root bridges", "root bridges", "cherrapunji root bridges", "living root bridge", "लिविंग रूट ब्रिज"
+  ],
+  "victoria-memorial": [
+    "victoria memorial", "victoria memorial hall", "विक्टोरिया मेमोरियल", "ভিক্টোরিয়া মেমোরিয়াল"
+  ],
+  "golden-temple": [
+    "golden temple", "harmandir sahib", "darbar sahib", "स्वर्ण मंदिर", "ਸ੍ਰੀ ਹਰਿਮੰਦਰ ਸਾਹਿਬ"
+  ],
+  "amber-fort": [
+    "आमेर किला", "amer fort", "amber palace", "आमेर का किला"
+  ],
+  "qutub-minar": [
+    "कुतुब मीनार", "qutb minar", "qutab minar"
+  ],
+  "red-fort": [
+    "लाल किला", "red fort delhi", "lal qila"
+  ],
+  "hawa-mahal": [
+    "हवा महल", "palace of winds"
   ],
   "chand-baori": [
-    "चांद बावड़ी", "চাঁদ বাওরি", "சந்த் பௌரி", "చాంద్ బావోరి", "ಚಾಂದ್ ಬಾವೊರಿ"
+    "चांद बावड़ी", "chand baori stepwell"
   ],
   "kerala-backwaters": [
-    "केरल बैकवाटर", "কেরালা ব্যাকওয়াটার", "கேரளா பேக்வாட்டர்ஸ்", "కేరళ బ్యాక్‌వాటర్స్", "കേരള ബാക്ക്‌വാട്ടേഴ്‌സ്"
+    "केरल बैकवाटर", "alleppey backwaters", "backwaters"
+  ],
+  "ram-mandir": [
+    "ram mandir", "ram janmabhoomi", "राम मंदिर", "ayodhya ram mandir"
+  ],
+  "lotus-temple": [
+    "lotus temple", "kamal mandir", "कमल मंदिर", "bahai temple"
+  ],
+  "gateway-of-india": [
+    "gateway of india", "गेटवे ऑफ इंडिया", "gateway of mumbai"
+  ],
+  "howrah-bridge": [
+    "howrah bridge", "हावड़ा ब्रिज", "rabindra setu"
+  ],
+  "varanasi-ghats": [
+    "varanasi ghats", "kashi ghats", "banaras ghats", "dashashwamedh ghat", "वाराणसी घाट"
+  ],
+  "city-palace-udaipur": [
+    "city palace udaipur", "udaipur palace", "सिटी पैलेस उदयपुर"
+  ],
+  "rishikesh-laxman-jhula": [
+    "rishikesh", "laxman jhula", "lakshman jhula", "ऋषिकेश", "लक्ष्मण झूला"
+  ],
+  "agra-fort": [
+    "agra fort", "आगरा किला", "red fort agra"
+  ],
+  "mahabalipuram": [
+    "mahabalipuram", "mamallapuram", "shore temple", "महाबलीपुरम"
+  ],
+  "tirupati-balaji": [
+    "tirupati", "tirupati balaji", "venkateswara temple", "तिरुपति बालाजी"
+  ],
+  "padmanabhaswamy-temple": [
+    "padmanabhaswamy", "padmanabhaswamy temple", "sree padmanabhaswamy", "पद्मनाभस्वामी मंदिर"
+  ],
+  "chowmahalla-palace": [
+    "chowmahalla", "chowmahalla palace", "चौमहल्ला पैलेस"
+  ],
+  "jagannath-temple-puri": [
+    "jagannath temple", "puri temple", "jagannath puri", "जगन्नाथ मंदिर"
+  ],
+  "sundarbans": [
+    "sundarbans", "sunderbans national park", "सुंदरवन"
+  ],
+  "goa-beaches": [
+    "goa beaches", "calangute beach", "goa beach", "गोवा बीच"
+  ],
+  "rann-of-kutch": [
+    "rann of kutch", "white rann", "kutch desert", "कच्छ का रण"
+  ],
+  "somnath-temple": [
+    "somnath", "somnath temple", "सोमनाथ मंदिर"
+  ],
+  "mehrangarh-fort": [
+    "mehrangarh", "mehrangarh fort", "मेहरानगढ़ किला"
+  ],
+  "kaziranga-national-park": [
+    "kaziranga", "kaziranga national park", "काजीरंगा"
+  ],
+  "tawang-monastery": [
+    "tawang", "tawang monastery", "तवांग मठ"
+  ],
+  "charminar": [
+    "charminar", "चारमीनार"
+  ],
+  "golconda-fort": [
+    "golconda", "golconda fort", "गोलकोंडा किला"
+  ],
+  "fatehpur-sikri": [
+    "fatehpur sikri", "फतेहपुर सीकरी"
+  ],
+  "meenakshi-temple": [
+    "meenakshi temple", "meenakshi amman temple", "मीनाक्षी अम्मन"
+  ],
+  "konark-sun-temple": [
+    "konark", "konark sun temple", "सूर्य मंदिर कोणार्क"
+  ],
+  "ajanta-caves": [
+    "ajanta", "ajanta caves", "अजंता की गुफाएं"
+  ],
+  "ellora-caves": [
+    "ellora", "ellora caves", "एलोरा की गुफाएं"
+  ],
+  "khajuraho": [
+    "khajuraho", "khajuraho temples", "खजुराहो"
   ],
 };
 
@@ -291,19 +398,19 @@ export function parseSlotFromQuery(query: string): string {
 export function extractRequestedGuide(query: string): VerifiedGuideInfo | null {
   const lower = query.toLowerCase();
   if (lower.includes("rajesh kumar") || lower.includes("rajesh") || /\b(?:option\s*1|#1|first\s+guide)\b/i.test(lower)) {
-    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-01") || null;
+    return VERIFIED_GUIDES.find((g) => g.id === "ASI-RAJ-001") || null;
   }
   if (lower.includes("priya sharma") || lower.includes("priya") || /\b(?:option\s*2|#2|second\s+guide)\b/i.test(lower)) {
-    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-02") || null;
+    return VERIFIED_GUIDES.find((g) => g.id === "ASI-PRI-002") || null;
   }
   if (lower.includes("meera devi") || lower.includes("meera") || /\b(?:option\s*3|#3|third\s+guide)\b/i.test(lower)) {
-    return VERIFIED_GUIDES.find((g) => g.id === "G-DEL-04") || null;
+    return VERIFIED_GUIDES.find((g) => g.id === "ASI-MEE-004") || null;
   }
   if (lower.includes("arun nair") || lower.includes("arun")) {
-    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-03") || null;
+    return VERIFIED_GUIDES.find((g) => g.id === "ASI-ARN-003") || null;
   }
   if (lower.includes("vikram singh") || lower.includes("vikram")) {
-    return VERIFIED_GUIDES.find((g) => g.id === "G-AGR-05") || null;
+    return VERIFIED_GUIDES.find((g) => g.id === "ASI-VIK-005") || null;
   }
   if (
     lower.includes("self") ||
@@ -416,21 +523,41 @@ function matchSpecificMonument(query: string): CatalogSite | null {
   const q = query.toLowerCase();
   const cleanQ = q.replace(/[^a-z0-9]/g, "");
 
-  return (
-    sites.find((site) => {
-      const sName = site.name.toLowerCase().replace("the ", "");
-      const sSlug = site.slug.toLowerCase().replace(/-/g, " ");
-      const cleanName = sName.replace(/[^a-z0-9]/g, "");
-      const cleanSlug = sSlug.replace(/[^a-z0-9]/g, "");
-      const aliases = SITE_SCRIPT_ALIASES[site.slug] || [];
+  // Priority 1: Script aliases (exact alias phrases)
+  for (const site of sites) {
+    const aliases = SITE_SCRIPT_ALIASES[site.slug] || [];
+    if (aliases.some((a) => q.includes(a.toLowerCase()))) {
+      return site;
+    }
+  }
 
-      if (aliases.some((a) => q.includes(a.toLowerCase()))) return true;
-      if (q.includes(sName) || q.includes(sSlug)) return true;
-      if (cleanQ.includes(cleanName) && cleanName.length > 3) return true;
-      if (cleanQ.includes(cleanSlug) && cleanSlug.length > 3) return true;
-      return false;
-    }) || null
-  );
+  // Priority 2: Full Name match (sorted by length descending to match specific sites first)
+  const sortedByNameLen = [...sites].sort((a, b) => b.name.length - a.name.length);
+  for (const site of sortedByNameLen) {
+    const sName = site.name.toLowerCase().replace("the ", "").trim();
+    if (sName.length > 2 && q.includes(sName)) {
+      return site;
+    }
+  }
+
+  // Priority 3: Slug match (with hyphens replaced by spaces)
+  const sortedBySlugLen = [...sites].sort((a, b) => b.slug.length - a.slug.length);
+  for (const site of sortedBySlugLen) {
+    const sSlug = site.slug.toLowerCase().replace(/-/g, " ");
+    if (sSlug.length > 3 && q.includes(sSlug)) {
+      return site;
+    }
+  }
+
+  // Priority 4: Clean sanitized string match
+  for (const site of sortedByNameLen) {
+    const cleanName = site.name.toLowerCase().replace("the ", "").replace(/[^a-z0-9]/g, "");
+    const cleanSlug = site.slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (cleanName.length > 4 && cleanQ.includes(cleanName)) return site;
+    if (cleanSlug.length > 4 && cleanQ.includes(cleanSlug)) return site;
+  }
+
+  return null;
 }
 
 /**
@@ -621,13 +748,16 @@ export function generateConciergeResponse(
   }
 
   // ─── 2. USER PROVIDES STATE / CITY OR SITES ARE FILTERED BY LOCATION ────
+  const directMonumentMatch = matchSpecificMonument(q);
   const matchedRegion = matchKnownRegion(q);
+
   if (
+    !directMonumentMatch &&
     matchedRegion &&
     (state.step === "awaiting_state_or_city" ||
       state.step === "idle" ||
       state.step === "awaiting_monument_choice" ||
-      !matchSpecificMonument(q))
+      isAskingWhatTicketsProvided)
   ) {
     const regionalSites = findSitesByRegion(matchedRegion);
     if (regionalSites.length > 0) {
@@ -668,8 +798,6 @@ export function generateConciergeResponse(
   }
 
   // ─── 3. USER SPECIFIES MONUMENT NAME -> MUST ASK VISITOR COUNT ──────────
-  const directMonumentMatch = matchSpecificMonument(q);
-
   const partyMatch =
     q.match(/\b(\d+)\s*(?:member|members|visitor|visitors|ticket|tickets|people|person|persons|log|jana|vyakti|personas?)\b/i) ||
     q.match(/\bfor\s+(\d+)\b/i);
@@ -685,6 +813,7 @@ export function generateConciergeResponse(
       state.step === "completed" ||
       state.step === "awaiting_monument_choice" ||
       state.step === "awaiting_state_or_city" ||
+      state.step === "awaiting_party_size" ||
       state.step === "awaiting_night_booking_confirmation" ||
       state.step === "offered_best_guide" ||
       state.step === "awaiting_datetime" ||
@@ -1012,7 +1141,7 @@ export function generateConciergeResponse(
   const isExpensiveComplaint =
     /\b(out of budget|out of my budget|over budget|beyond budget|not in my budget|can't afford|cannot afford|expensive|mehenga|mahnga|costly|cheaper|cheap|too much|high price|kam karo|budget|bada price|zyada hai|bahut zyada|lower price|other guide|alternative guide|economical|vikalp)\b/i.test(q) ||
     q.includes("out of budget") ||
-    (currentStep === "offered_best_guide" && /\b(budget|mehenga|expensive|costly)\b/i.test(q));
+    (currentStep === "offered_best_guide" && /\b(budget|mehenga|expensive|costly|no|nahi|nah|nope|change guide|dusra guide|dusra|different guide)\b/i.test(q));
 
   if (isExpensiveComplaint) {
     state.step = "awaiting_alternative_guide";
@@ -1105,21 +1234,28 @@ export function generateConciergeResponse(
     if (explicitlyMentionedGuide) {
       selectedGuide = explicitlyMentionedGuide;
       isSelfGuided = explicitlyMentionedGuide.id === "none";
+    } else if (q.includes("self") || q.includes("no guide") || q.includes("bina guide") || /\b(?:option\s*4|#4|fourth)\b/i.test(q) || q === "4") {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "none")!;
+      isSelfGuided = true;
+    } else if (q.includes("meera") || /\b(?:option\s*3|#3|third)\b/i.test(q) || q === "3") {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "ASI-MEE-004")!;
+      isSelfGuided = false;
+    } else if (q.includes("priya") || /\b(?:option\s*2|#2|second)\b/i.test(q) || q === "2") {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "ASI-PRI-002")!;
+      isSelfGuided = false;
+    } else if (q.includes("rajesh") || /\b(?:option\s*1|#1|first)\b/i.test(q) || q === "1") {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "ASI-RAJ-001")!;
+      isSelfGuided = false;
+    } else if (q.includes("arun")) {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "ASI-ARN-003")!;
+      isSelfGuided = false;
+    } else if (q.includes("vikram")) {
+      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "ASI-VIK-005")!;
+      isSelfGuided = false;
     } else if (isAcceptingBestGuide) {
       // Respect the guide that was offered in state! Do not unconditionally revert to Vikram Singh!
       selectedGuide = (state.guideId ? VERIFIED_GUIDES.find((g) => g.id === state.guideId) : null) || VERIFIED_GUIDES[0];
       isSelfGuided = selectedGuide.id === "none";
-    } else if (q.includes("self") || q.includes("no guide") || q.includes("bina guide") || /\b(?:option\s*4|#4|fourth)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "none")!;
-      isSelfGuided = true;
-    } else if (q.includes("priya") || /\b(?:option\s*2|#2|second)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-02")!;
-    } else if (q.includes("meera") || /\b(?:option\s*3|#3|third)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-DEL-04")!;
-    } else if (q.includes("vikram")) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-05")!;
-    } else if (q.includes("rajesh") || /\b(?:option\s*1|#1|first)\b/i.test(q)) {
-      selectedGuide = VERIFIED_GUIDES.find((g) => g.id === "G-AGR-01")!;
     }
 
     state.guideId = selectedGuide.id;
@@ -1128,6 +1264,16 @@ export function generateConciergeResponse(
     state.isSelfGuided = isSelfGuided;
     state.step = "completed";
     sessionStates.set(activeKey, state);
+
+    // If siteSlug is somehow missing, reconstruct from history
+    if (!state.siteSlug && history) {
+      const combinedHist = history.map((h) => h.text || h.content || "").join(" ");
+      const histMon = matchSpecificMonument(combinedHist);
+      if (histMon) {
+        state.siteSlug = histMon.slug;
+        state.siteName = histMon.name;
+      }
+    }
 
     // Accurate parsed date
     const visitDate = state.visitDate || (isDateMentionedInQuery(q) ? parseDateFromQuery(q, ist) : ist.tomorrowStr);
