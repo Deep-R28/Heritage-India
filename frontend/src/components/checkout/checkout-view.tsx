@@ -26,18 +26,54 @@ const STANDARD_SLOTS = [
 function normalizeSlot(raw?: string | null): string {
   if (!raw) return "09:00 AM - 12:00 PM (Morning Slot)";
   const lower = raw.toLowerCase().trim();
-  if (lower.includes("06:00") || lower.includes("6:00") || lower.includes("sunrise") || lower.includes("early")) {
-    return "06:00 AM - 09:00 AM (Sunrise Slot)";
-  }
-  if (lower.includes("09:00") || lower.includes("9:00") || lower.includes("10:00") || lower.includes("11:00") || lower.includes("morning")) {
-    return "09:00 AM - 12:00 PM (Morning Slot)";
-  }
-  if (lower.includes("12:00") || lower.includes("01:00") || lower.includes("1:00") || lower.includes("02:00") || lower.includes("2:00") || lower.includes("afternoon") || lower.includes("noon")) {
-    return "12:00 PM - 03:00 PM (Afternoon Slot)";
-  }
-  if (lower.includes("03:00") || lower.includes("3:00") || lower.includes("04:00") || lower.includes("4:00") || lower.includes("05:00") || lower.includes("5:00") || lower.includes("06:00 pm") || lower.includes("sunset") || lower.includes("evening")) {
+
+  // Sunset Slot: 3:00 PM to 6:00 PM (matches 3.30, 4.30, 4:30, 5.15, 16:30, sunset, evening, shaam)
+  if (
+    lower.includes("sunset") ||
+    lower.includes("evening") ||
+    lower.includes("shaam") ||
+    /(?:1[5-8]|0?[3-5])[:.][0-5]\d(?:\s*(?:pm|baje))?/i.test(lower) ||
+    /\b(?:0?[3-5]|1[5-8])\s*(?:pm|baje)\b/i.test(lower) ||
+    lower.includes("03:00") || lower.includes("3:00") || lower.includes("04:00") || lower.includes("4:00") || lower.includes("05:00") || lower.includes("5:00") || lower.includes("06:00 pm")
+  ) {
     return "03:00 PM - 06:00 PM (Sunset Slot)";
   }
+
+  // Afternoon Slot: 12:00 PM to 3:00 PM (matches 12:30, 1.30, 2:15, afternoon, dopahar, noon)
+  if (
+    lower.includes("afternoon") ||
+    lower.includes("dopahar") ||
+    lower.includes("noon") ||
+    /(?:1[2-4]|0?[1-2])[:.][0-5]\d(?:\s*(?:pm|baje))?/i.test(lower) ||
+    /\b(?:12|0?[1-2])\s*(?:pm|baje)\b/i.test(lower) ||
+    lower.includes("12:00") || lower.includes("01:00") || lower.includes("1:00") || lower.includes("02:00") || lower.includes("2:00")
+  ) {
+    return "12:00 PM - 03:00 PM (Afternoon Slot)";
+  }
+
+  // Sunrise Slot: 6:00 AM to 9:00 AM (matches 6:00, 6.30, 7.30, 8:15, sunrise, early, dawn)
+  if (
+    lower.includes("sunrise") ||
+    lower.includes("early") ||
+    lower.includes("dawn") ||
+    /(?:0?[6-8])[:.][0-5]\d(?:\s*(?:am|baje))?/i.test(lower) ||
+    /\b(?:0?[6-8])\s*(?:am|baje)\b/i.test(lower) ||
+    lower.includes("06:00") || lower.includes("6:00") || lower.includes("07:00") || lower.includes("7:00") || lower.includes("08:00") || lower.includes("8:00")
+  ) {
+    return "06:00 AM - 09:00 AM (Sunrise Slot)";
+  }
+
+  // Morning Slot: 9:00 AM to 12:00 PM (matches 9:00, 9.30, 10:15, 11:30, morning, subah)
+  if (
+    lower.includes("morning") ||
+    lower.includes("subah") ||
+    /(?:0?9|1[0-1])[:.][0-5]\d(?:\s*(?:am|baje))?/i.test(lower) ||
+    /\b(?:0?9|1[0-1])\s*(?:am|baje)\b/i.test(lower) ||
+    lower.includes("09:00") || lower.includes("9:00") || lower.includes("10:00") || lower.includes("11:00")
+  ) {
+    return "09:00 AM - 12:00 PM (Morning Slot)";
+  }
+
   return raw;
 }
 
