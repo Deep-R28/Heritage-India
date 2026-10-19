@@ -10,13 +10,12 @@ import { Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { VerifiedSeal } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
-import { localizeGuide, localizePricing, localizeSite } from "@/lib/localize";
+import { localizeGuide, localizeSite } from "@/lib/localize";
 import nearbySitesRaw from "@/data/nearby-sites.json";
 
-export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing }: { guides: Guide[]; pricing: PricingData }) {
+export function GuideVerificationClient({ guides: rawGuides }: { guides: Guide[]; pricing?: PricingData }) {
   const { t, i18n } = useTranslation();
   const guides = useMemo(() => rawGuides.map((g) => localizeGuide(g, i18n.language)), [rawGuides, i18n.language]);
-  const pricing = useMemo(() => localizePricing(rawPricing, i18n.language), [rawPricing, i18n.language]);
   const [query, setQuery] = useState("");
   const [selectedGuideForBooking, setSelectedGuideForBooking] = useState<Guide | null>(null);
 
@@ -133,27 +132,6 @@ export function GuideVerificationClient({ guides: rawGuides, pricing: rawPricing
         )}
       </div>
 
-      <Reveal className="mt-16">
-        <h2 className="mb-6 text-center font-headline text-2xl text-foreground">{t("guides.rateTable.heading")}</h2>
-        <div className="overflow-x-auto rounded-xl border border-hairline">
-          <table className="w-full min-w-[420px] border-collapse text-left">
-            <thead>
-              <tr className="border-b border-hairline">
-                <th className="px-4 py-3 font-label text-xs uppercase tracking-widest text-foreground-muted">{t("guides.rateTable.tier")}</th>
-                <th className="px-4 py-3 font-label text-xs uppercase tracking-widest text-foreground-muted">{t("guides.rateTable.price")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pricing.guideRates.map((rate) => (
-                <tr key={rate.tier} className="border-b border-hairline-strong/60 last:border-b-0">
-                  <td className="px-4 py-4 font-body text-sm text-foreground">{rate.tier}</td>
-                  <td className="px-4 py-4 font-body text-sm text-accent">₹{rate.priceInr}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Reveal>
 
       {/* Site Selection Modal for chosen guide */}
       {selectedGuideForBooking && (

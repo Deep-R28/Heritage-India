@@ -13,6 +13,21 @@ import { CATEGORIES, categoryLabelKey } from "@/lib/categories";
 import { localizeSite } from "@/lib/localize";
 import { api } from "@/lib/api";
 
+function calculateHaversineDistanceKm(userLat: number, userLng: number, siteLat: number, siteLng: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = ((siteLat - userLat) * Math.PI) / 180;
+  const dLon = ((siteLng - userLng) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((userLat * Math.PI) / 180) *
+      Math.cos((siteLat * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const dist = R * c;
+  return dist < 10 ? Math.round(dist * 10) / 10 : Math.round(dist);
+}
+
 export function ExploreClient({
   sites,
   initialSiteSlug,
@@ -22,7 +37,60 @@ export function ExploreClient({
 }) {
   const { t, i18n } = useTranslation();
   const [category, setCategory] = useState("All");
-  const localizedSites = useMemo(() => sites.map((s) => localizeSite(s, i18n.language)), [sites, i18n.language]);
+
+  // User live geolocation state
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("heritage_user_coords");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+            return parsed;
+          }
+        }
+      } catch {}
+    }
+    return null;
+  });
+  const [locationStatus, setLocationStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
+
+  const requestLocation = () => {
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      setLocationStatus("requesting");
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setUserLocation(coords);
+          setLocationStatus("granted");
+          try {
+            localStorage.setItem("heritage_user_coords", JSON.stringify(coords));
+          } catch {}
+        },
+        (err) => {
+          console.warn("Geolocation permission error:", err.message);
+          setLocationStatus("denied");
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
+      );
+    }
+  };
+
+  useEffect(() => {
+    requestLocation();
+  }, []);
+
+  const localizedSites = useMemo(() => {
+    return sites.map((s) => {
+      const loc = localizeSite(s, i18n.language);
+      if (userLocation && typeof s.lat === "number" && typeof s.lng === "number") {
+        const realKm = calculateHaversineDistanceKm(userLocation.lat, userLocation.lng, s.lat, s.lng);
+        return { ...loc, distanceKm: realKm };
+      }
+      return loc;
+    });
+  }, [sites, i18n.language, userLocation]);
+
   const [selected, setSelected] = useState<Site | undefined>(() => {
     if (initialSiteSlug) {
       return sites.find((s) => s.slug === initialSiteSlug);
@@ -188,6 +256,29 @@ export function ExploreClient({
           ))}
         </div>
 
+        {/* GPS Live Distance Banner */}
+        <div className="flex items-center justify-between border-b border-hairline bg-surface/25 px-6 py-2 text-[11px] text-foreground-muted">
+          <span className="flex items-center gap-1.5">
+            <span className={cn("h-2 w-2 rounded-full", userLocation ? "bg-emerald-400 animate-pulse" : "bg-amber-400")} />
+            {userLocation ? (
+              <span className="text-emerald-400 font-medium">Real distance away calculated from your location</span>
+            ) : locationStatus === "requesting" ? (
+              <span>Detecting your location for live distance...</span>
+            ) : (
+              <span>Click to calculate exact distance away</span>
+            )}
+          </span>
+          {!userLocation && (
+            <button
+              type="button"
+              onClick={requestLocation}
+              className="font-label text-[10px] uppercase tracking-wider text-accent hover:underline cursor-pointer"
+            >
+              Enable GPS Location
+            </button>
+          )}
+        </div>
+
         {/* Selected Site Banner (when marker or card clicked) */}
         {selected && (
           <div className="border-b border-accent/40 bg-accent/5 px-6 py-3.5 transition-all">
@@ -214,6 +305,7 @@ export function ExploreClient({
                 <p className="flex items-center gap-1 text-xs text-foreground-muted">
                   <Icon name="location_on" className="text-xs" />
                   {selected.region} · {selected.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${selected.priceInr}`}
+                  {selected.distanceKm !== undefined ? ` · ${selected.distanceKm.toLocaleString()} km away` : ""}
                   {selected.googleRating ? ` · ★${selected.googleRating}` : ""}
                 </p>
                 <div className="mt-1">
@@ -249,7 +341,10 @@ export function ExploreClient({
                   <h3 className="truncate font-headline text-lg text-foreground">{site.name}</h3>
                   <p className="mb-2 flex items-center gap-1 font-body text-xs text-foreground-muted">
                     <Icon name="location_on" className="text-sm" />
-                    {site.region} {site.googleRating ? `· ★${site.googleRating}` : ""} · {site.distanceKm} km
+                    {site.region} {site.googleRating ? `· ★${site.googleRating}` : ""} ·{" "}
+                    <span className={userLocation ? "text-accent font-semibold" : ""}>
+                      {site.distanceKm.toLocaleString()} km away
+                    </span>
                   </p>
                   <CrowdGaugeBar percent={site.crowdPercent} />
                 </div>

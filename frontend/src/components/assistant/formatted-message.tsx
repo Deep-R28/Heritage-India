@@ -43,6 +43,29 @@ export function FormattedMessage({ text }: { text: string }) {
           <span key={`link-${match.index}`} className="my-2 block">
             <Link
               href={href}
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  try {
+                    const url = new URL(href, window.location.origin);
+                    const site = url.searchParams.get("site") || url.searchParams.get("monument") || url.searchParams.get("place");
+                    const party = url.searchParams.get("partySize") || url.searchParams.get("members") || url.searchParams.get("visitors") || url.searchParams.get("tickets");
+                    const date = url.searchParams.get("date") || url.searchParams.get("visitDate");
+                    const slot = url.searchParams.get("slot") || url.searchParams.get("time");
+                    const guide = url.searchParams.get("guide") || url.searchParams.get("guideId") || url.searchParams.get("guideName");
+                    localStorage.setItem(
+                      "heritage_last_chat_booking",
+                      JSON.stringify({
+                        siteSlug: site,
+                        partySize: party ? parseInt(party, 10) : undefined,
+                        visitDate: date,
+                        visitSlot: slot,
+                        guideName: guide,
+                        guideId: guide,
+                      })
+                    );
+                  } catch {}
+                }
+              }}
               className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 font-label text-xs uppercase tracking-wider text-background font-bold shadow-lg transition-transform hover:scale-102 hover:opacity-95"
             >
               <span>💳</span>

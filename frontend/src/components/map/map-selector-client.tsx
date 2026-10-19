@@ -21,6 +21,21 @@ const crowdFilterKey: Record<(typeof CROWD_FILTERS)[number], string> = {
   Busy: "map.crowdFilters.busy",
 };
 
+function calculateHaversineDistanceKm(userLat: number, userLng: number, siteLat: number, siteLng: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = ((siteLat - userLat) * Math.PI) / 180;
+  const dLon = ((siteLng - userLng) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((userLat * Math.PI) / 180) *
+      Math.cos((siteLat * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const dist = R * c;
+  return dist < 10 ? Math.round(dist * 10) / 10 : Math.round(dist);
+}
+
 export function MapSelectorClient({
   sites: rawSites,
   initialSiteSlug,
@@ -29,7 +44,48 @@ export function MapSelectorClient({
   initialSiteSlug?: string;
 }) {
   const { t, i18n } = useTranslation();
-  const sites = useMemo(() => rawSites.map((s) => localizeSite(s, i18n.language)), [rawSites, i18n.language]);
+
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("heritage_user_coords");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+            return parsed;
+          }
+        }
+      } catch {}
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setUserLocation(coords);
+          try {
+            localStorage.setItem("heritage_user_coords", JSON.stringify(coords));
+          } catch {}
+        },
+        () => {},
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
+      );
+    }
+  }, []);
+
+  const sites = useMemo(() => {
+    return rawSites.map((s) => {
+      const loc = localizeSite(s, i18n.language);
+      if (userLocation && typeof s.lat === "number" && typeof s.lng === "number") {
+        const realKm = calculateHaversineDistanceKm(userLocation.lat, userLocation.lng, s.lat, s.lng);
+        return { ...loc, distanceKm: realKm };
+      }
+      return loc;
+    });
+  }, [rawSites, i18n.language, userLocation]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [crowdFilter, setCrowdFilter] = useState<(typeof CROWD_FILTERS)[number]>("Any");

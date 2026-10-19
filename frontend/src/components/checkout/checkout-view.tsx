@@ -12,6 +12,9 @@ import { api, type ApiSite, type ApiGuide } from "@/lib/api";
 import { useAuth } from "@/hooks/use-auth";
 import { SITE_TRANSLATIONS } from "@/lib/site-translations";
 import type { LanguageCode } from "@/i18n/config";
+import nearbySitesRaw from "@/data/nearby-sites.json";
+import guideRegistryRaw from "@/data/guide-registry.json";
+import type { Site } from "@/lib/data";
 
 export function CheckoutView() {
   const router = useRouter();
@@ -19,12 +22,66 @@ export function CheckoutView() {
   const { user, isLoggedIn } = useAuth();
   const { i18n } = useTranslation();
 
-  const siteSlug = searchParams.get("site") || "taj-mahal";
-  const guideId = searchParams.get("guide");
-  const initialDate = searchParams.get("date") || new Date(Date.now() + 86400000).toISOString().split("T")[0];
-  const paramParty = searchParams.get("partySize") || searchParams.get("members") || searchParams.get("tickets");
-  const initialParty = paramParty ? Math.max(1, parseInt(paramParty, 10)) : 2;
-  const initialSlot = searchParams.get("slot") || "09:00 AM (Morning Slot)";
+  // Read any chat booking cached in localStorage
+  let lastChatBooking: {
+    siteSlug?: string;
+    siteName?: string;
+    partySize?: number;
+    visitDate?: string;
+    visitSlot?: string;
+    guideName?: string;
+    guideId?: string;
+  } | null = null;
+  if (typeof window !== "undefined") {
+    try {
+      lastChatBooking = JSON.parse(localStorage.getItem("heritage_last_chat_booking") || "null");
+    } catch {}
+  }
+
+  const rawSiteParam =
+    searchParams.get("site") ||
+    searchParams.get("monument") ||
+    searchParams.get("place") ||
+    searchParams.get("siteSlug") ||
+    searchParams.get("slug") ||
+    lastChatBooking?.siteSlug ||
+    "taj-mahal";
+  const siteSlug = rawSiteParam.trim().toLowerCase().replace(/[\s_]+/g, "-");
+
+  const guideId =
+    searchParams.get("guide") ||
+    searchParams.get("guideId") ||
+    searchParams.get("guideName") ||
+    lastChatBooking?.guideName ||
+    lastChatBooking?.guideId;
+
+  const initialDate =
+    searchParams.get("date") ||
+    searchParams.get("visitDate") ||
+    searchParams.get("day") ||
+    lastChatBooking?.visitDate ||
+    new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+  const paramParty =
+    searchParams.get("partySize") ||
+    searchParams.get("members") ||
+    searchParams.get("visitors") ||
+    searchParams.get("tickets") ||
+    searchParams.get("guests") ||
+    searchParams.get("count");
+  const initialParty = paramParty
+    ? Math.max(1, parseInt(paramParty, 10))
+    : lastChatBooking?.partySize && lastChatBooking.partySize > 0
+    ? lastChatBooking.partySize
+    : 2;
+
+  const initialSlot =
+    searchParams.get("slot") ||
+    searchParams.get("time") ||
+    searchParams.get("visitSlot") ||
+    searchParams.get("timeSlot") ||
+    lastChatBooking?.visitSlot ||
+    "09:00 AM (Morning Slot)";
 
   const [site, setSite] = useState<ApiSite | null>(null);
   const [guide, setGuide] = useState<ApiGuide | null>(null);
@@ -43,6 +100,23 @@ export function CheckoutView() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  // Sync state if searchParams or last chat booking update dynamically
+  useEffect(() => {
+    if (paramParty) {
+      const p = parseInt(paramParty, 10);
+      if (!isNaN(p) && p > 0) setPartySize(p);
+    } else if (lastChatBooking?.partySize) {
+      setPartySize(lastChatBooking.partySize);
+    }
+
+    const d = searchParams.get("date") || searchParams.get("visitDate") || lastChatBooking?.visitDate;
+    if (d) setVisitDate(d);
+
+    const s = searchParams.get("slot") || searchParams.get("time") || lastChatBooking?.visitSlot;
+    if (s) setVisitSlot(s);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   // Form states
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8892");
   const [cardExpiry, setCardExpiry] = useState("09/28");
@@ -53,36 +127,114 @@ export function CheckoutView() {
   useEffect(() => {
     async function loadData() {
       try {
-        const siteData = await api.sites.bySlug(siteSlug);
-        setSite(siteData);
-
-        const guidesRes = await api.guides.verify();
-        if (guidesRes.guides && guidesRes.guides.length > 0) {
-          setAvailableGuides(guidesRes.guides);
-          if (guideId === "none" || guideId === "self") {
-            setGuide(null);
-          } else if (guideId) {
-            const target = guideId.toLowerCase();
-            const matched = guidesRes.guides.find(
-              (g) =>
-                g.id.toLowerCase() === target ||
-                g.licenseId?.toLowerCase() === target ||
-                g.name.toLowerCase().includes(target) ||
-                (target.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
-                (target.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
-                (target.includes("priya") && g.name.toLowerCase().includes("priya")) ||
-                (target.includes("meera") && g.name.toLowerCase().includes("meera")) ||
-                (target.includes("arun") && g.name.toLowerCase().includes("arun")) ||
-                (target.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
-                (target.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
-                (target.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
-                (target.includes("del-04") && g.name.toLowerCase().includes("meera"))
-            );
-            if (matched) setGuide(matched);
-            else setGuide(guidesRes.guides[0]);
-          } else {
-            setGuide(guidesRes.guides[0]);
+        let siteData: ApiSite | null = null;
+        try {
+          siteData = await api.sites.bySlug(siteSlug);
+        } catch {
+          const fallback = (nearbySitesRaw as unknown as Site[]).find(
+            (s) =>
+              s.slug === siteSlug ||
+              s.id === siteSlug ||
+              s.name.toLowerCase() === rawSiteParam.toLowerCase() ||
+              s.slug.replace(/-/g, " ") === rawSiteParam.toLowerCase()
+          );
+          if (fallback) {
+            siteData = {
+              id: fallback.id,
+              slug: fallback.slug,
+              name: fallback.name,
+              city: fallback.region.split(",")[0]?.trim() || fallback.region,
+              state: fallback.region.split(",")[1]?.trim() || fallback.region,
+              category: fallback.category,
+              lat: fallback.lat,
+              lng: fallback.lng,
+              entryFeeINR: fallback.priceInr,
+              openingHours: fallback.openHours,
+              images: fallback.gallery && fallback.gallery.length > 0 ? fallback.gallery : [fallback.image],
+              zone: fallback.zone || "Northern",
+              type: fallback.type || fallback.category,
+              established: null,
+              bestTime: fallback.bestTime || null,
+              weeklyOff: fallback.weeklyOff || "Open All Days",
+              googleRating: fallback.googleRating || 4.5,
+              reviewCount: 0.5,
+              significance: null,
+              timeNeeded: fallback.timeNeeded || 2.0,
+              dslrAllowed: true,
+              airportNearby: false,
+              crowd: { level: "LOW", percent: fallback.crowdPercent, lastUpdated: new Date().toISOString() },
+            };
           }
+        }
+        if (siteData) setSite(siteData);
+
+        let guidesList: ApiGuide[] = [];
+        try {
+          const guidesRes = await api.guides.verify();
+          if (guidesRes.guides && guidesRes.guides.length > 0) {
+            guidesList = guidesRes.guides;
+          }
+        } catch {}
+
+        if (guidesList.length === 0) {
+          guidesList = (guideRegistryRaw as unknown as Array<{
+            id: string;
+            name: string;
+            asiId: string | null;
+            verified: boolean;
+            photo: string | null;
+            experienceYears: number;
+            languages: string[];
+            specialty: string;
+            region: string;
+            rateInr: number;
+            rating: number;
+          }>).map((g) => ({
+            id: g.id,
+            name: g.name,
+            licenseId: g.asiId || "ASI-VERIFIED",
+            licenseStatus: g.verified ? "VERIFIED" : "UNVERIFIED",
+            experienceYears: g.experienceYears,
+            languages: g.languages,
+            ratePerHourINR: g.rateInr,
+            standardRateINR: Math.round(g.rateInr * 0.7),
+            photoUrl: g.photo,
+          }));
+        }
+
+        setAvailableGuides(guidesList);
+
+        if (
+          guideId === "none" ||
+          guideId === "self" ||
+          String(guideId).toLowerCase().includes("none") ||
+          String(guideId).toLowerCase().includes("self")
+        ) {
+          setGuide(null);
+        } else if (guideId) {
+          const target = String(guideId).toLowerCase().trim();
+          const matched = guidesList.find(
+            (g) =>
+              g.id.toLowerCase() === target ||
+              g.licenseId?.toLowerCase() === target ||
+              g.name.toLowerCase() === target ||
+              g.name.toLowerCase().includes(target) ||
+              target.includes(g.name.toLowerCase()) ||
+              (target.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
+              (target.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
+              (target.includes("priya") && g.name.toLowerCase().includes("priya")) ||
+              (target.includes("meera") && g.name.toLowerCase().includes("meera")) ||
+              (target.includes("arun") && g.name.toLowerCase().includes("arun")) ||
+              (target.includes("sanjay") && g.name.toLowerCase().includes("sanjay")) ||
+              (target.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
+              (target.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
+              (target.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
+              (target.includes("del-04") && g.name.toLowerCase().includes("meera"))
+          );
+          if (matched) setGuide(matched);
+          else setGuide(guidesList[0]);
+        } else {
+          setGuide(guidesList[0]);
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : "Failed to load checkout details";
@@ -92,6 +244,7 @@ export function CheckoutView() {
       }
     }
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteSlug, guideId]);
 
   // Pricing calculations

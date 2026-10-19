@@ -156,7 +156,9 @@ CONVERSATIONAL TICKET & GUIDE BOOKING WORKFLOW:
 
 7. SUMMARY, PAYMENT & LOGIN REMINDER:
    Once the guide is selected, present the itemized booking summary and provide the checkout payment link:
-   [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=<slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot>&guide=<guideId>)
+   [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=<lowercase_slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot_time>&guide=<guide_name>)
+   Example: [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=statue-of-unity&partySize=3&date=2026-10-21&slot=09:00%20AM&guide=Rajesh%20Kumar)
+   Ensure the parameters in the link match the EXACT monument slug, visitor count, date, time slot, and guide name from your summary conversation.
    Always include a helpful account note:
    "📌 If you haven't logged in yet, please [Log In](/login) or [Sign Up](/signup) so your e-tickets, live crowd updates, and real-time confirmation notifications are permanently linked to your Heritage dashboard!"
 

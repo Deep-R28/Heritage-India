@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -10,160 +11,203 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/cn";
-import { localizePricing, localizeSite, localizeSiteName } from "@/lib/localize";
-
-const tierMeta = [
-  { key: "scholar", featured: false },
-  { key: "curated", featured: true },
-  { key: "odyssey", featured: false },
-] as const;
+import { localizePricing, localizeSite } from "@/lib/localize";
+import { CATEGORIES, categoryLabelKey } from "@/lib/categories";
 
 export function PricingView({ pricing: rawPricing, sites }: { pricing: PricingData; sites: Site[] }) {
   const { t, i18n } = useTranslation();
   const pricing = localizePricing(rawPricing, i18n.language);
-  const localizedSites = sites.map((s) => localizeSite(s, i18n.language));
-  const siteById = new Map(localizedSites.map((s) => [s.id, s]));
-  const siteBySlug = new Map(localizedSites.map((s) => [s.slug, s]));
-  const siteByName = new Map(localizedSites.map((s) => [s.name, s]));
-  const tierCopy = tierMeta.map((m) => ({
-    ...m,
-    title: t(`pricing.tiers.${m.key}.title`),
-    description: t(`pricing.tiers.${m.key}.description`),
-    features: t(`pricing.tiers.${m.key}.features`, { returnObjects: true }) as string[],
-  }));
+  const localizedSites = useMemo(() => sites.map((s) => localizeSite(s, i18n.language)), [sites, i18n.language]);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+
+  const filteredSites = useMemo(() => {
+    return localizedSites.filter((s) => {
+      if (category !== "All" && s.category !== category) return false;
+      if (search.trim()) {
+        const q = search.trim().toLowerCase();
+        const raw = sites.find((r) => r.id === s.id);
+        const matchesName = s.name.toLowerCase().includes(q) || (raw ? raw.name.toLowerCase().includes(q) : false);
+        const matchesRegion = s.region.toLowerCase().includes(q) || (raw ? raw.region.toLowerCase().includes(q) : false);
+        const matchesCategory = s.category.toLowerCase().includes(q);
+        if (!matchesName && !matchesRegion && !matchesCategory) return false;
+      }
+      return true;
+    });
+  }, [localizedSites, category, search, sites]);
 
   return (
     <div className="mx-auto max-w-content px-6 py-24 md:px-8">
-      <Reveal className="mx-auto mb-20 max-w-3xl text-center">
-        <h1 className="mb-6 font-headline text-5xl leading-tight text-foreground md:text-6xl">
+      <Reveal className="mx-auto mb-16 max-w-3xl text-center">
+        <h1 className="mb-4 font-headline text-5xl leading-tight text-foreground md:text-6xl">
           {t("pricing.hero.title")}
         </h1>
         <p className="font-body text-lg font-light text-foreground-muted md:text-xl">
-          {t("pricing.hero.subtitle")}
+          Official, transparent ticket entry fees across all {sites.length} heritage monuments in India.
         </p>
       </Reveal>
 
       {/* Monument entry fees */}
-      <section className="mb-24">
-        <div className="mb-8 flex items-center justify-between border-b border-hairline pb-4">
-          <h2 className="font-headline text-3xl text-foreground">{t("pricing.entryFees.heading")}</h2>
-          <span className="border-b border-accent pb-1 font-label text-xs font-medium uppercase tracking-widest text-accent">
-            {t("pricing.entryFees.currency")}
+      <section className="mb-20">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-hairline pb-4">
+          <div>
+            <h2 className="font-headline text-3xl text-foreground">{t("pricing.entryFees.heading")}</h2>
+            <p className="mt-1 font-body text-xs text-foreground-muted">
+              Standard universal entrance fee per visitor for all tourists.
+            </p>
+          </div>
+          <span className="self-start sm:self-auto border-b border-accent pb-1 font-label text-xs font-medium uppercase tracking-widest text-accent">
+            {t("pricing.entryFees.currency")} (All Tourists)
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {pricing.entryFees.map((fee, i) => {
-            const site = siteById.get(fee.siteId) ?? siteBySlug.get(fee.siteId) ?? siteByName.get(fee.siteName);
-            const siteDisplayName = site ? site.name : localizeSiteName(fee.siteName, i18n.language);
-            return (
-              <Reveal key={fee.siteId} delay={i * 0.08}>
-                <Card className="flex h-full flex-col overflow-hidden">
-                  <div className="relative h-48 w-full">
-                    {site && (
-                      <Image
-                        src={site.image}
-                        alt={siteDisplayName}
-                        fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent" />
-                    <div className="absolute bottom-4 left-6">
-                      <h3 className="font-headline text-2xl text-foreground">{siteDisplayName}</h3>
-                      {site && (
-                        <p className="mt-1 font-label text-xs uppercase tracking-widest text-accent">
-                          {site.region}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex flex-grow flex-col justify-between gap-6 p-6">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-foreground-muted">{t("pricing.entryFees.domestic")}</span>
-                        <span className="font-medium text-foreground">₹{fee.indianInr}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-foreground-muted">{t("pricing.entryFees.foreign")}</span>
-                        <span className="font-medium text-foreground">₹{fee.foreignInr}</span>
-                      </div>
-                    </div>
-                    {site && (
-                      <Link href={`/sites/${site.slug}`}>
-                        <Button variant="secondary" size="sm" className="w-full">
-                          {t("pricing.entryFees.viewSite")}
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </Card>
-              </Reveal>
-            );
-          })}
-        </div>
-        <p className="mt-6 font-body text-sm italic text-foreground-muted">{pricing.feeBreakdownNote}</p>
-      </section>
 
-      {/* Guide tiers */}
-      <section>
-        <div className="mb-8 flex items-center justify-between border-b border-hairline pb-4">
-          <h2 className="font-headline text-3xl text-foreground">{t("pricing.guidesSection.heading")}</h2>
+        {/* Search and Category Filter Bar */}
+        <div className="mb-8 flex flex-col gap-4">
+          <div className="relative w-full max-w-md">
+            <Icon name="search" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-foreground-muted" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("explore.searchPlaceholder") || "Search places, cities, states..."}
+              className="w-full rounded-xl border border-hairline bg-surface py-2.5 pl-10 pr-9 font-body text-xs text-foreground placeholder:text-foreground-muted focus:border-accent focus:outline-none"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-accent"
+              >
+                <Icon name="close" className="text-sm" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
+            {CATEGORIES.slice(0, 10).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={cn(
+                  "shrink-0 rounded-full border px-3.5 py-1 font-label text-xs uppercase tracking-wider transition-colors",
+                  category === c
+                    ? "border-accent bg-accent/15 text-accent font-semibold"
+                    : "border-hairline text-foreground-muted hover:border-accent/40 hover:text-foreground",
+                )}
+              >
+                {t(categoryLabelKey(c))}
+              </button>
+            ))}
+          </div>
         </div>
-        <Card className="p-1">
-          <div className="grid grid-cols-1 divide-y divide-hairline md:grid-cols-3 md:divide-x md:divide-y-0">
-            {tierCopy.map((tier, i) => {
-              const rate = pricing.guideRates[i];
-              const canonicalTier = rawPricing.guideRates[i]?.tier ?? "";
-              return (
-                <div
-                  key={tier.title}
-                  className={cn(
-                    "relative flex h-full flex-col p-8 transition-colors duration-500 hover:bg-surface-hover/40",
-                    tier.featured && "bg-accent/5",
-                  )}
-                >
-                  {tier.featured && <div className="absolute inset-x-0 top-0 h-[2px] bg-accent" />}
-                  <div className="mb-6">
-                    <div className="mb-2 flex items-start justify-between gap-2">
-                      <h3 className="font-headline text-xl text-foreground">{tier.title}</h3>
-                      {tier.featured && (
-                        <span className="shrink-0 rounded-sm bg-accent px-2 py-1 font-label text-[10px] uppercase tracking-widest text-accent-foreground">
-                          {t("pricing.guidesSection.recommended")}
-                        </span>
-                      )}
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredSites.map((site, i) => (
+            <Reveal key={site.id} delay={Math.min(i * 0.04, 0.4)}>
+              <Card className="flex h-full flex-col overflow-hidden transition-all hover:border-accent/40">
+                <div className="relative h-48 w-full bg-surface-container">
+                  {site.image ? (
+                    <Image
+                      src={site.image}
+                      alt={site.name}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs text-foreground-muted">
+                      No image
                     </div>
-                    <p className="font-body text-sm font-light text-foreground-muted">{tier.description}</p>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                    <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent backdrop-blur-sm">
+                      {t(categoryLabelKey(site.category))}
+                    </span>
+                    {site.zone && (
+                      <span className="rounded-full bg-black/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-300 backdrop-blur-sm">
+                        {site.zone}
+                      </span>
+                    )}
                   </div>
-                  <div className="mb-8">
-                    <div className="mb-1 font-headline text-3xl text-accent">
-                      ₹{rate?.priceInr}
-                      <span className="font-body text-lg text-foreground-muted">
-                        {" "}
-                        / {canonicalTier.includes("Multi") || canonicalTier.toLowerCase().includes("full")
-                          ? t("pricing.guidesSection.perDay")
-                          : t("pricing.guidesSection.perTrip")}
+                  {site.googleRating && (
+                    <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/80 px-2.5 py-0.5 text-xs font-semibold text-amber-300 backdrop-blur-sm">
+                      ★ {site.googleRating}
+                    </span>
+                  )}
+                  <div className="absolute bottom-3 left-4 right-4">
+                    <h3 className="font-headline text-xl font-bold text-foreground line-clamp-1">{site.name}</h3>
+                    <p className="mt-0.5 font-label text-xs uppercase tracking-wider text-accent/90 line-clamp-1">
+                      {site.region}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-grow flex-col justify-between gap-5 p-5">
+                  <div className="space-y-2.5">
+                    {/* Common Universal Entry Fee */}
+                    <div className="flex items-center justify-between rounded-lg bg-surface-elevated/40 p-2.5 border border-hairline">
+                      <span className="font-label text-xs uppercase tracking-wider text-foreground-muted">
+                        {t("siteDetail.entryFee") || "Ticket Price"}
+                      </span>
+                      <span className="font-mono text-base font-bold text-accent">
+                        {site.priceInr === 0 ? (t("explore.freeEntry") || "Free Entry") : `₹${site.priceInr}`}
                       </span>
                     </div>
+
+                    <div className="flex items-center justify-between text-xs text-foreground-muted px-1">
+                      <span>{t("siteDetail.openHours") || "Hours"}</span>
+                      <span className="truncate max-w-[170px] text-right font-medium text-foreground">
+                        {site.openHours || "Open All Days"}
+                      </span>
+                    </div>
+
+                    {site.timeNeeded && (
+                      <div className="flex items-center justify-between text-xs text-foreground-muted px-1">
+                        <span>Time Needed</span>
+                        <span className="font-medium text-foreground">~{site.timeNeeded} hrs</span>
+                      </div>
+                    )}
                   </div>
-                  <ul className="mb-8 flex-grow space-y-3 font-body text-sm text-foreground">
-                    {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-3">
-                        <Icon name="check" className="text-[18px] text-accent" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link href="/guides/verify">
-                    <Button className="w-full" variant={tier.featured ? "primary" : "secondary"}>
-                      {t("pricing.guidesSection.bookCta")}
-                    </Button>
-                  </Link>
+
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-hairline">
+                    <Link href={`/sites/${site.slug}`}>
+                      <Button variant="secondary" size="sm" className="w-full text-xs">
+                        {t("pricing.entryFees.viewSite") || "View Site"}
+                      </Button>
+                    </Link>
+                    <Link href={`/checkout?site=${site.slug}&partySize=2`}>
+                      <Button size="sm" className="w-full text-xs">
+                        Book Tickets
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-              );
-            })}
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+
+        {filteredSites.length === 0 && (
+          <div className="py-16 text-center">
+            <Icon name="search_off" className="mx-auto mb-3 text-4xl text-foreground-muted" />
+            <p className="font-headline text-lg text-foreground">No monuments found matching &ldquo;{search}&rdquo;</p>
+            <button
+              onClick={() => {
+                setSearch("");
+                setCategory("All");
+              }}
+              className="mt-3 text-xs uppercase tracking-wider text-accent hover:underline"
+            >
+              Reset Filters
+            </button>
           </div>
-        </Card>
+        )}
+
+        <p className="mt-8 font-body text-sm italic text-foreground-muted text-center">
+          {pricing.feeBreakdownNote || "All prices shown include ASI entry fees, applicable taxes, and platform service charge — no hidden costs at checkout."}
+        </p>
       </section>
     </div>
   );

@@ -1146,7 +1146,24 @@ export function generateConciergeResponse(
     const taxes = Math.round(subtotal * 0.05);
     const grandTotal = subtotal + conciergeFee + taxes;
 
-    const checkoutUrl = `/checkout?site=${siteSlug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${selectedGuide.id}`;
+    const checkoutUrl = `/checkout?site=${siteSlug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${encodeURIComponent(selectedGuide.name)}&guideId=${selectedGuide.id}`;
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(
+          "heritage_last_chat_booking",
+          JSON.stringify({
+            siteSlug,
+            siteName,
+            partySize,
+            visitDate,
+            visitSlot,
+            guideId: selectedGuide.id,
+            guideName: selectedGuide.name,
+            totalINR: grandTotal,
+          })
+        );
+      } catch {}
+    }
     const stepLang = detectedLang !== "en" ? detectedLang : state.lang || "en";
 
     if (stepLang === "hinglish") {

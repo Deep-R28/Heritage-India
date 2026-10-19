@@ -162,9 +162,18 @@ router.get("/:slug", async (req, res, next) => {
   try {
     const { slug } = req.params;
     const locale = (req.query.locale as string) || "en";
+    const normalizedSlug = slug.trim().toLowerCase().replace(/[\s_]+/g, "-");
+    const nameVariant = slug.trim().replace(/[-_]+/g, " ");
 
-    const site = await prisma.site.findUnique({
-      where: { slug },
+    const site = await prisma.site.findFirst({
+      where: {
+        OR: [
+          { slug: slug },
+          { slug: normalizedSlug },
+          { name: { equals: slug } },
+          { name: { equals: nameVariant } },
+        ],
+      },
       include: {
         content: true,
       },
