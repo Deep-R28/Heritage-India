@@ -56,9 +56,41 @@ export function ChatClient() {
     );
 
     // Finalize message with complete text and detected language
+    const finalText = reply.text || streamed;
     setMessages((m) =>
-      m.map((msg) => (msg.id === assistantMsgId ? { ...msg, text: reply.text || streamed, language: reply.language } : msg))
+      m.map((msg) => (msg.id === assistantMsgId ? { ...msg, text: finalText, language: reply.language } : msg))
     );
+
+    // Sync any checkout booking parameters to localStorage immediately
+    if (typeof window !== "undefined" && finalText) {
+      try {
+        const linkMatch = finalText.match(/(?:href=["']|\()([^"')\s]*\/checkout\?[^"')\s]+)/i);
+        if (linkMatch && linkMatch[1]) {
+          const rawUrl = linkMatch[1];
+          const urlObj = new URL(rawUrl, window.location.origin);
+          const site = urlObj.searchParams.get("site") || urlObj.searchParams.get("monument") || urlObj.searchParams.get("place") || urlObj.searchParams.get("siteSlug");
+          const party = urlObj.searchParams.get("partySize") || urlObj.searchParams.get("members") || urlObj.searchParams.get("visitors") || urlObj.searchParams.get("tickets");
+          const date = urlObj.searchParams.get("date") || urlObj.searchParams.get("visitDate");
+          const slot = urlObj.searchParams.get("slot") || urlObj.searchParams.get("time") || urlObj.searchParams.get("visitSlot");
+          const guide = urlObj.searchParams.get("guide") || urlObj.searchParams.get("guideId") || urlObj.searchParams.get("guideName");
+
+          if (site) {
+            localStorage.setItem(
+              "heritage_last_chat_booking",
+              JSON.stringify({
+                siteSlug: site,
+                partySize: party ? parseInt(party, 10) : undefined,
+                visitDate: date,
+                visitSlot: slot,
+                guideName: guide,
+                guideId: guide,
+              })
+            );
+          }
+        }
+      } catch {}
+    }
+
     setSending(false);
   };
 

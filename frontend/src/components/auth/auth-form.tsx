@@ -44,6 +44,14 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
         await login({ email, password });
       }
 
+      if (redirectParam) {
+        if (typeof window !== "undefined") {
+          sessionStorage.removeItem("pending_booking_draft");
+        }
+        router.push(redirectParam);
+        return;
+      }
+
       // Check if there is a pending booking draft to auto-finalize
       if (typeof window !== "undefined") {
         const rawDraft = sessionStorage.getItem("pending_booking_draft");
@@ -53,7 +61,10 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
             const booking = await api.bookings.create({
               siteId: draft.siteId,
               guideId: draft.guideId,
+              guideName: draft.guideName,
               visitDate: draft.visitDate,
+              visitSlot: draft.visitSlot,
+              time: draft.visitSlot,
               partySize: draft.partySize,
               leadVisitor: draft.leadVisitor,
               amountPaid: draft.totalINR,
@@ -67,9 +78,7 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
         }
       }
 
-      if (redirectParam) {
-        router.push(redirectParam);
-      } else if (isSignup) {
+      if (isSignup) {
         router.push("/onboarding");
       } else {
         router.push("/dashboard");

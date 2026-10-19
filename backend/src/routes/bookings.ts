@@ -37,14 +37,28 @@ router.post("/", optionalAuth, async (req, res, next) => {
     if (!site) throw new AppError(404, "Site not found", "NOT_FOUND");
 
     let guide = null;
-    if (guideId) {
+    const isSelf =
+      !guideId ||
+      guideId === "none" ||
+      guideId === "self" ||
+      guideId.toLowerCase().includes("none") ||
+      guideId.toLowerCase().includes("self");
+
+    if (!isSelf && guideId) {
       guide = await prisma.guide.findFirst({
         where: {
           OR: [
             { id: guideId },
             { licenseId: guideId },
+            { name: { contains: guideId } },
             ...(guideName ? [{ name: { contains: guideName } }] : []),
           ],
+        },
+      });
+    } else if (guideName && !guideName.toLowerCase().includes("self") && !guideName.toLowerCase().includes("none")) {
+      guide = await prisma.guide.findFirst({
+        where: {
+          name: { contains: guideName },
         },
       });
     }

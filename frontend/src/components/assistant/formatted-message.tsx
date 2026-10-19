@@ -35,32 +35,43 @@ export function FormattedMessage({ text }: { text: string }) {
         parts.push(renderBold(str.substring(lastIdx, match.index), `sub-${lastIdx}`));
       }
       const label = match[1];
-      const href = match[2];
-      const isCheckout = href.startsWith("/checkout");
+      const rawHref = match[2];
+      const isCheckout = rawHref.startsWith("/checkout") || rawHref.includes("/checkout");
 
       if (isCheckout) {
+        let targetHref = rawHref;
+        let siteParam: string | null = null;
+        let partyParam: string | null = null;
+        let dateParam: string | null = null;
+        let slotParam: string | null = null;
+        let guideParam: string | null = null;
+
+        try {
+          const url = new URL(rawHref, typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
+          targetHref = `${url.pathname}${url.search}`;
+          siteParam = url.searchParams.get("site") || url.searchParams.get("monument") || url.searchParams.get("place") || url.searchParams.get("siteSlug");
+          partyParam = url.searchParams.get("partySize") || url.searchParams.get("members") || url.searchParams.get("visitors") || url.searchParams.get("tickets");
+          dateParam = url.searchParams.get("date") || url.searchParams.get("visitDate");
+          slotParam = url.searchParams.get("slot") || url.searchParams.get("time") || url.searchParams.get("visitSlot");
+          guideParam = url.searchParams.get("guide") || url.searchParams.get("guideId") || url.searchParams.get("guideName");
+        } catch {}
+
         parts.push(
           <span key={`link-${match.index}`} className="my-2 block">
             <Link
-              href={href}
+              href={targetHref}
               onClick={() => {
                 if (typeof window !== "undefined") {
                   try {
-                    const url = new URL(href, window.location.origin);
-                    const site = url.searchParams.get("site") || url.searchParams.get("monument") || url.searchParams.get("place");
-                    const party = url.searchParams.get("partySize") || url.searchParams.get("members") || url.searchParams.get("visitors") || url.searchParams.get("tickets");
-                    const date = url.searchParams.get("date") || url.searchParams.get("visitDate");
-                    const slot = url.searchParams.get("slot") || url.searchParams.get("time");
-                    const guide = url.searchParams.get("guide") || url.searchParams.get("guideId") || url.searchParams.get("guideName");
                     localStorage.setItem(
                       "heritage_last_chat_booking",
                       JSON.stringify({
-                        siteSlug: site,
-                        partySize: party ? parseInt(party, 10) : undefined,
-                        visitDate: date,
-                        visitSlot: slot,
-                        guideName: guide,
-                        guideId: guide,
+                        siteSlug: siteParam,
+                        partySize: partyParam ? parseInt(partyParam, 10) : undefined,
+                        visitDate: dateParam,
+                        visitSlot: slotParam,
+                        guideName: guideParam,
+                        guideId: guideParam,
                       })
                     );
                   } catch {}
@@ -78,7 +89,7 @@ export function FormattedMessage({ text }: { text: string }) {
         parts.push(
           <Link
             key={`link-${match.index}`}
-            href={href}
+            href={rawHref}
             className="text-accent underline font-medium hover:opacity-80"
           >
             {label}

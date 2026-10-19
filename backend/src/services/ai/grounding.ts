@@ -44,7 +44,7 @@ export function detectLanguage(text: string, defaultLang = "en"): { code: string
   return LANGUAGE_REGISTRY.en;
 }
 
-export async function buildGroundingContext(userPrompt: string): Promise<string> {
+export async function buildGroundingContext(userPrompt: string, recentHistoryText = ""): Promise<string> {
   const promptLower = userPrompt.toLowerCase();
 
   // Load all sites and guides for matching
@@ -53,7 +53,7 @@ export async function buildGroundingContext(userPrompt: string): Promise<string>
     prisma.guide.findMany({ where: { licenseStatus: "VERIFIED" } }),
   ]);
 
-  // Identify mentioned sites or query keywords
+  // Identify mentioned sites or query keywords from user prompt
   const matchedSites = allSites.filter(
     (s) =>
       promptLower.includes(s.name.toLowerCase()) ||
@@ -61,6 +61,19 @@ export async function buildGroundingContext(userPrompt: string): Promise<string>
       promptLower.includes(s.city.toLowerCase()) ||
       promptLower.includes(s.state.toLowerCase())
   );
+
+  // If no site is explicitly mentioned in current prompt, check recent history for the active site
+  if (matchedSites.length === 0 && recentHistoryText) {
+    const histLower = recentHistoryText.toLowerCase();
+    const historyMatched = allSites.filter(
+      (s) =>
+        histLower.includes(s.name.toLowerCase()) ||
+        histLower.includes(s.slug.toLowerCase())
+    );
+    if (historyMatched.length > 0) {
+      matchedSites.push(...historyMatched.slice(-2));
+    }
+  }
 
   const relevantSites = matchedSites.length > 0 ? matchedSites : allSites.slice(0, 5);
 
@@ -157,7 +170,9 @@ CONVERSATIONAL TICKET & GUIDE BOOKING WORKFLOW:
 7. SUMMARY, PAYMENT & LOGIN REMINDER:
    Once the guide is selected, present the itemized booking summary and provide the checkout payment link:
    [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=<lowercase_slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot_time>&guide=<guide_name>)
-   Example: [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=statue-of-unity&partySize=3&date=2026-10-21&slot=09:00%20AM&guide=Rajesh%20Kumar)
+   - If user selected Self-Guided (No Guide), use guide=self in the link: /checkout?site=<slug>&partySize=<count>&date=<YYYY-MM-DD>&slot=<slot_time>&guide=self
+   - Example with guide: [Click Here to Proceed to Payment & Confirm Ticket](/checkout?site=statue-of-unity&partySize=3&date=2026-10-21&slot=09:00%20AM&guide=Rajesh%20Kumar)
+   - Always use relative path /checkout?... (never prepend external domains or full URLs).
    Ensure the parameters in the link match the EXACT monument slug, visitor count, date, time slot, and guide name from your summary conversation.
    Always include a helpful account note:
    "📌 If you haven't logged in yet, please [Log In](/login) or [Sign Up](/signup) so your e-tickets, live crowd updates, and real-time confirmation notifications are permanently linked to your Heritage dashboard!"

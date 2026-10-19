@@ -165,7 +165,7 @@ router.get("/:slug", async (req, res, next) => {
     const normalizedSlug = slug.trim().toLowerCase().replace(/[\s_]+/g, "-");
     const nameVariant = slug.trim().replace(/[-_]+/g, " ");
 
-    const site = await prisma.site.findFirst({
+    let site = await prisma.site.findFirst({
       where: {
         OR: [
           { slug: slug },
@@ -178,6 +178,28 @@ router.get("/:slug", async (req, res, next) => {
         content: true,
       },
     });
+
+    if (!site) {
+      const allSites = await prisma.site.findMany({ include: { content: true } });
+      const target = normalizedSlug.replace(/[-_]+/g, " ").toLowerCase();
+      site =
+        allSites.find((s) => {
+          const sSlugClean = s.slug.toLowerCase().replace(/[-_]+/g, " ");
+          const sName = s.name.toLowerCase();
+          return (
+            sSlugClean === target ||
+            sName === target ||
+            target.includes(sSlugClean) ||
+            sSlugClean.includes(target) ||
+            target.includes(sName) ||
+            sName.includes(target) ||
+            (target.includes("hampi") && sSlugClean.includes("hampi")) ||
+            (target.includes("bangalore") && sSlugClean.includes("bangalore")) ||
+            (target.includes("unity") && sSlugClean.includes("unity")) ||
+            (target.includes("taj") && sSlugClean.includes("taj"))
+          );
+        }) || null;
+    }
 
     if (!site) {
       throw new AppError(404, "Site not found", "NOT_FOUND");

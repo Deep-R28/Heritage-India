@@ -16,6 +16,49 @@ import nearbySitesRaw from "@/data/nearby-sites.json";
 import guideRegistryRaw from "@/data/guide-registry.json";
 import type { Site } from "@/lib/data";
 
+const STANDARD_SLOTS = [
+  { value: "06:00 AM - 09:00 AM (Sunrise Slot)", label: "🌅 06:00 AM – 09:00 AM (Sunrise Slot — Best Light & Lowest Crowd)" },
+  { value: "09:00 AM - 12:00 PM (Morning Slot)", label: "☀️ 09:00 AM – 12:00 PM (Morning Slot)" },
+  { value: "12:00 PM - 03:00 PM (Afternoon Slot)", label: "🌤️ 12:00 PM – 03:00 PM (Afternoon Slot)" },
+  { value: "03:00 PM - 06:00 PM (Sunset Slot)", label: "🌇 03:00 PM – 06:00 PM (Sunset Slot — Golden Hour)" },
+];
+
+function normalizeSlot(raw?: string | null): string {
+  if (!raw) return "09:00 AM - 12:00 PM (Morning Slot)";
+  const lower = raw.toLowerCase().trim();
+  if (lower.includes("06:00") || lower.includes("6:00") || lower.includes("sunrise") || lower.includes("early")) {
+    return "06:00 AM - 09:00 AM (Sunrise Slot)";
+  }
+  if (lower.includes("09:00") || lower.includes("9:00") || lower.includes("10:00") || lower.includes("11:00") || lower.includes("morning")) {
+    return "09:00 AM - 12:00 PM (Morning Slot)";
+  }
+  if (lower.includes("12:00") || lower.includes("01:00") || lower.includes("1:00") || lower.includes("02:00") || lower.includes("2:00") || lower.includes("afternoon") || lower.includes("noon")) {
+    return "12:00 PM - 03:00 PM (Afternoon Slot)";
+  }
+  if (lower.includes("03:00") || lower.includes("3:00") || lower.includes("04:00") || lower.includes("4:00") || lower.includes("05:00") || lower.includes("5:00") || lower.includes("06:00 pm") || lower.includes("sunset") || lower.includes("evening")) {
+    return "03:00 PM - 06:00 PM (Sunset Slot)";
+  }
+  return raw;
+}
+
+function normalizeDateStr(raw?: string | null): string {
+  if (!raw) return new Date(Date.now() + 86400000).toISOString().split("T")[0];
+  const trimmed = raw.trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  const dmyMatch = trimmed.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (dmyMatch) {
+    const [, d, m, y] = dmyMatch;
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+  try {
+    const parsed = new Date(trimmed);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split("T")[0];
+    }
+  } catch {}
+  return new Date(Date.now() + 86400000).toISOString().split("T")[0];
+}
+
 export function CheckoutView() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,12 +98,12 @@ export function CheckoutView() {
     lastChatBooking?.guideName ||
     lastChatBooking?.guideId;
 
-  const initialDate =
+  const rawDate =
     searchParams.get("date") ||
     searchParams.get("visitDate") ||
     searchParams.get("day") ||
-    lastChatBooking?.visitDate ||
-    new Date(Date.now() + 86400000).toISOString().split("T")[0];
+    lastChatBooking?.visitDate;
+  const initialDate = normalizeDateStr(rawDate);
 
   const paramParty =
     searchParams.get("partySize") ||
@@ -75,13 +118,13 @@ export function CheckoutView() {
     ? lastChatBooking.partySize
     : 2;
 
-  const initialSlot =
+  const rawSlot =
     searchParams.get("slot") ||
     searchParams.get("time") ||
     searchParams.get("visitSlot") ||
     searchParams.get("timeSlot") ||
-    lastChatBooking?.visitSlot ||
-    "09:00 AM (Morning Slot)";
+    lastChatBooking?.visitSlot;
+  const initialSlot = normalizeSlot(rawSlot);
 
   const [site, setSite] = useState<ApiSite | null>(null);
   const [guide, setGuide] = useState<ApiGuide | null>(null);
@@ -102,19 +145,39 @@ export function CheckoutView() {
 
   // Sync state if searchParams or last chat booking update dynamically
   useEffect(() => {
-    if (paramParty) {
-      const p = parseInt(paramParty, 10);
-      if (!isNaN(p) && p > 0) setPartySize(p);
-    } else if (lastChatBooking?.partySize) {
-      setPartySize(lastChatBooking.partySize);
+    let cached: {
+      siteSlug?: string;
+      partySize?: number;
+      visitDate?: string;
+      visitSlot?: string;
+      guideName?: string;
+      guideId?: string;
+    } | null = null;
+    if (typeof window !== "undefined") {
+      try {
+        cached = JSON.parse(localStorage.getItem("heritage_last_chat_booking") || "null");
+      } catch {}
     }
 
-    const d = searchParams.get("date") || searchParams.get("visitDate") || lastChatBooking?.visitDate;
-    if (d) setVisitDate(d);
+    const p =
+      searchParams.get("partySize") ||
+      searchParams.get("members") ||
+      searchParams.get("visitors") ||
+      searchParams.get("tickets") ||
+      searchParams.get("guests") ||
+      searchParams.get("count");
+    if (p) {
+      const parsed = parseInt(p, 10);
+      if (!isNaN(parsed) && parsed > 0) setPartySize(parsed);
+    } else if (cached?.partySize && cached.partySize > 0) {
+      setPartySize(cached.partySize);
+    }
 
-    const s = searchParams.get("slot") || searchParams.get("time") || lastChatBooking?.visitSlot;
-    if (s) setVisitSlot(s);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const d = searchParams.get("date") || searchParams.get("visitDate") || searchParams.get("day") || cached?.visitDate;
+    if (d) setVisitDate(normalizeDateStr(d));
+
+    const s = searchParams.get("slot") || searchParams.get("time") || searchParams.get("visitSlot") || searchParams.get("timeSlot") || cached?.visitSlot;
+    if (s) setVisitSlot(normalizeSlot(s));
   }, [searchParams]);
 
   // Form states
@@ -130,14 +193,29 @@ export function CheckoutView() {
         let siteData: ApiSite | null = null;
         try {
           siteData = await api.sites.bySlug(siteSlug);
-        } catch {
-          const fallback = (nearbySitesRaw as unknown as Site[]).find(
-            (s) =>
-              s.slug === siteSlug ||
+        } catch {}
+
+        if (!siteData) {
+          const cleanTarget = rawSiteParam.replace(/[-_]+/g, " ").toLowerCase().trim();
+          const fallback = (nearbySitesRaw as unknown as Site[]).find((s) => {
+            const sSlug = s.slug.toLowerCase();
+            const sName = s.name.toLowerCase();
+            const sSlugClean = sSlug.replace(/[-_]+/g, " ");
+            return (
+              sSlug === siteSlug ||
               s.id === siteSlug ||
-              s.name.toLowerCase() === rawSiteParam.toLowerCase() ||
-              s.slug.replace(/-/g, " ") === rawSiteParam.toLowerCase()
-          );
+              sSlugClean === cleanTarget ||
+              sName === cleanTarget ||
+              cleanTarget.includes(sSlugClean) ||
+              sSlugClean.includes(cleanTarget) ||
+              cleanTarget.includes(sName) ||
+              sName.includes(cleanTarget) ||
+              (cleanTarget.includes("hampi") && (sSlug.includes("hampi") || sName.includes("hampi"))) ||
+              (cleanTarget.includes("bangalore") && (sSlug.includes("bangalore") || sName.includes("bangalore"))) ||
+              (cleanTarget.includes("unity") && (sSlug.includes("unity") || sName.includes("unity"))) ||
+              (cleanTarget.includes("taj") && (sSlug.includes("taj") || sName.includes("taj")))
+            );
+          });
           if (fallback) {
             siteData = {
               id: fallback.id,
@@ -204,33 +282,43 @@ export function CheckoutView() {
 
         setAvailableGuides(guidesList);
 
-        if (
-          guideId === "none" ||
-          guideId === "self" ||
-          String(guideId).toLowerCase().includes("none") ||
-          String(guideId).toLowerCase().includes("self")
-        ) {
+        const effectiveGuideTarget =
+          searchParams.get("guide") ||
+          searchParams.get("guideId") ||
+          searchParams.get("guideName") ||
+          lastChatBooking?.guideName ||
+          lastChatBooking?.guideId;
+
+        const isSelf =
+          effectiveGuideTarget === "none" ||
+          effectiveGuideTarget === "self" ||
+          (effectiveGuideTarget && (
+            effectiveGuideTarget.toLowerCase().includes("none") ||
+            effectiveGuideTarget.toLowerCase().includes("self") ||
+            effectiveGuideTarget.toLowerCase().includes("no guide") ||
+            effectiveGuideTarget.toLowerCase().includes("self-guided")
+          ));
+
+        if (isSelf) {
           setGuide(null);
-        } else if (guideId) {
-          const target = String(guideId).toLowerCase().trim();
-          const matched = guidesList.find(
-            (g) =>
-              g.id.toLowerCase() === target ||
-              g.licenseId?.toLowerCase() === target ||
-              g.name.toLowerCase() === target ||
-              g.name.toLowerCase().includes(target) ||
-              target.includes(g.name.toLowerCase()) ||
-              (target.includes("rajesh") && g.name.toLowerCase().includes("rajesh")) ||
-              (target.includes("vikram") && g.name.toLowerCase().includes("vikram")) ||
-              (target.includes("priya") && g.name.toLowerCase().includes("priya")) ||
-              (target.includes("meera") && g.name.toLowerCase().includes("meera")) ||
-              (target.includes("arun") && g.name.toLowerCase().includes("arun")) ||
-              (target.includes("sanjay") && g.name.toLowerCase().includes("sanjay")) ||
-              (target.includes("agr-01") && g.name.toLowerCase().includes("rajesh")) ||
-              (target.includes("agr-05") && g.name.toLowerCase().includes("vikram")) ||
-              (target.includes("agr-02") && g.name.toLowerCase().includes("priya")) ||
-              (target.includes("del-04") && g.name.toLowerCase().includes("meera"))
-          );
+        } else if (effectiveGuideTarget) {
+          const target = String(effectiveGuideTarget).toLowerCase().trim();
+          const targetClean = target.replace(/[-_]+/g, " ");
+          const targetTokens = targetClean.split(/\s+/).filter(Boolean);
+
+          const matched = guidesList.find((g) => {
+            const gName = g.name.toLowerCase();
+            const gId = g.id.toLowerCase();
+            const gLic = (g.licenseId || "").toLowerCase();
+            return (
+              gId === target ||
+              gLic === target ||
+              gName === targetClean ||
+              gName.includes(targetClean) ||
+              targetClean.includes(gName) ||
+              targetTokens.some((tok) => tok.length > 2 && gName.includes(tok))
+            );
+          });
           if (matched) setGuide(matched);
           else setGuide(guidesList[0]);
         } else {
@@ -293,7 +381,7 @@ export function CheckoutView() {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("pending_booking_draft", JSON.stringify(draft));
     }
-    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${guide?.id ?? "none"}`;
+    const currentCheckoutUrl = `/checkout?site=${site.slug}&partySize=${partySize}&date=${visitDate}&slot=${encodeURIComponent(visitSlot)}&guide=${guide ? encodeURIComponent(guide.name) : "self"}`;
     router.push(`${targetPath}?redirect=${encodeURIComponent(currentCheckoutUrl)}&from=checkout&siteName=${encodeURIComponent(site.name)}`);
   };
 
@@ -556,11 +644,16 @@ export function CheckoutView() {
                     onChange={(e) => setPartySize(Number(e.target.value))}
                     className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-body text-xs text-foreground focus:border-accent focus:outline-none"
                   >
-                    {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].map((n) => (
                       <option key={n} value={n}>
                         {n} {n === 1 ? "Visitor" : "Visitors"}
                       </option>
                     ))}
+                    {![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].includes(partySize) && (
+                      <option value={partySize}>
+                        {partySize} Visitors
+                      </option>
+                    )}
                   </select>
                 </div>
               </div>
@@ -571,10 +664,14 @@ export function CheckoutView() {
                   onChange={(e) => setVisitSlot(e.target.value)}
                   className="mt-1 w-full rounded border border-hairline bg-surface px-2.5 py-1.5 font-body text-xs text-foreground focus:border-accent focus:outline-none"
                 >
-                  <option value="06:00 AM - 09:00 AM (Sunrise Slot)">🌅 06:00 AM – 09:00 AM (Sunrise Slot — Best Light & Lowest Crowd)</option>
-                  <option value="09:00 AM - 12:00 PM (Morning Slot)">☀️ 09:00 AM – 12:00 PM (Morning Slot)</option>
-                  <option value="12:00 PM - 03:00 PM (Afternoon Slot)">🌤️ 12:00 PM – 03:00 PM (Afternoon Slot)</option>
-                  <option value="03:00 PM - 06:00 PM (Sunset Slot)">🌇 03:00 PM – 06:00 PM (Sunset Slot — Golden Hour)</option>
+                  {STANDARD_SLOTS.map((slot) => (
+                    <option key={slot.value} value={slot.value}>
+                      {slot.label}
+                    </option>
+                  ))}
+                  {!STANDARD_SLOTS.some((s) => s.value === visitSlot) && (
+                    <option value={visitSlot}>🕒 {visitSlot}</option>
+                  )}
                 </select>
               </div>
             </div>
@@ -585,10 +682,15 @@ export function CheckoutView() {
                 <span>Monument Entry ({partySize} tickets)</span>
                 <span className="font-mono text-foreground">₹{siteEntryTotal.toLocaleString("en-IN")}</span>
               </div>
-              {guide && (
+              {guide ? (
                 <div className="flex justify-between">
                   <span>Certified ASI Guide ({guide.name}, 3 hrs)</span>
                   <span className="font-mono text-foreground">₹{guideFeeTotal.toLocaleString("en-IN")}</span>
+                </div>
+              ) : (
+                <div className="flex justify-between">
+                  <span>Certified ASI Guide</span>
+                  <span className="font-mono text-emerald-400">Self-Guided (₹0)</span>
                 </div>
               )}
               <div className="flex justify-between">
@@ -888,7 +990,7 @@ export function CheckoutView() {
                 </div>
                 <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
                   <span className="font-label uppercase text-foreground-muted">Date & Time Slot</span>
-                  <span className="font-mono text-foreground text-right">{visitDate} &middot; {visitSlot.split(" ")[0]}</span>
+                  <span className="font-mono text-foreground text-right">{visitDate} &middot; {visitSlot}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-hairline/60 pb-2">
                   <span className="font-label uppercase text-foreground-muted">Visitors</span>
